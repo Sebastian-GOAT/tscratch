@@ -1,8 +1,10 @@
 {
-  "name": "game-engine",
-  "version": "0.0.1",
+  "name": "tscratch",
+  "version": "0.1.0",
   "description": "A Scratch-style game engine for TypeScript.",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "prepublishOnly": "npm run build",
@@ -10,8 +12,16 @@
   },
   "keywords": [
     "typescript",
-    "game engine",
+    "game",
+    "engine",
+    "scratch",
+    "sprites",
+    "canvas",
+    "tscratch",
     "oop"
+  ],
+  "files": [
+    "dist"
   ],
   "author": "sebastian-goat",
   "license": "MIT",

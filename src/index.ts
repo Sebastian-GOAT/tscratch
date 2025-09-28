@@ -3,7 +3,7 @@ import Sprite from './Sprite.ts';
 import Rectangle from './Rectangle.ts';
 import { setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
 
-const GameEngine = {
+const TScratch = {
     // Main
     Engine,
     Sprite,
@@ -18,7 +18,7 @@ const GameEngine = {
     ctx
 };
 
-export default GameEngine;
+export default TScratch;
 export {
     // Main
     Engine,
