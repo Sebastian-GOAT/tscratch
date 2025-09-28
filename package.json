@@ -1,0 +1,23 @@
+{
+  "name": "game-engine",
+  "version": "0.0.1",
+  "description": "A Scratch-style game engine for TypeScript.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "game engine",
+    "oop"
+  ],
+  "author": "sebastian-goat",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}
