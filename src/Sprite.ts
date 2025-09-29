@@ -50,7 +50,7 @@ export default abstract class Sprite {
         this.refresh();
     }
 
-    public pointInDirection(dir: number) {
+    public point(dir: number) {
         this.dir = dir;
         this.refresh();
     }

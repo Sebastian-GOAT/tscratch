@@ -23,6 +23,21 @@ export default class Rectangle extends Sprite {
         );
     }
 
+    public setWidth(width: number) {
+        this.width = width;
+        this.refresh();
+    }
+
+    public setHeight(height: number) {
+        this.height = height;
+        this.refresh();
+    }
+
+    public setColor(color: string) {
+        this.color = color;
+        this.refresh();
+    }
+
     constructor(options?: RectangleOptions) {
         super(options);
         this.width = options?.width ?? 50;

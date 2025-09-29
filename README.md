@@ -1,17 +1,17 @@
 # 🐱 tscratch
 
-A **Scratch-inspired 2D game engine** for **TypeScript**.  
+A **Scratch-inspired 2D game engine** for **TypeScript**.
 Type-safe, lightweight, and fun — bring the simplicity of Scratch into real code.
 
 ---
 
 ## ✨ Features
 
-- 🎮 **Scratch-style API** — `goTo`, `setX`, `moveSteps`, etc.  
-- ⚡ **TypeScript first** — full type safety & IntelliSense.  
-- 🖼️ **Canvas rendering** — built on the HTML5 canvas.  
-- 🧩 **Sprites system** — extend `Sprite` to create your own shapes.  
-- 🛠️ **Lightweight** — no heavy dependencies, works in any TypeScript project.  
+- 🎮 **Scratch-style API** — `goTo`, `setX`, `move`, etc.
+- ⚡ **TypeScript first** — full type safety & IntelliSense.
+- 🖼️ **Canvas rendering** — built on the HTML5 canvas.
+- 🧩 **Sprites system** — extend `Sprite` to create your own shapes.
+- 🛠️ **Lightweight** — no heavy dependencies, works in any TypeScript project.
 
 ---
 
@@ -31,14 +31,15 @@ const engine = Engine.init();
 
 // Create a rectangle sprite
 const rect = new Rectangle();
-rect.goTo(0, 0);
-
 // Add it to the engine
-engine.addSprite(rect);
+engine.addSprites(rect);
+
+// Move it to the center
+rect.goTo(0, 0);
 
 // Animate in the game loop
 engine.loop = () => {
-  rect.setX(rect.x + 2); // move right every frame
+  rect.changeX(2); // move right every frame
 };
 ```
 ## 🎨 Example: Multiple Sprites
@@ -49,19 +50,20 @@ import { Engine, Rectangle } from 'tscratch';
 const engine = Engine.init();
 
 const redBox = new Rectangle();
-redBox.color = 'red';
+engine.addSprite(redBox);
+
+redBox.setColor('red');
 redBox.goTo(-100, 0);
 
 const blueBox = new Rectangle();
-blueBox.color = 'blue';
-blueBox.goTo(100, 0);
-
-engine.addSprite(redBox);
 engine.addSprite(blueBox);
 
+blueBox.setColor('blue');
+blueBox.goTo(100, 0);
+
 engine.loop = () => {
-  redBox.setX(redBox.x + 1);
-  blueBox.setX(blueBox.x - 1);
+  redBox.changeX(1);
+  blueBox.changeX(-1);
 };
 ```
 
@@ -69,22 +71,30 @@ engine.loop = () => {
 
 ### Engine
 
-- `Engine.init()` → get the singleton instance  
-- `engine.addSprite(sprite)` → add a sprite to the stage  
-- `engine.loop = () => { ... }` → game loop logic  
-- `engine.refreshAll()` → redraw all sprites  
+- `Engine.init()` → get the singleton instance
+- `engine.addSprites(...sprites)` → add sprites to the stage
+- `engine.removeSprites(...sprites)` → removes sprites from the stage
+- `engine.setFramesPerSecond(FPS)`→ sets the update time
+- `engine.loop = () => { ... }` → game loop logic
+- `engine.refresh()` → redraw all sprites
 
 ### Sprite (abstract)
 
-- `goTo(x, y)` → move to coordinates  
-- `setX(x)` / `setY(y)` → set position  
-- `changeXBy(dx)` / `changeYBy(dy)` → relative movement  
-- `show()` / `hide()` → toggle visibility  
+- `goTo(x, y)` → move to coordinates
+- `setX(x)` / `setY(y)` → set position
+- `changeX(x)` / `changeY(y)` → change position
+- `turn(deg)` / `point(deg)` → change / set direction
+- `changeX(dX)` / `changeY(dY)` → relative movement
 
 ### Rectangle (example sprite)
 
-- Has `width`, `height`, and `color` properties  
+- Has `width`, `height`, and `color` properties
 - Draws a rectangle centered on `(x, y)`
+
+### Canvas
+
+- `setScale` → sets the scale of the stage
+- `setAspectRatio` → sets the aspect ratio of the stage
 
 ## License
 

@@ -20,6 +20,21 @@ export default class Oval extends Sprite {
         ctx.fill();
     }
 
+    public setRadA(radA: number) {
+        this.radA = radA;
+        this.refresh();
+    }
+
+    public setRadB(radB: number) {
+        this.radB = radB;
+        this.refresh();
+    }
+
+    public setColor(color: string) {
+        this.color = color;
+        this.refresh();
+    }
+
     constructor(options?: OvalOptions) {
         super(options);
         this.radA = options?.radA ?? 25;

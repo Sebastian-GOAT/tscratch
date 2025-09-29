@@ -4,6 +4,8 @@ import Sprite from './Sprite.ts';
 export default class Engine {
 
     private static instance: Engine;
+    private updateInterval: number | undefined;
+    private FPS: number = 24;
     public loop: () => void = () => {};
     public sprites: Sprite[] = [];
 
@@ -14,12 +16,18 @@ export default class Engine {
         return this.instance;
     }
 
-    private constructor() {
-        setInterval(() => this.loop(), 1000 / 8);
+    public addSprites(...sprites: Sprite[]) {
+        this.sprites.push(...sprites);
     }
 
-    public addSprite(sprite: Sprite) {
-        this.sprites.push(sprite);
+    public removeSprites(...sprites: Sprite[]) {
+        this.sprites = this.sprites.filter(s => !sprites.includes(s));
+    }
+
+    public setFramesPerSecond(FPS: number) {
+        this.FPS = FPS;
+        clearInterval(this.updateInterval);
+        this.updateInterval = setInterval(() => this.loop(), 1000 / this.FPS);
     }
 
     public refresh() {
@@ -27,6 +35,10 @@ export default class Engine {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         this.sprites.forEach(sprite => sprite.draw());
+    }
+
+    private constructor() {
+        this.setFramesPerSecond(24);
     }
 
 }
