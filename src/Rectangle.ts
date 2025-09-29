@@ -1,11 +1,17 @@
-import Sprite from './Sprite.ts';
+import Sprite, { type SpriteOptions } from './Sprite.ts';
 import { ctx, canvas } from './canvas.ts';
+
+export interface RectangleOptions extends SpriteOptions {
+    width?: number;
+    height?: number;
+    color?: string;
+};
 
 export default class Rectangle extends Sprite {
 
-    public width: number = 50;
-    public height: number = 50;
-    public color: string = 'black';
+    public width: number;
+    public height: number;
+    public color: string;
 
     public draw(): void {
         ctx.fillStyle = this.color;
@@ -17,8 +23,11 @@ export default class Rectangle extends Sprite {
         );
     }
 
-    constructor() {
-        super();
+    constructor(options?: RectangleOptions) {
+        super(options);
+        this.width = options?.width ?? 50;
+        this.height = options?.height ?? 50;
+        this.color = options?.color ?? 'black';
         this.draw();
     }
 

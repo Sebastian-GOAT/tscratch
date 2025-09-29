@@ -1,10 +1,16 @@
 import Engine from './Engine.ts';
 
+export interface SpriteOptions {
+    x?: number;
+    y?: number;
+    dir?: number;
+};
+
 export default abstract class Sprite {
 
-    public x: number = 0;
-    public y: number = 0;
-    public dir: number = 90;
+    public x: number;
+    public y: number;
+    public dir: number;
 
     // Rendering
 
@@ -12,6 +18,12 @@ export default abstract class Sprite {
 
     protected refresh() {
         Engine.init().refresh();
+    }
+
+    constructor(options?: SpriteOptions) {
+        this.x = options?.x ?? 0;
+        this.y = options?.y ?? 0;
+        this.dir = options?.dir ?? 90;
     }
 
     // Helpers
@@ -29,6 +41,7 @@ export default abstract class Sprite {
     // Motion
     public move(steps: number) {
         this.x += steps * Math.sin(this.toRadians(this.dir));
+        this.y -= steps * Math.cos(this.toRadians(this.dir));
         this.refresh();
     }
 
@@ -64,7 +77,7 @@ export default abstract class Sprite {
     }
 
     public changeY(dY: number) {
-        this.y += dY;
+        this.y -= dY;
         this.refresh();
     }
 
