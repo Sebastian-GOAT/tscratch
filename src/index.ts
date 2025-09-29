@@ -1,6 +1,8 @@
 import Engine from './Engine.ts';
 import Sprite from './Sprite.ts';
 import Rectangle from './Rectangle.ts';
+import Oval from './Oval.ts';
+import RegularShape from './RegularShape.ts';
 import { setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
 
 const TScratch = {
@@ -10,6 +12,8 @@ const TScratch = {
 
     // Sprites
     Rectangle,
+    Oval,
+    RegularShape,
 
     // Canvas
     setScale,
@@ -26,7 +30,9 @@ export {
 
     // Sprites
     Rectangle,
-
+    Oval,
+    RegularShape,
+    
     // Canvas
     setScale,
     setAspectRatio,
