@@ -10,7 +10,7 @@ export default class Engine {
     public FPS: number = 24;
 
     private lastFrame: number = performance.now();
-    public deltaTime: number = 1 / this.FPS;
+    public deltaTime: number = 1 / this.FPS / 1000;
 
     public sprites: Sprite[] = [];
 
@@ -36,7 +36,7 @@ export default class Engine {
             this.loop();
 
             const now = performance.now();
-            const deltaTime = now - this.lastFrame;
+            const deltaTime = (now - this.lastFrame) / 1000;
             this.lastFrame = now;
             this.deltaTime = deltaTime;
         }, 1000 / this.FPS);
