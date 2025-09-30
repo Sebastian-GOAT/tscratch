@@ -4,9 +4,14 @@ import Sprite from './Sprite.ts';
 export default class Engine {
 
     private static instance: Engine;
+
     private updateInterval: number | undefined;
-    private FPS: number = 24;
     public loop: () => void = () => {};
+    public FPS: number = 24;
+
+    private lastFrame: number = performance.now();
+    public deltaTime: number = 1 / this.FPS;
+
     public sprites: Sprite[] = [];
 
     public static init() {
@@ -27,7 +32,14 @@ export default class Engine {
     public setFramesPerSecond(FPS: number) {
         this.FPS = FPS;
         clearInterval(this.updateInterval);
-        this.updateInterval = setInterval(() => this.loop(), 1000 / this.FPS);
+        this.updateInterval = setInterval(() => {
+            this.loop();
+
+            const now = performance.now();
+            const deltaTime = now - this.lastFrame;
+            this.lastFrame = now;
+            this.deltaTime = deltaTime;
+        }, 1000 / this.FPS);
     }
 
     public refresh() {

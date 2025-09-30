@@ -1,13 +1,13 @@
 import { canvas, ctx } from './canvas.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 
-interface RegularShapeOptions extends SpriteOptions {
+export interface RegularPolygonOptions extends SpriteOptions {
     sides?: number;
     radius?: number;
     color?: string;
 }
 
-export default class RegularShape extends Sprite {
+export default class RegularPolygon extends Sprite {
 
     public sides: number;
     public radius: number;
@@ -44,7 +44,7 @@ export default class RegularShape extends Sprite {
         this.refresh();
     }
 
-    constructor(options?: RegularShapeOptions) {
+    constructor(options?: RegularPolygonOptions) {
         super(options);
         this.sides = options?.sides ?? 5;
         this.radius = options?.radius ?? 50;

@@ -1,5 +1,5 @@
 import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { ctx, canvas } from './canvas.ts';
+import { ctx } from './canvas.ts';
 
 export interface OvalOptions extends SpriteOptions {
     radA?: number;
