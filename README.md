@@ -77,6 +77,8 @@ engine.loop = () => {
 - `engine.setFramesPerSecond(FPS)`→ sets the update time
 - `engine.loop = () => { ... }` → game loop logic
 - `engine.refresh()` → redraw all sprites
+- `engine.toRadians` → converts degrees to radians
+- `engine.toDegrees` → converts radians to degrees
 
 ### Sprite (abstract)
 
@@ -90,6 +92,12 @@ engine.loop = () => {
 
 - Has `width`, `height`, and `color` properties
 - Draws a rectangle centered on `(x, y)`
+
+### Pen
+
+- `down()` → starts drawing
+- `up()` → stops drawing
+- `dot()` → draws a single dot
 
 ### Canvas
 

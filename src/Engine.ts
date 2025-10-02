@@ -7,10 +7,10 @@ export default class Engine {
 
     private updateInterval: number | undefined;
     public loop: () => void = () => {};
-    public FPS: number = 24;
+    public maxFPS: number = 24;
 
     private lastFrame: number = performance.now();
-    public deltaTime: number = 1 / this.FPS / 1000;
+    public deltaTime: number = 1 / this.maxFPS;
 
     public sprites: Sprite[] = [];
 
@@ -29,28 +29,39 @@ export default class Engine {
         this.sprites = this.sprites.filter(s => !sprites.includes(s));
     }
 
-    public setFramesPerSecond(FPS: number) {
-        this.FPS = FPS;
+    public setMaxFramesPerSecond(maxFPS: number) {
+        this.maxFPS = maxFPS;
         clearInterval(this.updateInterval);
         this.updateInterval = setInterval(() => {
-            this.loop();
-
+            
             const now = performance.now();
             const deltaTime = (now - this.lastFrame) / 1000;
             this.lastFrame = now;
             this.deltaTime = deltaTime;
-        }, 1000 / this.FPS);
+
+            this.loop();
+        }, 1000 / this.maxFPS);
     }
 
     public refresh() {
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.sprites.forEach(sprite => sprite.draw());
     }
 
+    // Helpers
+
+    public toRadians(deg: number) {
+        return deg * Math.PI / 180;
+    }
+
+    public toDegrees(rad: number) {
+        return rad * 180 / Math.PI;
+    }
+
+    // Private constructor
+
     private constructor() {
-        this.setFramesPerSecond(24);
+        this.setMaxFramesPerSecond(24);
     }
 
 }

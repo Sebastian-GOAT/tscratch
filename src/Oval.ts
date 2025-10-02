@@ -16,7 +16,7 @@ export default class Oval extends Sprite {
     public draw(): void {
         ctx.fillStyle = this.color;
         ctx.beginPath()
-        ctx.ellipse(this.x, this.y, this.radA, this.radB, 0, 0, Math.PI * 2);
+        ctx.ellipse(this.x, this.y, this.radA, this.radB, this.toRadians(this.dir), 0, Math.PI * 2);
         ctx.fill();
     }
 
