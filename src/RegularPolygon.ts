@@ -25,7 +25,7 @@ export default class RegularPolygon extends Sprite {
         for (let i = 0; i < this.sides; i++) {
             const theta = i * step - Math.PI / 2 + rotation;
             const px = cx + this.x + r * Math.cos(theta);
-            const py = cy + this.y - r * Math.sin(theta);
+            const py = cy - this.y - r * Math.sin(theta);
 
             if (i === 0) ctx.moveTo(px, py);
             else ctx.lineTo(px, py);

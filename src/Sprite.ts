@@ -42,7 +42,7 @@ export default abstract class Sprite {
     // Motion
     public move(steps: number) {
         this.x += steps * Math.sin(this.toRadians(this.dir));
-        this.y -= steps * Math.cos(this.toRadians(this.dir));
+        this.y += steps * Math.cos(this.toRadians(this.dir));
         this.refresh();
     }
 
@@ -78,7 +78,7 @@ export default abstract class Sprite {
     }
 
     public changeY(dY: number) {
-        this.y -= dY;
+        this.y += dY;
         this.refresh();
     }
 }

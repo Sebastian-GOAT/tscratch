@@ -1,10 +1,10 @@
-import { canvas, ctx } from './canvas.ts';
+import { canvas, ctx, penCtx } from './canvas.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 
 export interface PenOptions extends SpriteOptions {
-    drawing: boolean;
-    size: number;
-    color: string;
+    drawing?: boolean;
+    size?: number;
+    color?: string;
 }
 
 export default class Pen extends Sprite {
@@ -23,26 +23,29 @@ export default class Pen extends Sprite {
         this.drawing = true;
     }
 
+    public ereaseAll() {
+        penCtx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
     public dot() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(
+        penCtx.fillStyle = this.color;
+        penCtx.fillRect(
             this.x - this.size / 2 + canvas.width / 2,
-            this.y - this.size / 2 + canvas.height / 2,
+            -this.y - this.size / 2 + canvas.height / 2,
             this.size,
             this.size
         );
     }
 
     private drawLine(lastX: number, lastY: number) {
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(
-            this.x + canvas.width / 2,
-            this.y + canvas.height / 2
-        );
-        ctx.lineWidth = this.size;
-        ctx.strokeStyle = this.color;
-        ctx.stroke()
+        penCtx.beginPath();
+
+        penCtx.moveTo(lastX + canvas.width / 2, -lastY + canvas.height / 2);
+        penCtx.lineTo(this.x + canvas.width / 2, -this.y + canvas.height / 2);
+
+        penCtx.lineWidth = this.size;
+        penCtx.strokeStyle = this.color;
+        penCtx.stroke();
     }
 
     // Overriding methods to include drawing
@@ -52,7 +55,7 @@ export default class Pen extends Sprite {
         const lastY = this.y;
 
         this.x += steps * Math.sin(this.toRadians(this.dir));
-        this.y -= steps * Math.cos(this.toRadians(this.dir));
+        this.y += steps * Math.cos(this.toRadians(this.dir));
         if (this.drawing)
             this.drawLine(lastX, lastY);
         this.refresh();
@@ -103,7 +106,7 @@ export default class Pen extends Sprite {
         const lastX = this.x;
         const lastY = this.y;
 
-        this.y -= dY;
+        this.y += dY;
         if (this.drawing)
             this.drawLine(lastX, lastY);
         this.refresh();
