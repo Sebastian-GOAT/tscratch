@@ -1,6 +1,5 @@
-import Engine from './Engine.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { ctx } from './canvas.ts';
+import { canvas, ctx } from './canvas.ts';
 
 export interface OvalOptions extends SpriteOptions {
     radA?: number;
@@ -18,7 +17,14 @@ export default class Oval extends Sprite {
         const rotation = this.toRadians(this.dir);
         
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y, this.radA, this.radB, rotation, 0, Math.PI * 2);
+        ctx.ellipse(
+            this.x + canvas.width / 2,
+            -this.y + canvas.height / 2,
+            this.radA,
+            this.radB,
+            rotation, 0,
+            Math.PI * 2
+        );
 
         ctx.fillStyle = this.color;
         ctx.fill();

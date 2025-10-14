@@ -9,9 +9,6 @@ export default class Engine {
     public loop: () => (void | Promise<void>) = () => {};
     public maxFPS: number = 24;
 
-    private lastFrame: number = performance.now();
-    public deltaTime: number = 1 / this.maxFPS;
-
     public sprites: Sprite[] = [];
 
     public static init() {
@@ -32,15 +29,7 @@ export default class Engine {
     public setMaxFramesPerSecond(maxFPS: number) {
         this.maxFPS = maxFPS;
         clearInterval(this.updateInterval);
-        this.updateInterval = setInterval(() => {
-            
-            const now = performance.now();
-            const deltaTime = (now - this.lastFrame) / 1000;
-            this.lastFrame = now;
-            this.deltaTime = deltaTime;
-
-            this.loop();
-        }, 1000 / this.maxFPS);
+        this.updateInterval = setInterval(() => this.loop(), 1000 / this.maxFPS);
     }
 
     public refresh() {

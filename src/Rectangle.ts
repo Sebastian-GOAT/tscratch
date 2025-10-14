@@ -17,7 +17,7 @@ export default class Rectangle extends Sprite {
         ctx.save()
 
         const cX = this.x + canvas.width / 2;
-        const cY = this.y + canvas.height / 2;
+        const cY = -this.y + canvas.height / 2;
         ctx.translate(cX, cY);
 
         ctx.rotate(this.toRadians(this.dir));
