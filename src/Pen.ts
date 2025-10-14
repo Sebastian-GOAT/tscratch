@@ -26,8 +26,8 @@ export default class Pen extends Sprite {
     public dot() {
         ctx.fillStyle = this.color;
         ctx.fillRect(
-            this.x - this.size / 2,
-            this.y - this.size / 2,
+            this.x - this.size / 2 + canvas.width / 2,
+            this.y - this.size / 2 + canvas.height / 2,
             this.size,
             this.size
         );

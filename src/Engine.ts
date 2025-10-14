@@ -6,7 +6,7 @@ export default class Engine {
     private static instance: Engine;
 
     private updateInterval: number | undefined;
-    public loop: () => void = () => {};
+    public loop: () => (void | Promise<void>) = () => {};
     public maxFPS: number = 24;
 
     private lastFrame: number = performance.now();
@@ -46,6 +46,10 @@ export default class Engine {
     public refresh() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.sprites.forEach(sprite => sprite.draw());
+    }
+
+    public async wait(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     // Helpers

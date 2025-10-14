@@ -19,9 +19,11 @@ export default class RegularPolygon extends Sprite {
         const cx = canvas.width / 2;
         const cy = canvas.height / 2;
 
+        const rotation = this.toRadians(this.dir);
+
         ctx.beginPath();
         for (let i = 0; i < this.sides; i++) {
-            const theta = i * step - Math.PI / 2;
+            const theta = i * step - Math.PI / 2 + rotation;
             const px = cx + this.x + r * Math.cos(theta);
             const py = cy + this.y + r * Math.sin(theta);
 

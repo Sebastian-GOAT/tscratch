@@ -14,13 +14,18 @@ export default class Rectangle extends Sprite {
     public color: string;
 
     public draw(): void {
+        ctx.save()
+
+        const cX = this.x + canvas.width / 2;
+        const cY = this.y + canvas.height / 2;
+        ctx.translate(cX, cY);
+
+        ctx.rotate(this.toRadians(this.dir));
+
         ctx.fillStyle = this.color;
-        ctx.fillRect(
-            this.x - this.width / 2 + canvas.width / 2,
-            this.y - this.height / 2 + canvas.height / 2,
-            this.width,
-            this.height
-        );
+        ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+
+        ctx.restore();
     }
 
     public setWidth(width: number) {

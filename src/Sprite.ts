@@ -24,6 +24,7 @@ export default abstract class Sprite {
         this.x = options?.x ?? 0;
         this.y = options?.y ?? 0;
         this.dir = options?.dir ?? 90;
+        Engine.init().addSprites(this);
     }
 
     // Helpers
@@ -80,10 +81,4 @@ export default abstract class Sprite {
         this.y -= dY;
         this.refresh();
     }
-
-    // Control
-    public async wait(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
 }

@@ -31,8 +31,6 @@ const engine = Engine.init();
 
 // Create a rectangle sprite
 const rect = new Rectangle();
-// Add it to the engine
-engine.addSprites(rect);
 
 // Move it to the center
 rect.goTo(0, 0);
@@ -50,13 +48,11 @@ import { Engine, Rectangle } from 'tscratch';
 const engine = Engine.init();
 
 const redBox = new Rectangle();
-engine.addSprite(redBox);
 
 redBox.setColor('red');
 redBox.goTo(-100, 0);
 
 const blueBox = new Rectangle();
-engine.addSprite(blueBox);
 
 blueBox.setColor('blue');
 blueBox.goTo(100, 0);
@@ -72,13 +68,13 @@ engine.loop = () => {
 ### Engine
 
 - `Engine.init()` → get the singleton instance
-- `engine.addSprites(...sprites)` → add sprites to the stage
 - `engine.removeSprites(...sprites)` → removes sprites from the stage
-- `engine.setFramesPerSecond(FPS)`→ sets the update time
+- `engine.setMaxFramesPerSecond(FPS)`→ sets the maximum FPS
 - `engine.loop = () => { ... }` → game loop logic
 - `engine.refresh()` → redraw all sprites
-- `engine.toRadians` → converts degrees to radians
-- `engine.toDegrees` → converts radians to degrees
+- `await engine.wait(ms)` → Wait some time (miliseconds)
+- `engine.toRadians(rad)` → converts degrees to radians
+- `engine.toDegrees(deg)` → converts radians to degrees
 
 ### Sprite (abstract)
 
