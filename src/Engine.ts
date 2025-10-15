@@ -9,12 +9,15 @@ export default class Engine {
     public loop: () => (void | Promise<void>) = () => {};
     public maxFPS: number = 24;
 
+    public mouseX: number = 0;
+    public mouseY: number = 0;
+
     public sprites: Sprite[] = [];
 
     public static init() {
-        if (!this.instance) {
+        if (!this.instance)
             this.instance = new Engine();
-        }
+
         return this.instance;
     }
 
@@ -55,6 +58,10 @@ export default class Engine {
 
     private constructor() {
         this.setMaxFramesPerSecond(24);
-    }
 
+        canvas.addEventListener('mousemove', e => {
+            this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
+            this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
+        });
+    }
 }

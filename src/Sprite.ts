@@ -23,7 +23,7 @@ export default abstract class Sprite {
     constructor(options?: SpriteOptions) {
         this.x = options?.x ?? 0;
         this.y = options?.y ?? 0;
-        this.dir = options?.dir ?? 90;
+        this.dir = options?.dir ?? 0;
         Engine.init().addSprites(this);
     }
 
