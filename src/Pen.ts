@@ -1,4 +1,4 @@
-import { canvas, ctx, penCtx } from './canvas.ts';
+import { canvas, penCtx } from './canvas.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 
 export interface PenOptions extends SpriteOptions {

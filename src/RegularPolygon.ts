@@ -36,6 +36,11 @@ export default class RegularPolygon extends Sprite {
         ctx.fill();
     }
 
+    public setSides(sides: number) {
+        this.sides = sides;
+        this.refresh();
+    }
+
     public setRadius(radius: number) {
         this.radius = radius;
         this.refresh();
