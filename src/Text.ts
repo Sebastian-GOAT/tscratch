@@ -17,12 +17,12 @@ export type CanvasTextBaseline =
     | 'bottom';
 
 export interface TextOptions extends SpriteOptions {
-    content: string;
-    color: string;
-    fontFamily: string;
-    fontSize: number;
-    align: CanvasTextAlign;
-    baseline: CanvasTextBaseline
+    content?: string;
+    color?: string;
+    fontFamily?: string;
+    fontSize?: number;
+    align?: CanvasTextAlign;
+    baseline?: CanvasTextBaseline;
 }
 
 export default class Text extends Sprite {
