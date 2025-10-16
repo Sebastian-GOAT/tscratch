@@ -37,16 +37,22 @@ export default class Text extends Sprite {
     private font: string;
 
     public draw() {
+        ctx.save();
+
+        const cX = this.x + canvas.width / 2;
+        const cY = -this.y + canvas.height / 2;
+        ctx.translate(cX, cY);
+
+        ctx.rotate(this.toRadians(this.dir));
+
         ctx.font = this.font;
         ctx.fillStyle = this.color;
         ctx.textAlign = this.align;
         ctx.textBaseline = this.baseline;
 
-        ctx.fillText(
-            this.content,
-            this.x + canvas.width / 2,
-            this.y + canvas.height / 2
-        );
+        ctx.fillText(this.content, 0, 0);
+
+        ctx.restore();
     }
 
     // Methods
@@ -63,11 +69,13 @@ export default class Text extends Sprite {
 
     public setFontSize(fontSize: number) {
         this.fontSize = fontSize;
+        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.refresh();
     }
 
     public setFontFamily(fontFamily: string) {
         this.fontFamily = fontFamily;
+        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.refresh();
     }
 
