@@ -6,6 +6,7 @@ import Oval, { type OvalOptions } from './Oval.ts';
 import RegularPolygon, { type RegularPolygonOptions } from './RegularPolygon.ts';
 import Pen, { type PenOptions } from './Pen.ts';
 import Text, { type TextOptions, type CanvasTextAlign, type CanvasTextBaseline } from './Text.ts';
+import ImageSprite, { type ImageSpriteOptions } from './ImageSprite.ts';
 
 import { setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
 
@@ -20,6 +21,7 @@ const TScratch = {
     RegularPolygon,
     Pen,
     Text,
+    ImageSprite,
 
     // Canvas
     setScale,
@@ -40,6 +42,7 @@ export {
     RegularPolygon,
     Pen,
     Text,
+    ImageSprite,
 
     // Options
     type SpriteOptions,
@@ -48,6 +51,7 @@ export {
     type RegularPolygonOptions,
     type PenOptions,
     type TextOptions,
+    type ImageSpriteOptions,
 
     // Other types
     type CanvasTextAlign,
