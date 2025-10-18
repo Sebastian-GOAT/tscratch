@@ -7,8 +7,8 @@ Type-safe, lightweight, and fun — bring the simplicity of Scratch into real co
 
 ## Live showcases
 
-1. [Interactive Inverse Kinematics Simulation](https://tscratch-projects-ik.vercel.app)
-2. [Recursive Snowflake Generator](https://tscratch-projects-ik.vercel.app)
+1. [Interactive Inverse Kinematics Simulation](https://tscratch-project-ik.vercel.app)
+2. [Recursive Snowflake Generator](https://tscratch-project-snowflake.vercel.app)
 
 ## Features
 
