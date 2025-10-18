@@ -5,6 +5,8 @@ export interface SpriteOptions {
     y?: number;
     dir?: number;
     scene?: string;
+    hidden?: boolean;
+    layer?: number;
 };
 
 export default abstract class Sprite {
@@ -13,6 +15,8 @@ export default abstract class Sprite {
     public y: number;
     public dir: number;
     public scene: string;
+    public hidden: boolean;
+    public layer: number;
 
     // Rendering
 
@@ -27,7 +31,9 @@ export default abstract class Sprite {
         this.y = options?.y ?? 0;
         this.dir = options?.dir ?? 0;
         this.scene = options?.scene ?? 'main';
-        Engine.init().addSprite(this.scene, this);
+        this.hidden = options?.hidden ?? false;
+        this.layer = options?.layer ?? 0;
+        Engine.init().addSprite(this);
     }
 
     // Helpers
@@ -82,6 +88,18 @@ export default abstract class Sprite {
 
     public changeY(dY: number) {
         this.y += dY;
+        this.refresh();
+    }
+
+    // Looks
+
+    public show() {
+        this.hidden = false;
+        this.refresh();
+    }
+
+    public hide() {
+        this.hidden = true;
         this.refresh();
     }
 }

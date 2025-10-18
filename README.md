@@ -31,7 +31,7 @@ const engine = Engine.init();
 
 // Create a rectangle sprite
 const rect = new Rectangle({ color: 'red' });
-// Move it to the center
+// Move it to x: 100, y: 50
 rect.goTo(100, 50);
 
 // Animate in the game loop
@@ -86,7 +86,7 @@ import main from './scenes/main.ts';
 
 const engine = Engine.init();
 
-// No need for changeScene() here, because it's 'main'
+// No need for changeScene() here, since we're in the 'main' scene
 engine.setLoop('main', main);
 ```
 

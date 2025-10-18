@@ -4,7 +4,7 @@ import Sprite from './Sprite.ts';
 type GameLoop = (() => any) | (() => Promise<any>);
 
 type SceneMap = {
-    [sceneName: string]: {
+    [scene: string]: {
         sprites: Sprite[];
         loop: GameLoop | null;
     };
@@ -61,13 +61,21 @@ export default class Engine {
 
     // Internal
 
-    public addSprite(scene: string, sprite: Sprite) {
+    public addSprite(sprite: Sprite) {
+        const { scene, layer } = sprite;
+
         if (!this.sceneMap[scene]) {
             this.sceneMap[scene] = { sprites: [sprite], loop: null };
             return;
         }
 
-        this.sceneMap[scene].sprites.push(sprite);
+        let targetIndex = this.sceneMap[scene].sprites.findIndex(s => s.layer > layer);
+        if (targetIndex === -1) {
+            this.sceneMap[scene].sprites.push(sprite);
+            return;
+        }
+
+        this.sceneMap[scene].sprites.splice(targetIndex, 0, sprite);
     }
 
     public setMaxFramesPerSecond(maxFPS: number) {
@@ -82,7 +90,10 @@ export default class Engine {
 
     public refresh() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.sceneMap[this.currentScene]?.sprites.forEach(sprite => sprite.draw());
+        this.sceneMap[this.currentScene]?.sprites.forEach(sprite => {
+            if (!sprite.hidden)
+                sprite.draw();
+        });
     }
 
     // Wait function
