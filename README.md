@@ -5,7 +5,12 @@ Type-safe, lightweight, and fun — bring the simplicity of Scratch into real co
 
 ---
 
-## ✨ Features
+## Live showcases
+
+1. [Interactive Inverse Kinematics Simulation](https://tscratch-projects-ik.vercel.app)
+2. [Recursive Snowflake Generator](https://tscratch-projects-ik.vercel.app)
+
+## Features
 
 - **Scratch-style API** — `goTo`, `setX`, `move`, etc.
 - **TypeScript first** — full type safety & IntelliSense.
@@ -15,13 +20,13 @@ Type-safe, lightweight, and fun — bring the simplicity of Scratch into real co
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```sh
 npm install tscratch
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```ts
 import { Engine, Rectangle } from 'tscratch';
@@ -40,7 +45,7 @@ engine.setLoop('main', () => {
   rect.turn(-2);
 });
 ```
-## 🎨 Example: Multiple Sprites
+## Example: Multiple Sprites
 
 ```ts
 import { Engine, Rectangle } from 'tscratch';
@@ -103,7 +108,7 @@ You can also specify 1 loop per scene using `engine.setLoop(scene, callback)`.
 Keep in mind that there is only 1 loop running at a time, which is the one
 in the current scene.
 
-## 🛠️ API Overview
+## API Overview
 
 ### Engine
 
