@@ -102,4 +102,14 @@ export default abstract class Sprite {
         this.hidden = true;
         this.refresh();
     }
+
+    public goToLayer(layer: number) {
+        this.layer = layer;
+        this.refresh();
+    }
+
+    public changeLayer(dL: number) {
+        this.layer += dL;
+        this.refresh();
+    }
 }
