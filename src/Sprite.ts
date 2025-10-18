@@ -4,6 +4,7 @@ export interface SpriteOptions {
     x?: number;
     y?: number;
     dir?: number;
+    scene?: string;
 };
 
 export default abstract class Sprite {
@@ -11,6 +12,7 @@ export default abstract class Sprite {
     public x: number;
     public y: number;
     public dir: number;
+    public scene: string;
 
     // Rendering
 
@@ -24,7 +26,8 @@ export default abstract class Sprite {
         this.x = options?.x ?? 0;
         this.y = options?.y ?? 0;
         this.dir = options?.dir ?? 0;
-        Engine.init().addSprites(this);
+        this.scene = options?.scene ?? 'main';
+        Engine.init().addSprite(this.scene, this);
     }
 
     // Helpers
