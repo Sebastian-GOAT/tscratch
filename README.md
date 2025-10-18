@@ -1,4 +1,4 @@
-# 🐱 tscratch
+# TScratch
 
 A **Scratch-inspired 2D game engine** for **TypeScript**.
 Type-safe, lightweight, and fun — bring the simplicity of Scratch into real code.
@@ -45,7 +45,7 @@ engine.setLoop('main', () => {
   rect.turn(-2);
 });
 ```
-## Example: Multiple Sprites
+### Example: Multiple Sprites
 
 ```ts
 import { Engine, Rectangle } from 'tscratch';
@@ -95,6 +95,32 @@ const engine = Engine.init();
 engine.setLoop('main', main);
 ```
 
+### Custom sprites
+
+You can extend the `Sprite` class, or any sprite that inherits from it.
+This way, the new sprite gets access to all the sprite properties and
+methods, like `x`, `dir`, `move(steps)` and so on. You want to call the
+parents constructor using super with the sprite options, that inherit
+from `SpriteOptions`, or any sub-interface.
+
+```ts
+import { Rectangle, RectangleOptions } from 'tscratch';
+
+export interface PlayerOptions extends RectangleOptions {
+  speed: number;
+}
+
+export default class Player extends Rectangle {
+
+  public speed: number;
+
+  constructor(options?: PlayerOptions) {
+    super(options);
+    this.speed = options?.speed ?? 5;
+  }
+}
+```
+
 ## Scenes
 
 TScratch supports scenes with the `scene` property. In every sprite you create,
@@ -122,11 +148,18 @@ in the current scene.
 
 ### Sprite (abstract)
 
+#### Movement
+
 - `goTo(x, y)` → move to coordinates
 - `setX(x)` / `setY(y)` → set position
 - `changeX(x)` / `changeY(y)` → change position
 - `turn(deg)` / `point(deg)` → change / set direction
 - `changeX(dX)` / `changeY(dY)` → relative movement
+
+#### Looks
+
+- `show()` → shows the sprite
+- `hide()` → hides the sprite (prevents rendering => better preformance)
 
 ### Rectangle
 
