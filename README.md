@@ -23,7 +23,9 @@ Type-safe, lightweight, and fun — bring the simplicity of Scratch into real co
 ## Installation
 
 ```sh
-npm install tscratch
+npx create-tscratch-app@latest project-name
+cd project-name
+npm install
 ```
 
 ## Quick Start
