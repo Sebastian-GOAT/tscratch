@@ -107,6 +107,56 @@ export default class Engine {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Math
+
+    public pickRandom(min: number, max: number) {
+        if (min > max)
+            [min, max] = [max, min];
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    // Trigonometric functions
+    public sin(deg: number) {
+        return Math.sin(this.toRadians(deg));
+    }
+
+    public cos(deg: number) {
+        return Math.cos(this.toRadians(deg));
+    }
+
+    public tan(deg: number) {
+        return Math.tan(this.toRadians(deg));
+    }
+
+    public csc(deg: number) {
+        return 1 / Math.sin(this.toRadians(deg));
+    }
+
+    public sec(deg: number) {
+        return 1 / Math.cos(this.toRadians(deg));
+    }
+
+    public cot(deg: number) {
+        return 1 / Math.tan(this.toRadians(deg));
+    }
+
+    // Inverse Trigonometric functions
+    public asin(val: number) {
+        return this.toDegrees(Math.asin(val));
+    }
+
+    public acos(val: number) {
+        return this.toDegrees(Math.acos(val));
+    }
+
+    public acsc(val: number) {
+        return this.toDegrees(Math.asin(1 / val));
+    }
+
+    public asec(val: number) {
+        return this.toDegrees(Math.acos(1 / val));
+    }
+
     // Helpers
 
     public toRadians(deg: number) {
