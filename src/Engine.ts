@@ -14,7 +14,7 @@ export default class Engine {
 
     private static instance: Engine;
 
-    private updateInterval: number | undefined;
+    private loopRunning: boolean = false;
     public gameLoop: GameLoop | null = null;
     public maxFPS: number = 24;
 
@@ -39,6 +39,7 @@ export default class Engine {
         if (!this.sceneMap[scene])
             this.sceneMap[scene] = { sprites: [], loop: null };
 
+        this.loopRunning = false;
         this.currentScene = scene;
         this.gameLoop = this.sceneMap[scene].loop;
         this.setMaxFramesPerSecond(this.maxFPS); // Update the interval function
@@ -78,14 +79,18 @@ export default class Engine {
         this.sceneMap[scene].sprites.splice(targetIndex, 0, sprite);
     }
 
-    public setMaxFramesPerSecond(maxFPS: number) {
+    public async setMaxFramesPerSecond(maxFPS: number) {
         this.maxFPS = maxFPS;
     
         let loop = this.gameLoop;
         if (!loop) return;
 
-        clearInterval(this.updateInterval);
-        this.updateInterval = setInterval(() => loop(), 1000 / this.maxFPS);
+        this.loopRunning = true;
+
+        while (this.loopRunning) {
+            await loop();
+            await this.wait(1000 / maxFPS);
+        }
     }
 
     public refresh() {
@@ -115,7 +120,7 @@ export default class Engine {
     // Private constructor
 
     private constructor() {
-        this.setMaxFramesPerSecond(24);
+        void this.setMaxFramesPerSecond(24);
 
         canvas.addEventListener('mousemove', e => {
             this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
