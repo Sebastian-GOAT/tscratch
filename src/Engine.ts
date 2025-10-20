@@ -117,20 +117,16 @@ export default class Engine {
         const canvasMouseX = mouseX + canvas.width / 2;
         const canvasMouseY = canvas.height / 2 - mouseY;
 
-        ctx.save();
-        
-        ctx.translate(sprite.x + canvas.width / 2, sprite.y + canvas.height / 2);
-        ctx.rotate(this.toRadians(sprite.dir));
+        // Mouse relative to sprite center
+        const localX = canvasMouseX - (sprite.x + canvas.width / 2);
+        const localY = canvasMouseY - (canvas.height / 2 - sprite.y);
 
-        const hovered = ctx.isPointInPath(
-            sprite.getPath(), 
-            canvasMouseX - (sprite.x + canvas.width / 2), 
-            canvasMouseY - (sprite.y + canvas.height / 2)
-        );
+        // Rotate mouse point by -dir to align with the path's local coordinates
+        const angle = -this.toRadians(sprite.dir);
+        const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
+        const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
 
-        ctx.restore();
-
-        return hovered;
+        return ctx.isPointInPath(sprite.getPath(), rotatedX, rotatedY);
     }
 
     // Math
