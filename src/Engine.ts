@@ -117,7 +117,20 @@ export default class Engine {
         const canvasMouseX = mouseX + canvas.width / 2;
         const canvasMouseY = canvas.height / 2 - mouseY;
 
-        return ctx.isPointInPath(sprite.getPath(), canvasMouseX, canvasMouseY);
+        ctx.save();
+        
+        ctx.translate(sprite.x + canvas.width / 2, sprite.y + canvas.height / 2);
+        ctx.rotate(this.toRadians(sprite.dir));
+
+        const hovered = ctx.isPointInPath(
+            sprite.getPath(), 
+            canvasMouseX - (sprite.x + canvas.width / 2), 
+            canvasMouseY - (sprite.y + canvas.height / 2)
+        );
+
+        ctx.restore();
+
+        return hovered;
     }
 
     // Math
