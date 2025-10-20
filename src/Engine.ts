@@ -21,6 +21,8 @@ export default class Engine {
     public mouseX: number = 0;
     public mouseY: number = 0;
 
+    public mouseDown: boolean = false;
+
     public currentScene: string = 'main';
     public sceneMap: SceneMap = {};
 
@@ -107,6 +109,17 @@ export default class Engine {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Mouse events
+
+    public isHovered(sprite: Sprite) {
+        const { mouseX, mouseY } = this;
+
+        const canvasMouseX = mouseX + canvas.width / 2;
+        const canvasMouseY = canvas.height / 2 - mouseY;
+
+        return ctx.isPointInPath(sprite.getPath(), canvasMouseX, canvasMouseY);
+    }
+
     // Math
 
     public pickRandom(min: number, max: number) {
@@ -175,6 +188,12 @@ export default class Engine {
         canvas.addEventListener('mousemove', e => {
             this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
             this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
+        });
+        canvas.addEventListener('mousedown', e => {
+            this.mouseDown = true;
+        });
+        canvas.addEventListener('mouseup', e => {
+            this.mouseDown = false;
         });
     }
 }

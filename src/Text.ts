@@ -36,6 +36,24 @@ export default class Text extends Sprite {
 
     private font: string;
 
+    public getPath(): Path2D {
+        const path = new Path2D();
+
+        ctx.save();
+        
+        ctx.font = this.font;
+
+        const metrics = ctx.measureText(this.content);
+        const width = metrics.width;
+        const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+        ctx.restore();
+
+        path.rect(-width / 2, -height / 2, width, height);
+
+        return path
+    }
+
     public draw() {
         ctx.save();
 

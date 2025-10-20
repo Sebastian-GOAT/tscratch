@@ -15,6 +15,19 @@ export default class ImageSprite extends Sprite {
 
     protected img: HTMLImageElement;
 
+    public getPath(): Path2D {
+        const path = new Path2D();
+
+        path.rect(
+            -this.width / 2,
+            -this.height / 2,
+            this.width,
+            this.height
+        );
+
+        return path;
+    }
+
     public draw() {
         ctx.save();
 

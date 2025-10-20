@@ -13,21 +13,33 @@ export default class Oval extends Sprite {
     public radB: number;
     public color: string;
 
-    public draw(): void {
-        const rotation = this.toRadians(this.dir);
-        
-        ctx.beginPath();
-        ctx.ellipse(
-            this.x + canvas.width / 2,
-            -this.y + canvas.height / 2,
+    public getPath(): Path2D {
+        const path = new Path2D();
+
+        path.ellipse(
+            0, 0,
             this.radA,
             this.radB,
-            rotation, 0,
+            0, 0,
             Math.PI * 2
         );
 
+        return path;
+    }
+
+    public draw(): void {
+        ctx.save();
+
+        const cX = this.x + canvas.width / 2;
+        const cY = -this.y + canvas.height / 2;
+        ctx.translate(cX, cY);
+
+        ctx.rotate(this.toRadians(this.dir));
+
         ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.fill(this.getPath());
+
+        ctx.restore();
     }
 
     public setRadA(radA: number) {

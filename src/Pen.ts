@@ -13,7 +13,10 @@ export default class Pen extends Sprite {
     public size: number;
     public color: string;
 
-    draw() {}
+    public getPath(): Path2D {
+        return new Path2D();
+    }
+    public draw() {}
 
     public up() {
         this.drawing = false;

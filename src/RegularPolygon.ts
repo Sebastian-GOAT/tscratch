@@ -13,27 +13,39 @@ export default class RegularPolygon extends Sprite {
     public radius: number;
     public color: string;
 
-    public draw() {
-        const r = this.radius;
+    public getPath(): Path2D {
+        const path = new Path2D();
+
         const step = (Math.PI * 2) / this.sides;
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-
         const rotation = this.toRadians(this.dir);
+        const r = this.radius;
 
-        ctx.beginPath();
         for (let i = 0; i < this.sides; i++) {
             const theta = i * step - Math.PI / 2 + rotation;
-            const px = cx + this.x + r * Math.cos(theta);
-            const py = cy - this.y - r * Math.sin(theta);
+            const px = r * Math.cos(theta);
+            const py = -r * Math.sin(theta);
 
-            if (i === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
+            if (i === 0) path.moveTo(px, py);
+            else path.lineTo(px, py);
         }
-        ctx.closePath();
+
+        path.closePath();
+
+        return path;
+    }
+
+    public draw() {
+        ctx.save();
+
+        const cX = this.x + canvas.width / 2;
+        const cY = this.y + canvas.height / 2;
+
+        ctx.translate(cX, cY);
 
         ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.fill(this.getPath());
+
+        ctx.restore();
     }
 
     public setSides(sides: number) {

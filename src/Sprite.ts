@@ -20,6 +20,7 @@ export default abstract class Sprite {
 
     // Rendering
 
+    public abstract getPath(): Path2D;
     public abstract draw(): void;
 
     protected refresh() {

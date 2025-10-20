@@ -13,6 +13,19 @@ export default class Rectangle extends Sprite {
     public height: number;
     public color: string;
 
+    public getPath(): Path2D {
+        const path = new Path2D();
+
+        path.rect(
+            -this.width / 2,
+            -this.height / 2,
+            this.width,
+            this.height
+        );
+
+        return path;
+    }
+
     public draw(): void {
         ctx.save();
 
@@ -23,12 +36,7 @@ export default class Rectangle extends Sprite {
         ctx.rotate(this.toRadians(this.dir));
 
         ctx.fillStyle = this.color;
-        ctx.fillRect(
-            -this.width / 2,
-            -this.height / 2,
-            this.width,
-            this.height
-        );
+        ctx.fill(this.getPath())
 
         ctx.restore();
     }
