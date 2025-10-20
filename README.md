@@ -110,6 +110,18 @@ const engine = Engine.init();
 engine.setLoop('main', main);
 ```
 
+### Collisions
+
+Sadly, TScratch doesn't have a built in method for collision checking.
+However, there might be some 3rd party libraries that extend TScratch
+with collision checks.
+
+But TScratch does have methods for mouse interactions! You can use the
+`engine.isHovering(sprite)` method to check, if the user is hovering a
+specific sprite. By combining this with `engine.mouseDown`, you can
+create click events. You can also make your own custom events using
+`engine.mouseX` and `engine.mouseY`.
+
 ### Custom sprites
 
 You can extend the `Sprite` class, or any sprite that inherits from it.
@@ -157,7 +169,8 @@ in the current scene.
 - `engine.setMaxFramesPerSecond(FPS)`→ sets the maximum FPS
 - `engine.setLoop(scene, callback)` → game loop logic
 - `engine.changeScene(scene)` → changes the scene, renders only the targeted sprites
-- `await engine.wait(ms)` → Wait some time in milliseconds (experimental)
+- `await engine.wait(ms)` → Wait some time in milliseconds
+- `engine.isHovering(sprite)` → Checks if the user is hovering a sprite with the mouse pointer
 - `engine.toRadians(rad)` → converts degrees to radians
 - `engine.toDegrees(deg)` → converts radians to degrees
 
@@ -175,6 +188,8 @@ in the current scene.
 
 - `show()` → shows the sprite
 - `hide()` → hides the sprite (prevents rendering => better preformance)
+- `goToLayer(layer)` → swithes the current layer (z-indexing)
+- `changeLayer(dL)` → moves forwards/backwards in layers (z-indexing)
 
 ### Rectangle
 
