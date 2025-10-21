@@ -22,6 +22,7 @@ programming languages.
 
 1. [Interactive Inverse Kinematics Simulation](https://tscratch-project-ik.vercel.app)
 2. [Recursive Snowflake Generator](https://tscratch-project-snowflake.vercel.app)
+3. [Pythagoras Tree Fractal](https://tscratch-project-fractal.vercel.app)
 
 ## Features
 
