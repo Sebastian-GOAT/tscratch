@@ -1,4 +1,4 @@
-import { canvas, ctx } from './canvas.ts';
+import { canvas, ctx, penCtx } from './canvas.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 
 export type CanvasTextAlign =
@@ -54,23 +54,25 @@ export default class Text extends Sprite {
         return path
     }
 
-    public draw() {
-        ctx.save();
+    public draw(stamping?: boolean) {
+        const c = stamping ? penCtx : ctx;
+
+        c.save();
 
         const cX = this.x + canvas.width / 2;
         const cY = -this.y + canvas.height / 2;
-        ctx.translate(cX, cY);
+        c.translate(cX, cY);
 
-        ctx.rotate(this.toRadians(this.dir));
+        c.rotate(this.toRadians(this.dir));
 
-        ctx.font = this.font;
-        ctx.fillStyle = this.color;
-        ctx.textAlign = this.align;
-        ctx.textBaseline = this.baseline;
+        c.font = this.font;
+        c.fillStyle = this.color;
+        c.textAlign = this.align;
+        c.textBaseline = this.baseline;
 
-        ctx.fillText(this.content, 0, 0);
+        c.fillText(this.content, 0, 0);
 
-        ctx.restore();
+        c.restore();
     }
 
     // Methods

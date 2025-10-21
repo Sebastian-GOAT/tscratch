@@ -26,6 +26,10 @@ export default class Pen extends Sprite {
         this.drawing = true;
     }
 
+    public stamp(sprite: Sprite) {
+        sprite.draw(true);
+    }
+
     public ereaseAll() {
         penCtx.clearRect(0, 0, canvas.width, canvas.height);
     }

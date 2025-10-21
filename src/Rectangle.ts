@@ -1,5 +1,5 @@
 import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { ctx, canvas } from './canvas.ts';
+import { ctx, canvas, penCtx } from './canvas.ts';
 
 export interface RectangleOptions extends SpriteOptions {
     width?: number;
@@ -26,19 +26,21 @@ export default class Rectangle extends Sprite {
         return path;
     }
 
-    public draw(): void {
-        ctx.save();
+    public draw(stamping?: boolean): void {
+        const c = stamping ? penCtx : ctx;
+
+        c.save();
 
         const cX = this.x + canvas.width / 2;
         const cY = -this.y + canvas.height / 2;
-        ctx.translate(cX, cY);
+        c.translate(cX, cY);
 
-        ctx.rotate(this.toRadians(this.dir));
+        c.rotate(this.toRadians(this.dir));
 
-        ctx.fillStyle = this.color;
-        ctx.fill(this.getPath())
+        c.fillStyle = this.color;
+        c.fill(this.getPath())
 
-        ctx.restore();
+        c.restore();
     }
 
     public setWidth(width: number) {

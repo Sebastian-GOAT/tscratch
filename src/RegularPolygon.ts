@@ -1,4 +1,4 @@
-import { canvas, ctx } from './canvas.ts';
+import { canvas, ctx, penCtx } from './canvas.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 
 export interface RegularPolygonOptions extends SpriteOptions {
@@ -34,18 +34,20 @@ export default class RegularPolygon extends Sprite {
         return path;
     }
 
-    public draw() {
-        ctx.save();
+    public draw(stamping?: boolean) {
+        const c = stamping ? penCtx : ctx;
+
+        c.save();
 
         const cX = this.x + canvas.width / 2;
         const cY = this.y + canvas.height / 2;
 
-        ctx.translate(cX, cY);
+        c.translate(cX, cY);
 
-        ctx.fillStyle = this.color;
-        ctx.fill(this.getPath());
+        c.fillStyle = this.color;
+        c.fill(this.getPath());
 
-        ctx.restore();
+        c.restore();
     }
 
     public setSides(sides: number) {

@@ -21,7 +21,7 @@ export default abstract class Sprite {
     // Rendering
 
     public abstract getPath(): Path2D;
-    public abstract draw(): void;
+    public abstract draw(stamping?: boolean): void;
 
     protected refresh() {
         Engine.init().refresh();
