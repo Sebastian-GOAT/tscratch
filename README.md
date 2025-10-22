@@ -149,6 +149,42 @@ export default class Player extends Rectangle {
 }
 ```
 
+For sprites that directly inherit from `Sprite`, you'll need to implement the
+following methods:
+
+```ts
+import { Sprite, ctx, penCtx } from 'tscratch';
+
+export default class MySprite extends Sprite {
+
+  public getPath(): Path2D {
+    const path = new Path2D();
+
+    // Example path
+    path.rect(
+      -this.width / 2, -this.height / 2,
+      this.width, this.height
+    );
+    path.closePath();
+
+    return path;
+  }
+
+  public draw(stamping?: boolean): void {
+    // For pen stamping (optional, you can just use ctx)
+    const c = stamping ? penCtx : ctx;
+    c.save();
+    c.translate(
+      this.x + canvas.width / 2,
+      -this.y + canvas.height / 2
+    );
+    c.rotate(this.toRadians(this.dir));
+    c.fill(this.getPath());
+    c.restore();
+  }
+}
+```
+
 ## Scenes
 
 TScratch supports scenes with the `scene` property. In every sprite you create,

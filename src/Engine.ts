@@ -18,6 +18,8 @@ export default class Engine {
     public gameLoop: GameLoop | null = null;
     public maxFPS: number = 24;
 
+    public sounds: HTMLAudioElement[] = [];
+
     public mouseX: number = 0;
     public mouseY: number = 0;
 
@@ -127,6 +129,31 @@ export default class Engine {
         const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
 
         return ctx.isPointInPath(sprite.getPath(), rotatedX, rotatedY);
+    }
+
+    // Sound
+
+    public playSound(src: string) {
+        const audio = new Audio(src);
+        this.sounds.push(audio);
+
+        audio.play();
+
+        return audio;
+    }
+
+    public stopSound(sound: HTMLAudioElement) {
+        sound.pause();
+        sound.currentTime = 0;
+        this.sounds = this.sounds.filter(s => s !== sound);
+    }
+
+    public stopAllSounds() {
+        this.sounds.forEach(sound => {
+            sound.pause();
+            sound.currentTime = 0;
+        });
+        this.sounds = [];
     }
 
     // Math
