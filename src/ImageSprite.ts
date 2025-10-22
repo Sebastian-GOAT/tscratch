@@ -5,6 +5,8 @@ export interface ImageSpriteOptions extends SpriteOptions {
     src?: string;
     width: number;
     height: number;
+    outlineColor?: string;
+    outlineWidth?: number;
 };
 
 export default class ImageSprite extends Sprite {
@@ -12,6 +14,8 @@ export default class ImageSprite extends Sprite {
     public src: string;
     public width: number;
     public height: number;
+    public outlineColor: string;
+    public outlineWidth: number;
 
     protected img: HTMLImageElement;
 
@@ -39,6 +43,8 @@ export default class ImageSprite extends Sprite {
 
         c.rotate(this.toRadians(this.dir));
 
+        c.strokeStyle = this.outlineColor;
+        c.lineWidth = this.outlineWidth;
         c.drawImage(
             this.img,
             0, 0,
@@ -48,6 +54,7 @@ export default class ImageSprite extends Sprite {
             -this.height / 2,
             this.width, this.height
         );
+        c.stroke(this.getPath());
 
         c.restore();
     }
@@ -80,5 +87,8 @@ export default class ImageSprite extends Sprite {
 
         this.width = options?.width ?? this.img.width;
         this.height = options?.height ?? this.img.height;
+
+        this.outlineColor = 'black';
+        this.outlineWidth = 0;
     }
 }

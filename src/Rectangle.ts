@@ -5,6 +5,8 @@ export interface RectangleOptions extends SpriteOptions {
     width?: number;
     height?: number;
     color?: string;
+    outlineColor?: string;
+    outlineWidth?: number;
 };
 
 export default class Rectangle extends Sprite {
@@ -12,6 +14,8 @@ export default class Rectangle extends Sprite {
     public width: number;
     public height: number;
     public color: string;
+    public outlineColor: string;
+    public outlineWidth: number;
 
     public getPath(): Path2D {
         const path = new Path2D();
@@ -37,8 +41,13 @@ export default class Rectangle extends Sprite {
 
         c.rotate(this.toRadians(this.dir));
 
+        const path = this.getPath();
+
         c.fillStyle = this.color;
-        c.fill(this.getPath())
+        c.strokeStyle = this.outlineColor;
+        c.lineWidth = this.outlineWidth;
+        c.fill(path)
+        c.stroke(path);
 
         c.restore();
     }
@@ -63,6 +72,8 @@ export default class Rectangle extends Sprite {
         this.width = options?.width ?? 50;
         this.height = options?.height ?? 50;
         this.color = options?.color ?? 'black';
+        this.outlineColor = 'black';
+        this.outlineWidth = 0;
         this.draw();
     }
 

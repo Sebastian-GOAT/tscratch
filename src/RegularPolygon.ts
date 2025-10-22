@@ -5,6 +5,8 @@ export interface RegularPolygonOptions extends SpriteOptions {
     sides?: number;
     radius?: number;
     color?: string;
+    outlineColor?: string;
+    outlineWidth?: number;
 }
 
 export default class RegularPolygon extends Sprite {
@@ -12,6 +14,8 @@ export default class RegularPolygon extends Sprite {
     public sides: number;
     public radius: number;
     public color: string;
+    public outlineColor: string;
+    public outlineWidth: number;
 
     public getPath(): Path2D {
         const path = new Path2D();
@@ -44,8 +48,13 @@ export default class RegularPolygon extends Sprite {
 
         c.translate(cX, cY);
 
+        const path = this.getPath();
+
         c.fillStyle = this.color;
-        c.fill(this.getPath());
+        c.strokeStyle = this.outlineColor;
+        c.lineWidth = this.outlineWidth;
+        c.fill(path)
+        c.stroke(path);
 
         c.restore();
     }
@@ -70,6 +79,8 @@ export default class RegularPolygon extends Sprite {
         this.sides = options?.sides ?? 5;
         this.radius = options?.radius ?? 50;
         this.color = options?.color ?? 'black';
+        this.outlineColor = 'black';
+        this.outlineWidth = 0;
         this.draw();
     }
 
