@@ -72,8 +72,8 @@ export default class Rectangle extends Sprite {
         this.width = options?.width ?? 50;
         this.height = options?.height ?? 50;
         this.color = options?.color ?? 'black';
-        this.outlineColor = 'black';
-        this.outlineWidth = 0;
+        this.outlineColor = options?.outlineColor ?? 'black';
+        this.outlineWidth = options?.outlineWidth ?? 0;
         this.draw();
     }
 

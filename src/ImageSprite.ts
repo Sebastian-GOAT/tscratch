@@ -88,7 +88,7 @@ export default class ImageSprite extends Sprite {
         this.width = options?.width ?? this.img.width;
         this.height = options?.height ?? this.img.height;
 
-        this.outlineColor = 'black';
-        this.outlineWidth = 0;
+        this.outlineColor = options?.outlineColor ?? 'black';
+        this.outlineWidth = options?.outlineWidth ?? 0;
     }
 }
