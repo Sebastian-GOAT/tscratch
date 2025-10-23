@@ -198,6 +198,14 @@ You can also specify 1 loop per scene using `engine.setLoop(scene, callback)`.
 Keep in mind that there is only 1 loop running at a time, which is the one
 in the current scene.
 
+## Sound
+
+You can use the `engine.playSound(src)` method to play sounds. You just provide
+the source. Keep in mind that a lot of modern browsers block sound without user
+interaction.
+
+To stop sounds, you can use the `engine.stopAllSounds()` method.
+
 ## API Overview
 
 ### Engine
