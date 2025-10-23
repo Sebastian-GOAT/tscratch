@@ -1,5 +1,5 @@
-import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { ctx, canvas, penCtx } from './canvas.ts';
+import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import { ctx, canvas, penCtx } from '../canvas.ts';
 
 export interface RectangleOptions extends SpriteOptions {
     width?: number;
