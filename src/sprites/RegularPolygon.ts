@@ -44,7 +44,7 @@ export default class RegularPolygon extends Sprite {
         c.save();
 
         const cX = this.x + canvas.width / 2;
-        const cY = this.y + canvas.height / 2;
+        const cY = -this.y + canvas.height / 2;
 
         c.translate(cX, cY);
 
