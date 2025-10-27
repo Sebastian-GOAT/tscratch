@@ -1,8 +1,9 @@
 # Live Showcases
 
-1. [Interactive Inverse Kinematics Simulation](https://tscratch-project-ik.vercel.app)
-2. [Recursive Snowflake Generator](https://tscratch-project-snowflake.vercel.app)
-3. [Pythagoras Tree Fractal](https://tscratch-project-fractal.vercel.app)
-4. [Ball Physics Simulation](https://tscratch-project-ball.vercel.app)
-5. [Abstract Art Generator (2D trig functions)](https://tscratch-project-func2d.vercel.app)
-6. [Famous Pyramid Fractal Drawing](https://tscratch-project-pyramid.vercel.app)
+1. [Interactive Inverse Kinematics Simulation](https://tscratch.vercel.app/showcase/inverse-kinematics)
+2. [Recursive Snowflake Generator](https://tscratch.vercel.app/showcase/snowflake-generator)
+3. [Pythagoras Tree Fractal](https://tscratch.vercel.app/showcase/pythagoras-tree)
+4. [Ball Physics Simulation](https://tscratch.vercel.app/showcase/ball-bouncing)
+5. [Abstract Art Generator (2D trig functions)](https://tscratch.vercel.app/showcase/abstract-art)
+6. [Famous Pyramid Fractal Drawing](https://tscratch.vercel.app/showcase/pyramid-fractal)
+7. [Famous Pyramid Fractal Drawing](https://tscratch.vercel.app/showcase/tree-fractal)

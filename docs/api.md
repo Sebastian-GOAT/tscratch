@@ -76,7 +76,7 @@ Draws an oval centered on `(x, y)`.
 
 Draws a label aligned to your preference.
 
-## ImageSprite (built-in sprite)
+## Image (built-in sprite)
 
 - `src` - the source
 - `width` - the width
