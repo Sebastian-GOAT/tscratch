@@ -81,6 +81,7 @@ export default class Engine {
         }
 
         this.sceneMap[scene].sprites.splice(targetIndex, 0, sprite);
+        this.refresh();
     }
 
     public removeSprite(sprite: Sprite) {
@@ -89,6 +90,7 @@ export default class Engine {
         if (!this.sceneMap[scene]) return;
 
         this.sceneMap[scene].sprites = this.sceneMap[scene].sprites.filter(s => s !== sprite);
+        this.refresh();
     }
 
     public async setMaxFramesPerSecond(maxFPS: number) {
