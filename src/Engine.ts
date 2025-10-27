@@ -1,4 +1,4 @@
-import { canvas, ctx } from './canvas.ts';
+import { canvas, ctx, penCanvas } from './canvas.ts';
 import Sprite from './Sprite.ts';
 
 type GameLoop = (() => any) | (() => Promise<any>);
@@ -81,6 +81,14 @@ export default class Engine {
         }
 
         this.sceneMap[scene].sprites.splice(targetIndex, 0, sprite);
+    }
+
+    public removeSprite(sprite: Sprite) {
+        const { scene } = sprite;
+
+        if (!this.sceneMap[scene]) return;
+
+        this.sceneMap[scene].sprites = this.sceneMap[scene].sprites.filter(s => s !== sprite);
     }
 
     public async setMaxFramesPerSecond(maxFPS: number) {
@@ -221,14 +229,14 @@ export default class Engine {
     private constructor() {
         void this.setMaxFramesPerSecond(24);
 
-        canvas.addEventListener('mousemove', e => {
-            this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
-            this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
+        penCanvas.addEventListener('mousemove', e => {
+            this.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
+            this.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
         });
-        canvas.addEventListener('mousedown', e => {
+        penCanvas.addEventListener('mousedown', e => {
             this.mouseDown = true;
         });
-        canvas.addEventListener('mouseup', e => {
+        penCanvas.addEventListener('mouseup', e => {
             this.mouseDown = false;
         });
     }
