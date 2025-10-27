@@ -54,7 +54,8 @@ export default class ImageSprite extends Sprite {
             -this.height / 2,
             this.width, this.height
         );
-        c.stroke(this.getPath());
+        if (this.outlineWidth)
+            c.stroke(this.getPath());
 
         c.restore();
     }

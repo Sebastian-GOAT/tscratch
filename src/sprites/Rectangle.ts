@@ -47,7 +47,8 @@ export default class Rectangle extends Sprite {
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;
         c.fill(path)
-        c.stroke(path);
+        if (this.outlineWidth)
+            c.stroke(path);
 
         c.restore();
     }
