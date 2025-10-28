@@ -1,6 +1,15 @@
 # TScratch
 
-## Contents
+## About
+
+A **Scratch-inspired 2D game engine** for **TypeScript**.
+Type-safe, lightweight, and fun — bring the simplicity of Scratch into real code.
+
+This is a new open source project. It is maintained by me, a 14 year old student.
+If anyone has suggestions, feedback, or improvement ideas, feel free to contact me
+at `sebastianrucabado0@gmail.com`, or open a pull request here on Github.
+
+## Documentation Contents
 
 - [About](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/about.md)
 - [Installation](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/installation.md)
