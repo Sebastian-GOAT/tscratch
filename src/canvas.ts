@@ -1,4 +1,4 @@
-export const canvas = document.getElementById('game-window') as HTMLCanvasElement;
+export const canvas = document.getElementById('game-window') as HTMLCanvasElement || document.createElement('canvas'); // For testing
 export const ctx = canvas.getContext('2d')!;
 
 export const penCanvas = document.createElement('canvas');

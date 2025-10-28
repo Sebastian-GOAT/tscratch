@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsup",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "typescript",
@@ -27,7 +28,10 @@
   "license": "MIT",
   "type": "module",
   "devDependencies": {
+    "@types/node": "^24.9.1",
+    "jsdom": "^27.0.1",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.4"
   }
 }
