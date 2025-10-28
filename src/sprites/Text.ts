@@ -122,5 +122,7 @@ export default class Text extends Sprite {
         this.baseline = options?.baseline ?? 'middle';
 
         this.font = `${this.fontSize}px ${this.fontFamily}`;
+
+        this.draw();
     }
 }

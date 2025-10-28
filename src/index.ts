@@ -3,6 +3,7 @@ import Engine from './Engine.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 import Rectangle, { type RectangleOptions } from './sprites/Rectangle.ts';
 import Oval, { type OvalOptions } from './sprites/Oval.ts';
+import Circle, { type CircleOptions } from './sprites/Circle.ts';
 import RegularPolygon, { type RegularPolygonOptions } from './sprites/RegularPolygon.ts';
 import Pen, { type PenOptions } from './sprites/Pen.ts';
 import Text, { type TextOptions, type CanvasTextAlign, type CanvasTextBaseline } from './sprites/Text.ts';
@@ -18,6 +19,7 @@ const TScratch = {
     // Sprites
     Rectangle,
     Oval,
+    Circle,
     RegularPolygon,
     Pen,
     Text,
@@ -39,6 +41,7 @@ export {
     // Sprites
     Rectangle,
     Oval,
+    Circle,
     RegularPolygon,
     Pen,
     Text,
@@ -48,6 +51,7 @@ export {
     type SpriteOptions,
     type RectangleOptions,
     type OvalOptions,
+    type CircleOptions,
     type RegularPolygonOptions,
     type PenOptions,
     type TextOptions,
