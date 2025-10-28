@@ -24,6 +24,9 @@ export default class Engine {
     public mouseY: number = 0;
 
     public mouseDown: boolean = false;
+    public mouseClicked: boolean = false;
+
+    private keysPressed: Set<string> = new Set<string>();
 
     public currentScene: string = 'main';
     public sceneMap: SceneMap = {};
@@ -121,7 +124,7 @@ export default class Engine {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // Mouse events
+    // Events
 
     public isHovered(sprite: Sprite) {
         const { mouseX, mouseY } = this;
@@ -139,6 +142,10 @@ export default class Engine {
         const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
 
         return ctx.isPointInPath(sprite.getPath(), rotatedX, rotatedY);
+    }
+
+    public isKeyPressed(key: string) {
+        return this.keysPressed.has(key);
     }
 
     // Sound
@@ -231,6 +238,9 @@ export default class Engine {
     private constructor() {
         void this.setMaxFramesPerSecond(24);
 
+        // Events
+
+        // Mouse
         penCanvas.addEventListener('mousemove', e => {
             this.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
             this.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
@@ -240,6 +250,20 @@ export default class Engine {
         });
         penCanvas.addEventListener('mouseup', e => {
             this.mouseDown = false;
+        });
+        penCanvas.addEventListener('click', e => {
+            this.mouseClicked = true;
+            setTimeout(() => this.mouseClicked = false, 0);
+        });
+
+        // Keys
+        addEventListener('keydown', e => {
+            if (e.repeat) return;
+            this.keysPressed.add(e.key);
+        });
+
+        addEventListener('keyup', e => {
+            this.keysPressed.delete(e.key);
         });
     }
 }

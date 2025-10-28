@@ -73,6 +73,7 @@ Draws an oval centered on `(x, y)`.
 - `content` - the text
 - `color` - the color
 - Other properties specifying the style.
+- You might need to call `.draw()` if it's not getting rendered initially.
 
 Draws a label aligned to your preference.
 
