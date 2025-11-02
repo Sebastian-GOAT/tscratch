@@ -33,6 +33,7 @@
 ### Helpers
 
 - `async wait(ms)` - wait some time in milliseconds
+- `async waitUntil(() => condition)` - wait until a condition becomes true (pass a getter)
 - `toRadians(rad)` - converts degrees to radians
 - `toDegrees(deg)` - converts radians to degrees
 
@@ -68,14 +69,44 @@
 - `width` - the width
 - `height` - the height
 - `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setWidth(width)` - set the width
+- `setHeight(height)` - set the height
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 
 Draws a rectangle centered on `(x, y)`.
+
+## Square (built-in sprite)
+
+- `sideLength` - the side length
+- `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setSideLength(sideLength)` - set the side length
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
+
+Draws a square centered on `(x, y)`.
 
 ## RegularPolygon (built-in sprite)
 
 - `radius` - the radius
 - `sides` - the number of sides
 - `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setRadius(radius)` - set the radius
+- `setSides(sides)`-  set the amount of sides
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 
 Draws a polygon centered on `(x, y)`.
 
@@ -84,6 +115,14 @@ Draws a polygon centered on `(x, y)`.
 - `radA` - radius A
 - `radB` - radius B
 - `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setRadA(radA)` - set the radius A
+- `setRadB(radB)` - set the radius B
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 
 Draws an oval centered on `(x, y)`.
 
@@ -91,6 +130,13 @@ Draws an oval centered on `(x, y)`.
 
 - `radius` - radius
 - `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setRadius(radius)` - set the radius
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 
 Draws a circle centered on `(x, y)`.
 
@@ -98,7 +144,14 @@ Draws a circle centered on `(x, y)`.
 
 - `content` - the text
 - `color` - the color
-- Other properties specifying the style.
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+- Other properties specifying the font style.
+
+- `setContent(content)` - set the text content
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 - You might need to call `.draw()` if it's not getting rendered initially.
 
 Draws a label aligned to your preference.
@@ -108,6 +161,14 @@ Draws a label aligned to your preference.
 - `src` - the source
 - `width` - the width
 - `height` - the height
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setSrc(src)` - set the image source
+- `setWidth(width)` - set the width
+- `setHeight(height)` - set the height
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
 
 Draws an image centered on `(x, y)`.
 

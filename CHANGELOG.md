@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.4.9] - 2.11.2025
+
+### Added
+
+- `async waitUntil(() => condition)` method on Engine
+- `Square` sprite
+
 ## [0.4.8] - 28.10.2025
 
 ### Added
 
-- `pointTowards(x, y)` method on sprite (no need for `Math.atan2` now)
+- `pointTowards(x, y)` method on Sprite (no need for `Math.atan2` now)

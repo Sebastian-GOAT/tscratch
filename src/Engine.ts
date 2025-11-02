@@ -118,10 +118,20 @@ export default class Engine {
         });
     }
 
-    // Wait function
+    // Wait functions
 
     public async wait(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    public async waitUntil(conditionGetter: () => boolean): Promise<void> {
+        return new Promise(resolve => {
+            const check = () => {
+                if (conditionGetter()) resolve();
+                else setTimeout(check, 1000 / this.maxFPS);
+            }
+            check();
+        });
     }
 
     // Events
