@@ -2,26 +2,46 @@
 
 ## Quick Start
 
-You can install the package using
+You can install the package using:
 
+npm:
 ```bash
 npm install tscratch
 ```
 
+yarn:
+```bash
+yarn add tscratch
+```
+
 or create a whole setup with Vite & TypeScript already integrated (recommended):
 
+npm:
 ```bash
 npx create-tscratch-app@latest project-name
 cd project-name
 npm install
 ```
 
+yarn:
+```bash
+yarn dlx create-tscratch-app@latest project-name
+cd project-name
+yarn install
+```
+
 Once you've created a project using `create-tscratch-app`, you get access to
 these 3 commands:
 
+npm:
 1. `npm run dev`     => Starts the development server on port `5173`
 2. `npm run build`   => Builds the production bundle inside `dist/`
 2. `npm run preview` => Shows a preview of the project from `dist/`
+
+yarn:
+1. `yarn dev`     => Starts the development server on port `5173`
+2. `yarn build`   => Builds the production bundle inside `dist/`
+2. `yarn preview` => Shows a preview of the project from `dist/`
 
 ## Deployment
 
