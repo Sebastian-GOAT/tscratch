@@ -52,7 +52,7 @@ export default class Engine {
         this.setMaxFramesPerSecond(this.maxFPS); // Update the interval function
     }
 
-    // Set a loop
+    // Loops
 
     public setLoop(scene: string, loop: GameLoop) {
         if (!this.sceneMap[scene]) {
@@ -65,6 +65,14 @@ export default class Engine {
         this.sceneMap[scene].loop = loop;
         if (scene === this.currentScene)
             this.changeScene(scene);
+    }
+
+    public pauseLoop() {
+        this.loopRunning = false;
+    }
+
+    public resumeLoop() {
+        this.loopRunning = true;
     }
 
     // Internal
