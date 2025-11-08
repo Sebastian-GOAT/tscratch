@@ -1,5 +1,5 @@
 export const canvas = document.getElementById('game-window') as HTMLCanvasElement || document.createElement('canvas'); // For testing
-export const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
+export const ctx = canvas.getContext('2d')!;
 
 export const penCanvas = document.createElement('canvas');
 export const penCtx = penCanvas.getContext('2d')!;

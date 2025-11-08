@@ -86,7 +86,7 @@ export default abstract class Sprite {
         const offCanvas = document.createElement('canvas');
         offCanvas.width = width;
         offCanvas.height = height;
-        const ctx = offCanvas.getContext('2d')!;
+        const ctx = offCanvas.getContext('2d', { willReadFrequently: true })!;
 
         // Draw first sprite
         ctx.save();
