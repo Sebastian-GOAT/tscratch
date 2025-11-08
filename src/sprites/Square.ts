@@ -21,8 +21,8 @@ export default class Square extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.sideLength,
-            height: this.sideLength
+            width: Math.hypot(this.sideLength, this.sideLength),
+            height: Math.hypot(this.sideLength, this.sideLength)
         };
     }
 

@@ -23,8 +23,8 @@ export default class Rectangle extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.width,
-            height: this.height
+            width: Math.hypot(this.width, this.height),
+            height: Math.hypot(this.width, this.height)
         };
     }
 

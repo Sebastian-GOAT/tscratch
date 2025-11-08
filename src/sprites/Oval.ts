@@ -23,8 +23,8 @@ export default class Oval extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.radX * 2,
-            height: this.radY * 2
+            width: Math.hypot(this.radX * 2, this.radY * 2),
+            height: Math.hypot(this.radX * 2, this.radY * 2)
         };
     }
 

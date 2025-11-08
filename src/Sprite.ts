@@ -54,8 +54,8 @@ export default abstract class Sprite {
         const bBox2 = sprite.getBoundingBox();
 
         const aabbOverlap =
-            Math.abs(bBox1.x - bBox2.x) * 2 < (bBox1.width + bBox2.width) &&
-            Math.abs(bBox1.y - bBox2.y) * 2 < (bBox1.height + bBox2.height);
+            Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
+            Math.abs(bBox1.y - bBox2.y) < (bBox1.height + bBox2.height) / 2;
 
         if (!aabbOverlap) return false;
 
@@ -63,34 +63,35 @@ export default abstract class Sprite {
 
         // Compute intersection bounding box
         const b1Left = bBox1.x - bBox1.width / 2;
-        const b1Top = bBox1.y - bBox1.height / 2;
+        const b1Top = bBox1.y + bBox1.height / 2;
         const b1Right = bBox1.x + bBox1.width / 2;
-        const b1Bottom = bBox1.y + bBox1.height / 2;
+        const b1Bottom = bBox1.y - bBox1.height / 2;
 
         const b2Left = bBox2.x - bBox2.width / 2;
-        const b2Top = bBox2.y - bBox2.height / 2;
+        const b2Top = bBox2.y + bBox2.height / 2;
         const b2Right = bBox2.x + bBox2.width / 2;
-        const b2Bottom = bBox2.y + bBox2.height / 2;
+        const b2Bottom = bBox2.y - bBox2.height / 2;
 
         const xMin = Math.max(b1Left, b2Left);
-        const yMin = Math.max(b1Top, b2Top);
+        const yMin = Math.min(b1Bottom, b2Bottom);
         const xMax = Math.min(b1Right, b2Right);
-        const yMax = Math.min(b1Bottom, b2Bottom);
+        const yMax = Math.max(b1Top, b2Top);
 
         const width = xMax - xMin;
         const height = yMax - yMin;
 
-        if (width <= 0 || height <= 0) return false;
+        if (width <= 1 || height <= 1) return false;
 
         // Create offscreen canvas just for intersection region
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d')!;
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = width;
+        offCanvas.height = height;
+        const ctx = offCanvas.getContext('2d')!;
 
         // Draw first sprite
         ctx.save();
-        ctx.translate(-xMin, -yMin);
+        ctx.translate(this.x - xMin, height - this.y + yMin);
+        ctx.rotate(this.toRadians(this.dir));
         ctx.fillStyle = 'red';
         ctx.fill(this.getPath());
         ctx.restore();
@@ -99,16 +100,16 @@ export default abstract class Sprite {
         // Draw second sprite
         ctx.clearRect(0, 0, width, height);
         ctx.save();
-        ctx.translate(-xMin, -yMin);
+        ctx.translate(sprite.x - xMin, height - sprite.y + yMin);
+        ctx.rotate(this.toRadians(sprite.dir));
         ctx.fillStyle = 'blue';
         ctx.fill(sprite.getPath());
         ctx.restore();
         const img2 = ctx.getImageData(0, 0, width, height).data;
 
         // Check for overlapping non-transparent pixels
-        for (let i = 3; i < img1.length; i += 4) { // alpha channel
+        for (let i = 3; i < img1.length; i += 4) // alpha channel
             if (img1[i]! > 0 && img2[i]! > 0) return true;
-        }
 
         return false;
     }
