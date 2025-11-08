@@ -29,17 +29,13 @@ export default class RegularPolygon extends Sprite {
     }
 
     public getPath(): Path2D {
-
         const path = new Path2D();
         const step = (2 * Math.PI) / this.sides;
-
         path.moveTo(this.radius, 0);
-
-        for (let i = 1; i < this.sides; i++)
+        for (let i = 1; i < this.sides; i++) {
             path.lineTo(this.radius * Math.cos(step * i), this.radius * Math.sin(step * i));
-
+        }
         path.closePath();
-        
         return path;
     }
 
@@ -52,6 +48,7 @@ export default class RegularPolygon extends Sprite {
         const cY = -this.y + canvas.height / 2;
 
         c.translate(cX, cY);
+        c.rotate(this.toRadians(this.dir));
 
         const path = this.getPath();
 
