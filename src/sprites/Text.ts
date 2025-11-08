@@ -1,5 +1,5 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export type CanvasTextAlign =
     | 'left'
@@ -27,6 +27,8 @@ export interface TextOptions extends SpriteOptions {
 
 export default class Text extends Sprite {
 
+    public discriminant = 'text';
+
     public content: string;
     public color: string;
     public fontFamily: string;
@@ -35,6 +37,18 @@ export default class Text extends Sprite {
     public baseline: CanvasTextBaseline;
 
     private font: string;
+
+    public getBoundingBox(): BoundingBox {
+        const metrics = ctx.measureText(this.content);
+        const width = metrics.width;
+        const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+        return {
+            x: this.x,
+            y: this.y,
+            width, height
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();

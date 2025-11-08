@@ -1,9 +1,9 @@
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
 
 export interface OvalOptions extends SpriteOptions {
-    radA?: number;
-    radB?: number;
+    radX?: number;
+    radY?: number;
     color?: string;
     outlineColor?: string;
     outlineWidth?: number;
@@ -11,19 +11,30 @@ export interface OvalOptions extends SpriteOptions {
 
 export default class Oval extends Sprite {
 
-    public radA: number;
-    public radB: number;
+    public discriminant = 'circle';
+
+    public radX: number;
+    public radY: number;
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.radX * 2,
+            height: this.radY * 2
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();
 
         path.ellipse(
             0, 0,
-            this.radA,
-            this.radB,
+            this.radX,
+            this.radY,
             0, 0,
             Math.PI * 2
         );
@@ -54,13 +65,13 @@ export default class Oval extends Sprite {
         c.restore();
     }
 
-    public setRadA(radA: number) {
-        this.radA = radA;
+    public setRadX(radX: number) {
+        this.radX = radX;
         this.refresh();
     }
 
-    public setRadB(radB: number) {
-        this.radB = radB;
+    public setRadY(radY: number) {
+        this.radY = radY;
         this.refresh();
     }
 
@@ -71,8 +82,8 @@ export default class Oval extends Sprite {
 
     constructor(options?: OvalOptions) {
         super(options);
-        this.radA = options?.radA ?? 25;
-        this.radB = options?.radB ?? 25;
+        this.radX = options?.radX ?? 25;
+        this.radY = options?.radY ?? 25;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;

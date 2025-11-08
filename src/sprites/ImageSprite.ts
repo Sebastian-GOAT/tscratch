@@ -1,5 +1,5 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface ImageSpriteOptions extends SpriteOptions {
     src?: string;
@@ -11,6 +11,8 @@ export interface ImageSpriteOptions extends SpriteOptions {
 
 export default class ImageSprite extends Sprite {
 
+    public discriminant = 'imagesprite';
+
     public src: string;
     public width: number;
     public height: number;
@@ -18,6 +20,15 @@ export default class ImageSprite extends Sprite {
     public outlineWidth: number;
 
     protected img: HTMLImageElement;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();

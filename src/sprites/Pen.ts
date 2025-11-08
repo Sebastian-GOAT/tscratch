@@ -1,5 +1,5 @@
 import { canvas, penCtx } from '../canvas.ts';
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface PenOptions extends SpriteOptions {
     drawing?: boolean;
@@ -9,9 +9,20 @@ export interface PenOptions extends SpriteOptions {
 
 export default class Pen extends Sprite {
 
+    public discriminant = 'pen';
+
     public drawing: boolean;
     public size: number;
     public color: string;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.size,
+            height: this.size
+        };
+    }
 
     public getPath(): Path2D {
         return new Path2D();

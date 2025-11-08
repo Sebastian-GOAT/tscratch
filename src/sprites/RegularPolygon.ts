@@ -1,5 +1,5 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface RegularPolygonOptions extends SpriteOptions {
     sides?: number;
@@ -11,11 +11,22 @@ export interface RegularPolygonOptions extends SpriteOptions {
 
 export default class RegularPolygon extends Sprite {
 
+    public discriminant = 'regularpolygon';
+
     public sides: number;
     public radius: number;
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.radius * 2,
+            height: this.radius * 2
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();

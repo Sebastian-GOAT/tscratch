@@ -1,4 +1,4 @@
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { ctx, canvas, penCtx } from '../canvas.ts';
 
 export interface SquareOptions extends SpriteOptions {
@@ -10,10 +10,21 @@ export interface SquareOptions extends SpriteOptions {
 
 export default class Square extends Sprite {
 
+    public discriminant = 'square';
+
     public sideLength: number;
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.sideLength,
+            height: this.sideLength
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();

@@ -1,4 +1,4 @@
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
 
 export interface CircleOptions extends SpriteOptions {
@@ -10,10 +10,21 @@ export interface CircleOptions extends SpriteOptions {
 
 export default class Circle extends Sprite {
 
+    public discriminant = 'circle';
+
     public radius: number;
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.radius * 2,
+            height: this.radius * 2
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();

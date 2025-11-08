@@ -112,14 +112,14 @@ Draws a polygon centered on `(x, y)`.
 
 ## Oval (built-in sprite)
 
-- `radA` - radius A
-- `radB` - radius B
+- `radX` - radius X
+- `radY` - radius Y
 - `color` - the color
 - `outlineWidth` - the border thickness
 - `outlineColor` - the border color
 
-- `setRadA(radA)` - set the radius A
-- `setRadB(radB)` - set the radius B
+- `setRadX(radX)` - set the radius X
+- `setRadY(radY)` - set the radius Y
 - `setColor(color)` - set the color
 - `setOutlineWidth(width)` - set the border thickness
 - `setOutlineColor(color)` - set the border color

@@ -1,4 +1,4 @@
-import Sprite, { type SpriteOptions } from '../Sprite.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { ctx, canvas, penCtx } from '../canvas.ts';
 
 export interface RectangleOptions extends SpriteOptions {
@@ -11,11 +11,22 @@ export interface RectangleOptions extends SpriteOptions {
 
 export default class Rectangle extends Sprite {
 
+    public discriminant = 'rectangle';
+
     public width: number;
     public height: number;
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+
+    public getBoundingBox(): BoundingBox {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height
+        };
+    }
 
     public getPath(): Path2D {
         const path = new Path2D();
