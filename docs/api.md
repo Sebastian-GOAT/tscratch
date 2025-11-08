@@ -19,11 +19,11 @@
 - `mouseDown` - checks if the user is holding the mouse button
 - `mouseClicked` - checks if the user is has clicked the mouse button
 
-- `isHovering(sprite)` - checks if the user is hovering a sprite with the mouse pointer
+- `hovering(sprite)` - checks if the user is hovering a sprite with the mouse pointer
 
 ### Keyboard Events
 
-- `isKeyPressed(key)` - checks if the user pressed a key
+- `keyPressed(key)` - checks if the user pressed a key
 
 ### Sound
 
@@ -57,6 +57,7 @@
 
 ### Looks
 
+- `scene` - the scene that it's rendered in (`*` for global rendering)
 - `hidden` - is currently hidden?
 - `layer` - the layer (z-index)
 

@@ -16,7 +16,10 @@ export default class Engine {
 
     private loopRunning: boolean = false;
     public gameLoop: GameLoop | null = null;
+
     public maxFPS: number = 24;
+    public deltaTime: number = 1 / this.maxFPS;
+    private lastFrame: number = performance.now();
 
     public sounds: HTMLAudioElement[] = [];
 
@@ -73,6 +76,7 @@ export default class Engine {
 
     public resumeLoop() {
         this.loopRunning = true;
+        void this.setMaxFramesPerSecond(this.maxFPS);
     }
 
     // Internal
@@ -113,6 +117,12 @@ export default class Engine {
         this.loopRunning = true;
 
         while (this.loopRunning) {
+            const last = this.lastFrame;
+            const now = performance.now();
+
+            this.deltaTime = (now - last) / 1000;
+            this.lastFrame = now;
+
             await loop();
             await this.wait(1000 / maxFPS);
         }
@@ -120,7 +130,11 @@ export default class Engine {
 
     public refresh() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.sceneMap[this.currentScene]?.sprites.forEach(sprite => {
+        const sprites = [
+            ...(this.sceneMap[this.currentScene]?.sprites ?? []),
+            ...(this.sceneMap['*']?.sprites ?? [])
+        ];
+        sprites.forEach(sprite => {
             if (!sprite.hidden)
                 sprite.draw();
         });
@@ -144,7 +158,7 @@ export default class Engine {
 
     // Events
 
-    public isHovered(sprite: Sprite) {
+    public hovering(sprite: Sprite) {
         const { mouseX, mouseY } = this;
 
         const canvasMouseX = mouseX + canvas.width / 2;
@@ -162,7 +176,7 @@ export default class Engine {
         return ctx.isPointInPath(sprite.getPath(), rotatedX, rotatedY);
     }
 
-    public isKeyPressed(key: string) {
+    public keyPressed(key: string) {
         return this.keysPressed.has(key);
     }
 

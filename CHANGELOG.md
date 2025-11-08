@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.5.6] - 8.11.2025
+
+### Added
+
+- `deltaTime` property on Engine (seconds between the last 2 frames)
+
+### Changed
+
+- `isKeyPressed(key)` method on Engine renamed to `keyPressed(key)`
+- `isHovered(sprite)` method on Engine renamed to `hovering(sprite)`
+- `*` special scene name for global sprites (doesn't apply to loops)
+
 ## [0.5.3] - 8.11.2025
 
 ### Added
