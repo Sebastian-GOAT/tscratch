@@ -53,6 +53,7 @@
 - `turn(deg)` - changes the direction
 - `point(deg)` - points in some direction
 - `pointTowards(x, y)` - points towards coordinates
+- `touching(sprite)` - checks for a collision with another sprite
 
 ### Looks
 

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.5.3] - 8.11.2025
+
+### Added
+
+- `getBoundingBox()` abstract method on Sprite (must be implemented on sprites that inherit directly from Sprite)
+- `touching(sprite)` method on Sprite (experimental, works unpredictably for `RegularPolygon`)
+
+### Changed
+
+- `radX, radY` instead of `radA, radB` on Oval
+
 ## [0.5.0] - 3.11.2025
 
 ### Added
