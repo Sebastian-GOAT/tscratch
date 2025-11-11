@@ -44,7 +44,7 @@ export default class Oval extends Sprite {
 
     public draw(stamping?: boolean): void {
         const c = stamping ? penCtx : ctx;
-       
+
         c.save();
 
         const cX = this.x + canvas.width / 2;
@@ -53,7 +53,7 @@ export default class Oval extends Sprite {
 
         c.rotate(this.toRadians(this.dir));
 
-        const path = this.getPath();
+        const path = this.getCachedPath();
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
@@ -67,11 +67,13 @@ export default class Oval extends Sprite {
 
     public setRadX(radX: number) {
         this.radX = radX;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setRadY(radY: number) {
         this.radY = radY;
+        this.invalidatePath();
         this.refresh();
     }
 

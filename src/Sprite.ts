@@ -25,6 +25,13 @@ export default abstract class Sprite {
     public hidden: boolean;
     public layer: number;
 
+    private cachedPath: Path2D | null = null;
+    private pathDirty: boolean = true;
+
+    // Reusable collision detection canvas
+    private static collisionCanvas: HTMLCanvasElement | null = null;
+    private static collisionCtx: CanvasRenderingContext2D | null = null;
+
     // Rendering
 
     public abstract getBoundingBox(): BoundingBox;
@@ -33,6 +40,19 @@ export default abstract class Sprite {
 
     protected refresh() {
         Engine.init().refresh();
+    }
+
+    protected invalidatePath() {
+        this.pathDirty = true;
+        this.cachedPath = null;
+    }
+
+    protected getCachedPath(): Path2D {
+        if (this.pathDirty || !this.cachedPath) {
+            this.cachedPath = this.getPath();
+            this.pathDirty = false;
+        }
+        return this.cachedPath;
     }
 
     constructor(options?: SpriteOptions) {
@@ -82,18 +102,27 @@ export default abstract class Sprite {
 
         if (width <= 1 || height <= 1) return false;
 
-        // Create offscreen canvas just for intersection region
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = width;
-        offCanvas.height = height;
-        const ctx = offCanvas.getContext('2d', { willReadFrequently: true })!;
+        // Reuse or create offscreen canvas for collision detection
+        if (!Sprite.collisionCanvas) {
+            Sprite.collisionCanvas = document.createElement('canvas');
+            Sprite.collisionCtx = Sprite.collisionCanvas.getContext('2d', { willReadFrequently: true })!;
+        }
+
+        // Resize if needed
+        if (Sprite.collisionCanvas.width < width || Sprite.collisionCanvas.height < height) {
+            Sprite.collisionCanvas.width = Math.max(width, Sprite.collisionCanvas.width);
+            Sprite.collisionCanvas.height = Math.max(height, Sprite.collisionCanvas.height);
+        }
+
+        const ctx = Sprite.collisionCtx!;
+        ctx.clearRect(0, 0, width, height);
 
         // Draw first sprite
         ctx.save();
         ctx.translate(this.x - xMin, height - this.y + yMin);
         ctx.rotate(this.toRadians(this.dir));
         ctx.fillStyle = 'red';
-        ctx.fill(this.getPath());
+        ctx.fill(this.getCachedPath());
         ctx.restore();
         const img1 = ctx.getImageData(0, 0, width, height).data;
 
@@ -103,7 +132,7 @@ export default abstract class Sprite {
         ctx.translate(sprite.x - xMin, height - sprite.y + yMin);
         ctx.rotate(this.toRadians(sprite.dir));
         ctx.fillStyle = 'blue';
-        ctx.fill(sprite.getPath());
+        ctx.fill(sprite.getCachedPath());
         ctx.restore();
         const img2 = ctx.getImageData(0, 0, width, height).data;
 

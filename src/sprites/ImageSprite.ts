@@ -66,7 +66,7 @@ export default class ImageSprite extends Sprite {
             this.width, this.height
         );
         if (this.outlineWidth)
-            c.stroke(this.getPath());
+            c.stroke(this.getCachedPath());
 
         c.restore();
     }
@@ -80,11 +80,13 @@ export default class ImageSprite extends Sprite {
 
     public setWidth(width: number) {
         this.width = width;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setHeight(height: number) {
         this.height = height;
+        this.invalidatePath();
         this.refresh();
     }
 

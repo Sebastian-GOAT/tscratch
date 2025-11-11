@@ -50,7 +50,7 @@ export default class Square extends Sprite {
 
         c.rotate(this.toRadians(this.dir));
 
-        const path = this.getPath();
+        const path = this.getCachedPath();
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
@@ -64,6 +64,7 @@ export default class Square extends Sprite {
 
     public setSideLength(sideLength: number) {
         this.sideLength = sideLength;
+        this.invalidatePath();
         this.refresh();
     }
 
