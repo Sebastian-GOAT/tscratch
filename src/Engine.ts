@@ -20,6 +20,8 @@ export default class Engine {
     public maxFPS: number = 24;
     public deltaTime: number = 1 / this.maxFPS;
     private lastFrame: number = performance.now();
+    private refreshScheduled: boolean = false;
+    private animationFrameId: number | null = null;
 
     public sounds: HTMLAudioElement[] = [];
 
@@ -72,6 +74,10 @@ export default class Engine {
 
     public pauseLoop() {
         this.loopRunning = false;
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
     }
 
     public resumeLoop() {
@@ -110,33 +116,57 @@ export default class Engine {
 
     public async setMaxFramesPerSecond(maxFPS: number) {
         this.maxFPS = maxFPS;
-    
+
         let loop = this.gameLoop;
         if (!loop) return;
 
-        this.loopRunning = true;
-
-        while (this.loopRunning) {
-            const last = this.lastFrame;
-            const now = performance.now();
-
-            this.deltaTime = (now - last) / 1000;
-            this.lastFrame = now;
-
-            await loop();
-            await this.wait(1000 / maxFPS);
+        // Cancel existing animation frame if any
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
         }
+
+        this.loopRunning = true;
+        const frameInterval = 1000 / maxFPS;
+        let accumulator = 0;
+
+        const tick = async (currentTime: number) => {
+            if (!this.loopRunning) return;
+
+            const deltaTime = currentTime - this.lastFrame;
+            this.lastFrame = currentTime;
+            accumulator += deltaTime;
+
+            // Fixed timestep: only run loop when enough time has passed
+            if (accumulator >= frameInterval) {
+                this.deltaTime = accumulator / 1000;
+                accumulator = accumulator % frameInterval;
+
+                if (loop) await loop();
+            }
+
+            this.animationFrameId = requestAnimationFrame(tick);
+        };
+
+        this.lastFrame = performance.now();
+        this.animationFrameId = requestAnimationFrame(tick);
     }
 
     public refresh() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const sprites = [
-            ...(this.sceneMap[this.currentScene]?.sprites ?? []),
-            ...(this.sceneMap['*']?.sprites ?? [])
-        ];
-        sprites.forEach(sprite => {
-            if (!sprite.hidden)
-                sprite.draw();
+        if (this.refreshScheduled) return;
+        this.refreshScheduled = true;
+
+        requestAnimationFrame(() => {
+            this.refreshScheduled = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const sprites = [
+                ...(this.sceneMap[this.currentScene]?.sprites ?? []),
+                ...(this.sceneMap['*']?.sprites ?? [])
+            ];
+            sprites.forEach(sprite => {
+                if (!sprite.hidden)
+                    sprite.draw();
+            });
         });
     }
 

@@ -50,7 +50,7 @@ export default class RegularPolygon extends Sprite {
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
 
-        const path = this.getPath();
+        const path = this.getCachedPath();
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
@@ -64,11 +64,13 @@ export default class RegularPolygon extends Sprite {
 
     public setSides(sides: number) {
         this.sides = sides;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setRadius(radius: number) {
         this.radius = radius;
+        this.invalidatePath();
         this.refresh();
     }
 

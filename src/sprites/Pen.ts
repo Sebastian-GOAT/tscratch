@@ -41,7 +41,7 @@ export default class Pen extends Sprite {
         sprite.draw(true);
     }
 
-    public ereaseAll() {
+    public eraseAll() {
         penCtx.clearRect(0, 0, canvas.width, canvas.height);
     }
 

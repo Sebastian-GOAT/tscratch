@@ -93,6 +93,7 @@ export default class Text extends Sprite {
 
     public setContent(content: string) {
         this.content = content;
+        this.invalidatePath();
         this.refresh();
     }
 
@@ -104,22 +105,26 @@ export default class Text extends Sprite {
     public setFontSize(fontSize: number) {
         this.fontSize = fontSize;
         this.font = `${this.fontSize}px ${this.fontFamily}`;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setFontFamily(fontFamily: string) {
         this.fontFamily = fontFamily;
         this.font = `${this.fontSize}px ${this.fontFamily}`;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setAlign(align: CanvasTextAlign) {
         this.align = align;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setBaseline(baseline: CanvasTextBaseline) {
         this.baseline = baseline;
+        this.invalidatePath();
         this.refresh();
     }
 

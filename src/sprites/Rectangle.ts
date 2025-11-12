@@ -52,7 +52,7 @@ export default class Rectangle extends Sprite {
 
         c.rotate(this.toRadians(this.dir));
 
-        const path = this.getPath();
+        const path = this.getCachedPath();
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
@@ -66,11 +66,13 @@ export default class Rectangle extends Sprite {
 
     public setWidth(width: number) {
         this.width = width;
+        this.invalidatePath();
         this.refresh();
     }
 
     public setHeight(height: number) {
         this.height = height;
+        this.invalidatePath();
         this.refresh();
     }
 
