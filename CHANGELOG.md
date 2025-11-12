@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.5.7] - 12.11.2025
+
+### Fixed
+
+- `ereaseAll()` -> `eraseAll()` typo
+
 ## [0.5.6] - 8.11.2025
 
 ### Added
