@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
-## [0.5.7] - 13.11.2025
+## [0.5.8] - 13.11.2025
 
 ### Added
 
 - `Arc` sprite
+- `CustomPolygon` **EXPERIMENTAL** sprite, allows you to define custom polygons with your own vertices
+- `Vec2`, `Vec3`, `Vec4` types for better readability & reusability
+- `dotProduct(vectors)` method on engine
 
 ## [0.5.7] - 12.11.2025
 

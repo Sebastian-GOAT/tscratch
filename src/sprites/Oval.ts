@@ -11,7 +11,7 @@ export interface OvalOptions extends SpriteOptions {
 
 export default class Oval extends Sprite {
 
-    public discriminant = 'circle';
+    public discriminant = 'oval';
 
     public radX: number;
     public radY: number;

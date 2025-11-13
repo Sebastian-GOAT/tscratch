@@ -1,5 +1,6 @@
 import { canvas, ctx, penCanvas } from './canvas.ts';
 import Sprite from './Sprite.ts';
+import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
 type GameLoop = (() => any) | (() => Promise<any>);
 
@@ -241,6 +242,16 @@ export default class Engine {
         if (min > max)
             [min, max] = [max, min];
         return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    public dotProduct(vectors: [Vec2, Vec2] | [Vec3, Vec3] | [Vec4, Vec4]) {
+        const [a, b] = vectors;
+
+        switch (a.length) {
+            case 2: return a[0] * b[0] + a[1] * b[1];
+            case 3: return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]!;
+            case 4: return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]! + a[3] * b[3]!; // TypeScript doesn't narrow down the types on b
+        }
     }
 
     // Trigonometric functions

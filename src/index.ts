@@ -8,9 +8,12 @@ import Oval, { type OvalOptions } from './sprites/Oval.ts';
 import Circle, { type CircleOptions } from './sprites/Circle.ts';
 import Arc, { type ArcOptions } from './sprites/Arc.ts';
 import RegularPolygon, { type RegularPolygonOptions } from './sprites/RegularPolygon.ts';
+import CustomPolygon, { type CustomPolygonOptions } from './sprites/CustomPolygon.ts';
 import Pen, { type PenOptions } from './sprites/Pen.ts';
 import Text, { type TextOptions, type CanvasTextAlign, type CanvasTextBaseline } from './sprites/Text.ts';
 import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
+
+import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
 const TScratch = {
     // Main
@@ -24,6 +27,7 @@ const TScratch = {
     Circle,
     Arc,
     RegularPolygon,
+    CustomPolygon,
     Pen,
     Text,
     ImageSprite,
@@ -48,6 +52,7 @@ export {
     Circle,
     Arc,
     RegularPolygon,
+    CustomPolygon,
     Pen,
     Text,
     ImageSprite,
@@ -60,6 +65,7 @@ export {
     type CircleOptions,
     type ArcOptions,
     type RegularPolygonOptions,
+    type CustomPolygonOptions,
     type PenOptions,
     type TextOptions,
     type ImageSpriteOptions,
@@ -67,6 +73,9 @@ export {
     // Other types
     type CanvasTextAlign,
     type CanvasTextBaseline,
+    type Vec2,
+    type Vec3,
+    type Vec4,
     
     // Canvas
     setScale,

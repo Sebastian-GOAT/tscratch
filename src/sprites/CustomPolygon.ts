@@ -1,42 +1,55 @@
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
+import type { Vec2 } from '../types/Vectors.ts';
 
-export interface ArcOptions extends SpriteOptions {
-    radius?: number;
-    angle?: number;
+export interface CustomPolygonOptions extends SpriteOptions {
+    vertices?: Vec2[];
     color?: string;
     outlineColor?: string;
     outlineWidth?: number;
 };
 
-export default class Arc extends Sprite {
+export default class CustomPolygon extends Sprite {
 
-    public discriminant = 'arc';
+    public discriminant = 'custompolygon';
 
-    public radius: number;
-    public angle: number;
+    public vertices: Vec2[];
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
+
+        let furthestVertexSize = 0;
+
+        for (const v of this.vertices) {
+
+            const size = Math.hypot(v[0], v[1]);
+
+            if (size > furthestVertexSize)
+                furthestVertexSize = size;
+        }
+
         return {
             x: this.x,
             y: this.y,
-            width: this.radius * 2,
-            height: this.radius * 2
+            width: furthestVertexSize,
+            height: furthestVertexSize
         };
     }
 
     public getPath(): Path2D {
         const path = new Path2D();
+        const vertices = this.vertices;
 
-        path.arc(
-            0, 0,
-            this.radius,
-            this.toRadians(this.angle / 2 - 90),
-            this.toRadians(-this.angle / 2 - 90)
-        );
+        if (vertices.length < 2) return path;
+
+        path.moveTo(vertices[0]![0], vertices[0]![1]);
+
+        for (let i = 1; i < vertices.length; i++)
+            path.lineTo(vertices[i]![0], vertices[i]![1]);
+
+        path.closePath();
 
         return path;
     }
@@ -64,14 +77,8 @@ export default class Arc extends Sprite {
         c.restore();
     }
 
-    public setRadius(radius: number) {
-        this.radius = radius;
-        this.invalidatePath();
-        this.refresh();
-    }
-
-    public setAngle(angle: number) {
-        this.angle = angle;
+    public setVertices(vertices: Vec2[]) {
+        this.vertices = vertices;
         this.invalidatePath();
         this.refresh();
     }
@@ -81,11 +88,10 @@ export default class Arc extends Sprite {
         this.refresh();
     }
 
-    constructor(options?: ArcOptions) {
+    constructor(options?: CustomPolygonOptions) {
         super(options);
 
-        this.radius = options?.radius ?? 25;
-        this.angle = options?.angle ?? 270;
+        this.vertices = options?.vertices ?? [];
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;

@@ -30,12 +30,32 @@
 - `playSound(src)` - plays a sound
 - `stopAllSounds()` - stops all sounds
 
-### Helpers
+### Time
+
+- `deltaTime` - the time passed from the last frame (in seconds)
 
 - `async wait(ms)` - wait some time in milliseconds
 - `async waitUntil(() => condition)` - wait until a condition becomes true (pass a getter)
+
+### Math
+
 - `toRadians(rad)` - converts degrees to radians
 - `toDegrees(deg)` - converts radians to degrees
+
+- `pickRandom(min, max)` picks a random integer
+- `dotProduct(vectors)` - computes the dot product between 2 vectors (Vec2 | Vec3 | Vec4)
+
+- `sin(deg)` - computes the sine of an angle
+- `cos(deg)` - computes the cosine of an angle
+- `tan(deg)` - computes the tangent of an angle
+- `csc(deg)` - computes the cosecant of an angle
+- `sec(deg)` - computes the secant of an angle
+- `cot(deg)` - computes the cotangent of an angle
+
+- `asin(value)` - computes the inverse of sine
+- `acos(value)` - computes the inverse of cosine
+- `acsc(value)` - computes the inverse of cosecant
+- `asec(value)` - computes the inverse of secant
 
 ## Sprite (abstract)
 
@@ -110,12 +130,26 @@ Draws a square centered on `(x, y)`.
 - `setOutlineWidth(width)` - set the border thickness
 - `setOutlineColor(color)` - set the border color
 
-Draws a polygon centered on `(x, y)`.
+Draws a regular polygon centered on `(x, y)`.
+
+## CustomPolygon (built-in sprite)
+
+- `vertices` - the vertices
+- `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setVertices(vertices)` - set the vertices
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
+
+Draws a custom polygon centered on `(x, y)`.
 
 ## Oval (built-in sprite)
 
-- `radX` - radius X
-- `radY` - radius Y
+- `radX` - the radius X
+- `radY` - the radius Y
 - `color` - the color
 - `outlineWidth` - the border thickness
 - `outlineColor` - the border color
@@ -130,7 +164,7 @@ Draws an oval centered on `(x, y)`.
 
 ## Circle (built-in sprite)
 
-- `radius` - radius
+- `radius` - the radius
 - `color` - the color
 - `outlineWidth` - the border thickness
 - `outlineColor` - the border color
@@ -141,6 +175,22 @@ Draws an oval centered on `(x, y)`.
 - `setOutlineColor(color)` - set the border color
 
 Draws a circle centered on `(x, y)`.
+
+## Arc (built-in sprite)
+
+- `radius` - the radius
+- `angle` - the angle of the arc
+- `color` - the color
+- `outlineWidth` - the border thickness
+- `outlineColor` - the border color
+
+- `setRadius(radius)` - set the radius
+- `setAngle(angle)` - set angle of the arc
+- `setColor(color)` - set the color
+- `setOutlineWidth(width)` - set the border thickness
+- `setOutlineColor(color)` - set the border color
+
+Draws an arc centered on `(x, y)`.
 
 ## Text (built-in sprite)
 

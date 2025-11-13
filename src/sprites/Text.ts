@@ -68,7 +68,7 @@ export default class Text extends Sprite {
         return path
     }
 
-    public draw(stamping?: boolean) {
+    public override draw(stamping?: boolean) {
         const c = stamping ? penCtx : ctx;
 
         c.save();
