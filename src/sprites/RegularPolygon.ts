@@ -62,6 +62,10 @@ export default class RegularPolygon extends Sprite {
         c.restore();
     }
 
+    public create(options?: RegularPolygonOptions): this {
+        return new RegularPolygon(options) as this;
+    }
+
     public setSides(sides: number) {
         this.sides = sides;
         this.invalidatePath();

@@ -63,6 +63,10 @@ export default class Circle extends Sprite {
         c.restore();
     }
 
+    public create(options?: CircleOptions): this {
+        return new Circle(options) as this;
+    }
+
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();

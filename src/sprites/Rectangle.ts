@@ -64,6 +64,10 @@ export default class Rectangle extends Sprite {
         c.restore();
     }
 
+    public create(options?: RectangleOptions): this {
+        return new Rectangle(options) as this;
+    }
+
     public setWidth(width: number) {
         this.width = width;
         this.invalidatePath();

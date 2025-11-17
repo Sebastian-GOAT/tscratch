@@ -65,6 +65,10 @@ export default class Oval extends Sprite {
         c.restore();
     }
 
+    public create(options?: OvalOptions): this {
+        return new Oval(options) as this;
+    }
+
     public setRadX(radX: number) {
         this.radX = radX;
         this.invalidatePath();

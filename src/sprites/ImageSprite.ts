@@ -71,6 +71,10 @@ export default class ImageSprite extends Sprite {
         c.restore();
     }
 
+    public create(options?: ImageSpriteOptions): this {
+        return new ImageSprite(options) as this;
+    }
+
     // Methods
 
     public setSrc(src: string) {

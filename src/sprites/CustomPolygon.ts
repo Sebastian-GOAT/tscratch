@@ -77,6 +77,10 @@ export default class CustomPolygon extends Sprite {
         c.restore();
     }
 
+    public create(options?: CustomPolygonOptions): this {
+        return new CustomPolygon(options) as this;
+    }
+
     public setVertices(vertices: Vec2[]) {
         this.vertices = vertices;
         this.invalidatePath();

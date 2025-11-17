@@ -29,6 +29,10 @@ export default class Pen extends Sprite {
     }
     public draw() {}
 
+    public create(options?: PenOptions): this {
+        return new Pen(options) as this;
+    }
+
     public up() {
         this.drawing = false;
     }

@@ -8,22 +8,22 @@ export interface BoundingBox {
 }
 
 export interface SpriteOptions {
-    x?: number;
-    y?: number;
-    dir?: number;
-    scene?: string;
-    hidden?: boolean;
-    layer?: number;
+    x: number;
+    y: number;
+    dir: number;
+    scene: string;
+    hidden: boolean;
+    layer: number;
 }
 
 export default abstract class Sprite {
 
-    public x: number;
-    public y: number;
-    public dir: number;
-    public scene: string;
-    public hidden: boolean;
-    public layer: number;
+    public x!: number;
+    public y!: number;
+    public dir!: number;
+    public scene!: string;
+    public hidden!: boolean;
+    public layer!: number;
 
     private cachedPath: Path2D | null = null;
     private pathDirty: boolean = true;
@@ -37,6 +37,7 @@ export default abstract class Sprite {
     public abstract getBoundingBox(): BoundingBox;
     public abstract getPath(): Path2D;
     public abstract draw(stamping?: boolean): void;
+    protected abstract create(options?: SpriteOptions): this;
 
     protected refresh() {
         Engine.init().refresh();
@@ -56,13 +57,20 @@ export default abstract class Sprite {
     }
 
     constructor(options?: SpriteOptions) {
-        this.x = options?.x ?? 0;
-        this.y = options?.y ?? 0;
-        this.dir = options?.dir ?? 0;
-        this.scene = options?.scene ?? 'main';
-        this.hidden = options?.hidden ?? false;
-        this.layer = options?.layer ?? 0;
+        Object.assign(this, options);
         Engine.init().addSprite(this);
+    }
+
+    public clone(options?: SpriteOptions): this {
+        return this.create({
+            x: this.x,
+            y: this.y,
+            dir: this.dir,
+            scene: this.scene,
+            layer: this.layer,
+            hidden: this.hidden,
+            ...options
+        });
     }
 
     // Sensing

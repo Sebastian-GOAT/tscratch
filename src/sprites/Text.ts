@@ -89,6 +89,10 @@ export default class Text extends Sprite {
         c.restore();
     }
 
+    public create(options?: TextOptions): this {
+        return new Text(options) as this;
+    }
+
     // Methods
 
     public setContent(content: string) {

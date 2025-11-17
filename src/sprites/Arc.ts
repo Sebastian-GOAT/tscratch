@@ -64,6 +64,10 @@ export default class Arc extends Sprite {
         c.restore();
     }
 
+    public create(options?: ArcOptions): this {
+        return new Arc(options) as this;
+    }
+
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();

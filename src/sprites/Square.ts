@@ -62,6 +62,10 @@ export default class Square extends Sprite {
         c.restore();
     }
 
+    public create(options?: SquareOptions): this {
+        return new Square(options) as this;
+    }
+
     public setSideLength(sideLength: number) {
         this.sideLength = sideLength;
         this.invalidatePath();

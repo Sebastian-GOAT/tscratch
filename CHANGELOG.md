@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.5.8] - 17.11.2025
+
+### Added
+
+- `clone(options)` method on Sprite, allows you to create copies of sprites while keeping their properties the same
+
 ## [0.5.8] - 13.11.2025
 
 ### Added
