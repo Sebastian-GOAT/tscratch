@@ -69,6 +69,9 @@ export default abstract class Sprite {
 
     public touching(sprite: Sprite): boolean {
 
+        // Return if hidden
+        if (this.hidden || sprite.hidden) return false;
+
         // AABB (bounding boxes)
         const bBox1 = this.getBoundingBox();
         const bBox2 = sprite.getBoundingBox();

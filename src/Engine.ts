@@ -4,12 +4,10 @@ import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
 type GameLoop = (() => any) | (() => Promise<any>);
 
-type SceneMap = {
-    [scene: string]: {
-        sprites: Sprite[];
-        loop: GameLoop | null;
-    };
-};
+type SceneMap = Map<string, {
+    sprites: Sprite[];
+    loop: GameLoop | null;
+}>
 
 export default class Engine {
 
@@ -35,7 +33,7 @@ export default class Engine {
     private keysPressed: Set<string> = new Set<string>();
 
     public currentScene: string = 'main';
-    public sceneMap: SceneMap = {};
+    public sceneMap: SceneMap = new Map();
 
     // Singleton initialization
 
@@ -49,26 +47,26 @@ export default class Engine {
     // Change the scene
 
     public changeScene(scene: string) {
-        if (!this.sceneMap[scene])
-            this.sceneMap[scene] = { sprites: [], loop: null };
+        if (!this.sceneMap.get(scene))
+            this.sceneMap.set(scene, { sprites: [], loop: null });
 
         this.loopRunning = false;
         this.currentScene = scene;
-        this.gameLoop = this.sceneMap[scene].loop;
+        this.gameLoop = this.sceneMap.get(scene)!.loop;
         this.setMaxFramesPerSecond(this.maxFPS); // Update the interval function
     }
 
     // Loops
 
     public setLoop(scene: string, loop: GameLoop) {
-        if (!this.sceneMap[scene]) {
-            this.sceneMap[scene] = { sprites: [], loop };
+        if (!this.sceneMap.get(scene)) {
+            this.sceneMap.set(scene, { sprites: [], loop });
             if (scene === this.currentScene)
                 this.changeScene(scene);
             return;
         }
 
-        this.sceneMap[scene].loop = loop;
+        this.sceneMap.get(scene)!.loop = loop;
         if (scene === this.currentScene)
             this.changeScene(scene);
     }
@@ -91,27 +89,27 @@ export default class Engine {
     public addSprite(sprite: Sprite) {
         const { scene, layer } = sprite;
 
-        if (!this.sceneMap[scene]) {
-            this.sceneMap[scene] = { sprites: [sprite], loop: null };
+        if (!this.sceneMap.get(scene)) {
+            this.sceneMap.set(scene, { sprites: [sprite], loop: null });
             return;
         }
 
-        let targetIndex = this.sceneMap[scene].sprites.findIndex(s => s.layer > layer);
+        let targetIndex = this.sceneMap.get(scene)!.sprites.findIndex(s => s.layer > layer);
         if (targetIndex === -1) {
-            this.sceneMap[scene].sprites.push(sprite);
+            this.sceneMap.get(scene)!.sprites.push(sprite);
             return;
         }
 
-        this.sceneMap[scene].sprites.splice(targetIndex, 0, sprite);
+        this.sceneMap.get(scene)!.sprites.splice(targetIndex, 0, sprite);
         this.refresh();
     }
 
     public removeSprite(sprite: Sprite) {
         const { scene } = sprite;
 
-        if (!this.sceneMap[scene]) return;
+        if (!this.sceneMap.get(scene)) return;
 
-        this.sceneMap[scene].sprites = this.sceneMap[scene].sprites.filter(s => s !== sprite);
+        this.sceneMap.get(scene)!.sprites = this.sceneMap.get(scene)!.sprites.filter(s => s !== sprite);
         this.refresh();
     }
 
@@ -161,8 +159,8 @@ export default class Engine {
             this.refreshScheduled = false;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const sprites = [
-                ...(this.sceneMap[this.currentScene]?.sprites ?? []),
-                ...(this.sceneMap['*']?.sprites ?? [])
+                ...this.sceneMap.get(this.currentScene)!.sprites,
+                ...this.sceneMap.get('*')!.sprites
             ];
             sprites.forEach(sprite => {
                 if (!sprite.hidden)
