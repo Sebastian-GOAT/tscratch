@@ -8,22 +8,22 @@ export interface BoundingBox {
 }
 
 export interface SpriteOptions {
-    x: number;
-    y: number;
-    dir: number;
-    scene: string;
-    hidden: boolean;
-    layer: number;
+    x?: number;
+    y?: number;
+    dir?: number;
+    scene?: string;
+    hidden?: boolean;
+    layer?: number;
 }
 
 export default abstract class Sprite {
 
-    public x!: number;
-    public y!: number;
-    public dir!: number;
-    public scene!: string;
-    public hidden!: boolean;
-    public layer!: number;
+    public x: number = 0;
+    public y: number = 0;
+    public dir: number = 0;
+    public scene: string = 'main';
+    public hidden: boolean = false;
+    public layer: number = 0;
 
     private cachedPath: Path2D | null = null;
     private pathDirty: boolean = true;

@@ -308,6 +308,8 @@ export default class Engine {
 
     private constructor() {
         void this.setMaxFramesPerSecond(24);
+        this.sceneMap.set('main', { loop: null, sprites: [] });
+        this.sceneMap.set('*', { loop: null, sprites: [] });
 
         // Events
 
