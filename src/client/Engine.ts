@@ -2,7 +2,7 @@ import { canvas, ctx, penCanvas } from './canvas.ts';
 import Sprite from './Sprite.ts';
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
-type GameLoop = (() => any) | (() => Promise<any>);
+type GameLoop = (() => void) | (() => Promise<void>);
 
 type SceneMap = Map<string, {
     sprites: Sprite[];

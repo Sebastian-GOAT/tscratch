@@ -18,5 +18,6 @@ at `sebastianrucabado0@gmail.com`, or open a pull request here on Github.
 - [Collisions](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/collisions.md)
 - [Scenes](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/scenes.md)
 - [Sounds](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/sounds.md)
+- [Multiplayer](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/multiplayer.md)
 - [Showcases](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/showcases.md)
 - [License](https://github.com/Sebastian-GOAT/tscratch/blob/main/docs/license.md)

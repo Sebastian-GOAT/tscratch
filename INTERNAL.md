@@ -3,7 +3,12 @@
 This file documents internal changes in the source codes architecture.
 
 Please keep the format the same for all updates.
-The dates are in the following format: DD.MM.YYYY
+The dates are in the following format: DD.MM.YYYY with an optional version after " - "
+
+## 19.11.2025 - 0.6.0
+
+- `Multiplayer` - runs on `socket.io-client`
+- `Server` - runs on `socket.io`
 
 ## 17.11.2025
 

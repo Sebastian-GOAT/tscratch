@@ -1,7 +1,12 @@
+// Main
 import Engine from './Engine.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
+import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
 
+// Multiplayer
+import Multiplayer from './Multiplayer.ts';
+
+// Sprites
 import Rectangle, { type RectangleOptions } from './sprites/Rectangle.ts';
 import Square, { type SquareOptions } from './sprites/Square.ts';
 import Oval, { type OvalOptions } from './sprites/Oval.ts';
@@ -13,12 +18,16 @@ import Pen, { type PenOptions } from './sprites/Pen.ts';
 import Text, { type TextOptions, type CanvasTextAlign, type CanvasTextBaseline } from './sprites/Text.ts';
 import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 
+// Types
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
 const TScratch = {
     // Main
     Engine,
     Sprite,
+
+    // Multiplayer
+    Multiplayer,
 
     // Sprites
     Rectangle,
@@ -33,6 +42,8 @@ const TScratch = {
     ImageSprite,
 
     // Canvas
+    scale,
+    aspectRatio,
     setScale,
     setAspectRatio,
     canvas,
@@ -44,6 +55,9 @@ export {
     // Main
     Engine,
     Sprite,
+
+    // Multiplayer
+    Multiplayer,
 
     // Sprites
     Rectangle,
@@ -78,6 +92,8 @@ export {
     type Vec4,
     
     // Canvas
+    scale,
+    aspectRatio,
     setScale,
     setAspectRatio,
     canvas,

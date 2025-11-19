@@ -1,6 +1,6 @@
 {
   "name": "tscratch",
-  "version": "0.5.9",
+  "version": "0.6.0",
   "description": "A Scratch-style game engine for TypeScript.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -21,6 +21,10 @@
     "tscratch",
     "oop"
   ],
+  "exports": {
+    ".": "./dist/client/index.js",
+    "./server": "./dist/server/index.js"
+  },
   "files": [
     "dist"
   ],
@@ -33,9 +37,14 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^24.9.1",
+    "@types/socket.io": "^3.0.1",
     "jsdom": "^27.0.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^4.0.4"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   }
 }

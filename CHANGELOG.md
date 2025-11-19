@@ -22,6 +22,14 @@ The dates are in the following format: DD.MM.YYYY
 - `Vec2`, `Vec3`, `Vec4` types for better readability & reusability
 - `dotProduct(vectors)` method on engine
 
+## [0.6.0] - 19.11.2025
+
+### Added
+
+- `Multiplayer` class with realtime updates
+- `Server` class to manage the backend for multiplayer experiences
+- direct access to `scale` & `aspectRatio` for canvas
+
 ## [0.5.7] - 12.11.2025
 
 ### Fixed

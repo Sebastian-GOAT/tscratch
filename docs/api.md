@@ -244,3 +244,17 @@ Movement methods, such as `move()`, can draw a line based on if `drawing` is tru
 - `canvas` - the canvas element
 - `ctx` - the 2D drawing context
 - `penCtx` - the 2D drawing context for the pen layer
+
+## Multiplayer (client)
+
+- `connect(serverURL)` - connects to the server & returns a singleton instance (serverURL defaults to 'http://localhost:3000')
+- `broadcast<T>(eventName, data: T)` - sends some data to the server under an event key
+- `on<T>(eventName, (data: T) => void)` - calls a callback function once it recives an event from the server
+
+## Server (server)
+
+- `clients` - a set of clients (sockets)
+
+- `broadcast<T>(eventName, data: T, clients?: Socket[])` - sends some data to every client under an event key (specify clients to target
+specific clients)
+- `on<T>(eventName, (data: T) => void))` - calls a callback function once it recives an event from the client

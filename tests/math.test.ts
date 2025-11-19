@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import Engine from '../src/Engine.ts';
+import Engine from '../src/client/Engine.ts';
 
 const engine = Engine.init();
 const testRange = 12;
