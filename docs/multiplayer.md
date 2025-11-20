@@ -11,8 +11,6 @@ import { Multiplayer } from 'tscratch';
 
 const connection = Multiplayer.connect('http://localhost:8080'); // Assuming the server runs on localhost:8080
 
-connection.broadcast('join', 'A new client has joined!');
-
 connection.on('welcome', data => {
     console.log(`The server says: ${data}`);
 });
@@ -25,8 +23,7 @@ import Server from 'tscratch/server';
 
 const server = new Server({ port: 8080 }); // Runs on localhost:8080
 
-server.on('join', (data, socket) => {
-    console.log(`A client says: ${data}`); // CAREFUL IF USING DATABASE QUERIES
-    server.broadcast('welcome', 'Welcome to our server!', [socket]);
+server.onJoin(client => {
+    server.broadcast('welcome', 'Welcome to our server!', [client]);
 });
 ```

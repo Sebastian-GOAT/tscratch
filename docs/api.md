@@ -257,4 +257,7 @@ Movement methods, such as `move()`, can draw a line based on if `drawing` is tru
 
 - `broadcast<T>(eventName, data: T, clients?: Socket[])` - sends some data to every client under an event key (specify clients to target
 specific clients)
+- `broadcastExcept<T>(eventName, data: T, clients?: Socket[])` - sends the data to everyone except the specified clients
 - `on<T>(eventName, (data: T) => void))` - calls a callback function once it recives an event from the client
+- `onJoin<T>(callback: (client) => void)` - calls a callback function once a new client joins
+- `onLeave<T>(callback: (client) => void)` - calls a callback function once a client leaves

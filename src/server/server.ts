@@ -5,7 +5,8 @@ interface ServerOptions {
     corsOrigin?: string;
 }
 
-type EventHandler<T> = (data: T, socket: Socket) => void;
+type DataEventHandler<T> = (data: T, socket: Socket) => void;
+type SocketEventHandler = (client: Socket) => void;
 
 export default class Server {
 
@@ -37,11 +38,31 @@ export default class Server {
         clients.forEach(c => c.emit(eventName, data));
     }
 
-    public on<T = unknown>(eventName: string, callback: EventHandler<T>) {
+    public broadcastExcept<T = unknown>(eventName: string, data: T, except: Socket[]) {
+        
+        const exclude = new Set(except);
+        const targets = this.clients.difference(exclude);
+
+        for (const socket of targets)
+            socket.emit(eventName, data);
+    }
+
+    public on<T = unknown>(eventName: string, callback: DataEventHandler<T>) {
         this.clients.forEach(socket => socket.on(eventName, (data: T) => callback(data, socket)));
 
         this.io.on('connection', (socket: Socket) => {
             socket.on(eventName, (data: T) => callback(data, socket));
+        });
+    }
+
+    public onJoin(callback: SocketEventHandler) {
+        this.clients.forEach(callback);
+        this.io.on('connection', callback);
+    }
+
+    public onLeave(callback: SocketEventHandler) {
+        this.io.on('connection', socket => {
+            socket.on('disconnect', () => callback(socket));
         });
     }
 }

@@ -7,7 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
-## [0.5.8] - 17.11.2025
+## [0.6.2] - 20.11.2025
+
+### Added
+
+- `broadcastExcept(eventName, data, except)` - method on `Server`
+- `onJoin(callback)` - method on `Server`
+- `onLeave(callback)` - method on `Server`
+
+## [0.6.0] - 19.11.2025
+
+### Added
+
+- `Multiplayer` class with realtime updates
+- `Server` class to manage the backend for multiplayer experiences
+- direct access to `scale` & `aspectRatio` for canvas
+
+## [0.5.9] - 17.11.2025
 
 ### Added
 
@@ -21,14 +37,6 @@ The dates are in the following format: DD.MM.YYYY
 - `CustomPolygon` **EXPERIMENTAL** sprite, allows you to define custom polygons with your own vertices
 - `Vec2`, `Vec3`, `Vec4` types for better readability & reusability
 - `dotProduct(vectors)` method on engine
-
-## [0.6.0] - 19.11.2025
-
-### Added
-
-- `Multiplayer` class with realtime updates
-- `Server` class to manage the backend for multiplayer experiences
-- direct access to `scale` & `aspectRatio` for canvas
 
 ## [0.5.7] - 12.11.2025
 
