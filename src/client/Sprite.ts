@@ -184,7 +184,7 @@ export default abstract class Sprite {
     }
 
     public pointTowards(x: number, y: number) {
-        this.dir = 90 - this.toDegrees(Math.atan2(y, x));
+        this.dir = 90 - this.toDegrees(Math.atan2(y - this.y, x - this.x));
         this.refresh();
     }
 
