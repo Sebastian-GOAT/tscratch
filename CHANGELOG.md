@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.6.4] - 23.11.2025
+
+### Added
+
+- `Mat2`, `Mat3`, `Mat4` types
+- `Button` sprite
+- `space`, `up`, `down`, `left`, `right`, `any` keyboard events
+- Global variables with `setVariable(key, value)`, `getVariable(key)` (not type safe)
+
 ## [0.6.2] - 20.11.2025
 
 ### Added

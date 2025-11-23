@@ -1,21 +1,6 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
-export type CanvasTextAlign =
-    | 'left'
-    | 'right'
-    | 'center'
-    | 'start'
-    | 'end';
-
-export type CanvasTextBaseline =
-    | 'top'
-    | 'hanging'
-    | 'middle'
-    | 'alphabetic'
-    | 'ideographic'
-    | 'bottom';
-
 export interface TextOptions extends SpriteOptions {
     content?: string;
     color?: string;
@@ -68,7 +53,7 @@ export default class Text extends Sprite {
         return path
     }
 
-    public override draw(stamping?: boolean) {
+    public draw(stamping?: boolean) {
         const c = stamping ? penCtx : ctx;
 
         c.save();

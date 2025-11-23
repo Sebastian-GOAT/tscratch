@@ -35,6 +35,8 @@ export default class Engine {
     public currentScene: string = 'main';
     public sceneMap: SceneMap = new Map();
 
+    public variableMap: Map<string, unknown> = new Map();
+
     // Singleton initialization
 
     public static init() {
@@ -185,6 +187,16 @@ export default class Engine {
         });
     }
 
+    // Global variables
+
+    public setVariable<T = any>(key: string, value: T) {
+        this.variableMap.set(key, value);
+    }
+
+    public getVariable<T = unknown>(key: string) {
+        return this.variableMap.get(key) as T;
+    }
+
     // Events
 
     public hovering(sprite: Sprite) {
@@ -202,11 +214,22 @@ export default class Engine {
         const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
         const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
 
-        return ctx.isPointInPath(sprite.getPath(), rotatedX, rotatedY);
+        return ctx.isPointInPath(sprite.getCachedPath(), rotatedX, rotatedY);
     }
 
     public keyPressed(key: string) {
-        return this.keysPressed.has(key);
+        switch (key) {
+            case 'any': return this.keysPressed.size > 0;
+
+            case 'up': return this.keysPressed.has('ArrowUp');
+            case 'down': return this.keysPressed.has('ArrowDown');
+            case 'left': return this.keysPressed.has('ArrowLeft');
+            case 'right': return this.keysPressed.has('ArrowRight');
+
+            case 'space': return this.keysPressed.has(' ');
+
+            default: return this.keysPressed.has(key);
+        }
     }
 
     // Sound
@@ -318,13 +341,13 @@ export default class Engine {
             this.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
             this.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
         });
-        penCanvas.addEventListener('mousedown', e => {
+        penCanvas.addEventListener('mousedown', () => {
             this.mouseDown = true;
         });
-        penCanvas.addEventListener('mouseup', e => {
+        penCanvas.addEventListener('mouseup', () => {
             this.mouseDown = false;
         });
-        penCanvas.addEventListener('click', e => {
+        penCanvas.addEventListener('click', () => {
             this.mouseClicked = true;
             setTimeout(() => this.mouseClicked = false, 0);
         });

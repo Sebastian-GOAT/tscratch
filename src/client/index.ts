@@ -15,11 +15,13 @@ import Arc, { type ArcOptions } from './sprites/Arc.ts';
 import RegularPolygon, { type RegularPolygonOptions } from './sprites/RegularPolygon.ts';
 import CustomPolygon, { type CustomPolygonOptions } from './sprites/CustomPolygon.ts';
 import Pen, { type PenOptions } from './sprites/Pen.ts';
-import Text, { type TextOptions, type CanvasTextAlign, type CanvasTextBaseline } from './sprites/Text.ts';
+import Text, { type TextOptions } from './sprites/Text.ts';
+import Button, { type ButtonOptions } from './sprites/Button.ts';
 import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 
 // Types
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
+import type { Mat2, Mat3, Mat4 } from './types/Matricies.ts';
 
 const TScratch = {
     // Main
@@ -39,6 +41,7 @@ const TScratch = {
     CustomPolygon,
     Pen,
     Text,
+    Button,
     ImageSprite,
 
     // Canvas
@@ -69,6 +72,7 @@ export {
     CustomPolygon,
     Pen,
     Text,
+    Button,
     ImageSprite,
 
     // Options
@@ -82,14 +86,16 @@ export {
     type CustomPolygonOptions,
     type PenOptions,
     type TextOptions,
+    type ButtonOptions,
     type ImageSpriteOptions,
 
     // Other types
-    type CanvasTextAlign,
-    type CanvasTextBaseline,
     type Vec2,
     type Vec3,
     type Vec4,
+    type Mat2,
+    type Mat3,
+    type Mat4,
     
     // Canvas
     scale,

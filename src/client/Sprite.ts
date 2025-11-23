@@ -48,7 +48,7 @@ export default abstract class Sprite {
         this.cachedPath = null;
     }
 
-    protected getCachedPath(): Path2D {
+    public getCachedPath(): Path2D {
         if (this.pathDirty || !this.cachedPath) {
             this.cachedPath = this.getPath();
             this.pathDirty = false;
@@ -162,6 +162,10 @@ export default abstract class Sprite {
 
     protected toDegrees(rad: number) {
         return rad * 180 / Math.PI;
+    }
+
+    public distanceTo(x: number, y: number) {
+        return Math.hypot(x - this.x, y - this.y);
     }
 
     // Methods
