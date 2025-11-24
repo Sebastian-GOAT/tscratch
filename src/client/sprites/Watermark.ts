@@ -3,6 +3,10 @@ import Text, { type TextOptions } from './Text.ts';
 
 export default class Watermark extends Text {
 
+    public override create(options?: TextOptions): this {
+        return new Watermark(options) as this;
+    }
+
     constructor(options?: TextOptions) {
         super(options);
 
