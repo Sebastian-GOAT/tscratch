@@ -14,7 +14,7 @@ export default class Engine {
     private static instance: Engine;
 
     private loopRunning: boolean = false;
-    public gameLoop: GameLoop | null = null;
+    private gameLoop: GameLoop | null = null;
 
     public maxFPS: number = 24;
     public deltaTime: number = 1 / this.maxFPS;
@@ -22,7 +22,7 @@ export default class Engine {
     private refreshScheduled: boolean = false;
     private animationFrameId: number | null = null;
 
-    public sounds: HTMLAudioElement[] = [];
+    private sounds: HTMLAudioElement[] = [];
 
     public mouseX: number = 0;
     public mouseY: number = 0;
@@ -32,10 +32,10 @@ export default class Engine {
 
     private keysPressed: Set<string> = new Set<string>();
 
-    public currentScene: string = 'main';
-    public sceneMap: SceneMap = new Map();
+    private currentScene: string = 'main';
+    private sceneMap: SceneMap = new Map();
 
-    public variableMap: Map<string, unknown> = new Map();
+    private variableMap: Map<string, unknown> = new Map();
 
     // Singleton initialization
 
@@ -265,7 +265,7 @@ export default class Engine {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public dotProduct(vectors: [Vec2, Vec2] | [Vec3, Vec3] | [Vec4, Vec4]) {
+    public dotProduct(...vectors: [Vec2, Vec2] | [Vec3, Vec3] | [Vec4, Vec4]) {
         const [a, b] = vectors;
 
         switch (a.length) {

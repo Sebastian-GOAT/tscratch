@@ -17,6 +17,7 @@ import CustomPolygon, { type CustomPolygonOptions } from './sprites/CustomPolygo
 import Pen, { type PenOptions } from './sprites/Pen.ts';
 import Text, { type TextOptions } from './sprites/Text.ts';
 import Button, { type ButtonOptions } from './sprites/Button.ts';
+import Watermark from './sprites/Watermark.ts';
 import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 
 // Types
@@ -42,6 +43,7 @@ const TScratch = {
     Pen,
     Text,
     Button,
+    Watermark,
     ImageSprite,
 
     // Canvas
@@ -73,6 +75,7 @@ export {
     Pen,
     Text,
     Button,
+    Watermark,
     ImageSprite,
 
     // Options
@@ -87,6 +90,7 @@ export {
     type PenOptions,
     type TextOptions,
     type ButtonOptions,
+    type TextOptions as WatermarkOptions,
     type ImageSpriteOptions,
 
     // Other types

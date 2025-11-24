@@ -2,7 +2,7 @@ import { canvas, ctx, penCtx } from '../canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface ButtonOptions extends SpriteOptions {
-    content?: string;
+    content?: string | number;
     fontColor?: string;
     fontFamily?: string;
     fontSize?: number;
@@ -19,7 +19,7 @@ export default class Button extends Sprite {
 
     public discriminant = 'button';
 
-    public content: string;
+    public content: string | number;
     public fontColor: string;
     public fontFamily: string;
     public fontSize: number;
@@ -39,7 +39,7 @@ export default class Button extends Sprite {
         
         ctx.font = this.font;
 
-        const metrics = ctx.measureText(this.content);
+        const metrics = ctx.measureText(String(this.content));
         const width = Math.max(metrics.width, this.width);
         const height = Math.max(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent, this.width);
 
@@ -91,7 +91,7 @@ export default class Button extends Sprite {
         c.textAlign = 'center';
         c.textBaseline = 'middle';
 
-        c.fillText(this.content, 0, 0);
+        c.fillText(String(this.content), 0, 0);
 
         c.restore();
     }
@@ -102,7 +102,7 @@ export default class Button extends Sprite {
 
     // Methods
 
-    public setContent(content: string) {
+    public setContent(content: string | number) {
         this.content = content;
         this.invalidatePath();
         this.refresh();
@@ -144,7 +144,7 @@ export default class Button extends Sprite {
 
         this.font = `${this.fontSize}px ${this.fontFamily}`;
 
-        this.width = options?.width ?? this.content.length * this.fontSize + 10;
+        this.width = options?.width ?? String(this.content).length * this.fontSize + 10;
         this.height = options?.height ?? this.fontSize + 10;
         this.backgroundColor = options?.backgroundColor ?? 'rgb(204, 204, 204)';
 

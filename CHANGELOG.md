@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.6.5] - 24.11.2025
+
+### Added
+
+- `Watermark` sprite
+
+### Fixed
+
+- `Button` & `Text` sprites now also accept numbers as content
+
 ## [0.6.4] - 23.11.2025
 
 ### Added

@@ -2,7 +2,7 @@ import { canvas, ctx, penCtx } from '../canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface TextOptions extends SpriteOptions {
-    content?: string;
+    content?: string | number;
     color?: string;
     fontFamily?: string;
     fontSize?: number;
@@ -14,7 +14,7 @@ export default class Text extends Sprite {
 
     public discriminant = 'text';
 
-    public content: string;
+    public content: string | number;
     public color: string;
     public fontFamily: string;
     public fontSize: number;
@@ -24,7 +24,7 @@ export default class Text extends Sprite {
     private font: string;
 
     public getBoundingBox(): BoundingBox {
-        const metrics = ctx.measureText(this.content);
+        const metrics = ctx.measureText(String(this.content));
         const width = metrics.width;
         const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
@@ -42,7 +42,7 @@ export default class Text extends Sprite {
         
         ctx.font = this.font;
 
-        const metrics = ctx.measureText(this.content);
+        const metrics = ctx.measureText(String(this.content));
         const width = metrics.width;
         const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
@@ -69,7 +69,7 @@ export default class Text extends Sprite {
         c.textAlign = this.align;
         c.textBaseline = this.baseline;
 
-        c.fillText(this.content, 0, 0);
+        c.fillText(String(this.content), 0, 0);
 
         c.restore();
     }
@@ -80,7 +80,7 @@ export default class Text extends Sprite {
 
     // Methods
 
-    public setContent(content: string) {
+    public setContent(content: string | number) {
         this.content = content;
         this.invalidatePath();
         this.refresh();
