@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+<!-- 0.6.6 - Fixed Watermark not drawing initially -->
+
 ## [0.6.5] - 24.11.2025
 
 ### Added

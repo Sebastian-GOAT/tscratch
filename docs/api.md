@@ -204,9 +204,36 @@ Draws an arc centered on `(x, y)`.
 - `setColor(color)` - set the color
 - `setOutlineWidth(width)` - set the border thickness
 - `setOutlineColor(color)` - set the border color
-- You might need to call `.draw()` if it's not getting rendered initially.
 
 Draws a label aligned to your preference.
+
+## Button (built-in sprite)
+
+- Combined properties from `Rectangle` & `Button`
+
+```ts
+import { Button } from 'tscratch';
+
+const engine = Engine.init();
+const button = new Button();
+
+engine.setLoop('main', () => {
+    if (engine.mouseDown) {
+        await engine.waitUntil(!engine.mouseDown);
+        if (engine.hovering(button))
+            console.log('Clicked!');
+    }
+});
+```
+
+Draws a button centered on `(x, y)`.
+
+## Watermark (built-in sprite)
+
+- Shares properties & methods with `Text`
+- Used for attributing TScratch (default) or someone other
+
+Draws a watermark on the top right of the canvas.
 
 ## Image (built-in sprite)
 

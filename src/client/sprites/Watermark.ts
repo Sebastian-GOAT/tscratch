@@ -11,5 +11,7 @@ export default class Watermark extends Text {
         this.y = options?.y ?? canvas.height / 2 - 5,
         this.align = options?.align ?? 'left',
         this.baseline = options?.baseline ?? 'top'
+
+        this.draw();
     }
 }
