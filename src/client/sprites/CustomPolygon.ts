@@ -1,3 +1,4 @@
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
 import type { Vec2 } from '../types/Vectors.ts';
@@ -20,21 +21,37 @@ export default class CustomPolygon extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
-        let furthestVertexSize = 0;
+        const engine = Engine.init();
+
+        const cos = engine.cos(this.dir);
+        const sin = engine.sin(this.dir);
+
+        let minX = Infinity;
+        let maxX = -Infinity;
+        let minY = Infinity;
+        let maxY = -Infinity;
 
         for (const v of this.vertices) {
 
-            const size = Math.hypot(v[0], v[1]);
+            // Rotate
+            const rx = v[0] * cos - v[1] * sin;
+            const ry = v[0] * sin + v[1] * cos;
 
-            if (size > furthestVertexSize)
-                furthestVertexSize = size;
+            // Translate
+            const fx = this.x + rx;
+            const fy = this.y + ry;
+
+            if (fx < minX) minX = fx;
+            if (fx > maxX) maxX = fx;
+            if (fy < minY) minY = fy;
+            if (fy > maxY) maxY = fy;
         }
 
         return {
-            x: this.x,
-            y: this.y,
-            width: furthestVertexSize,
-            height: furthestVertexSize
+            x: minX,
+            y: minY,
+            width:  maxX - minX,
+            height: maxY - minY
         };
     }
 

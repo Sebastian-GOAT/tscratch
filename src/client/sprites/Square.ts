@@ -1,3 +1,4 @@
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { ctx, canvas, penCtx } from '../canvas.ts';
 
@@ -18,11 +19,22 @@ export default class Square extends Sprite {
     public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
+
+        const engine = Engine.init();
+
+        const sideLength = this.sideLength;
+        const dir = this.dir;
+
+        const cos = Math.abs(engine.cos(dir));
+        const sin = Math.abs(engine.sin(dir));
+
+        const bboxSize = sideLength * cos + sideLength * sin;
+
         return {
             x: this.x,
             y: this.y,
-            width: Math.hypot(this.sideLength, this.sideLength),
-            height: Math.hypot(this.sideLength, this.sideLength)
+            width: bboxSize,
+            height: bboxSize
         };
     }
 

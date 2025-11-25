@@ -20,9 +20,12 @@ import Button, { type ButtonOptions } from './sprites/Button.ts';
 import Watermark from './sprites/Watermark.ts';
 import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 
+import RigidCircle, { type RigidCircleOptions } from './sprites/physics/RigidCircle.ts';
+
 // Types
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 import type { Mat2, Mat3, Mat4 } from './types/Matricies.ts';
+import { type RigidBodyOptions } from './sprites/physics/RigidBodyOptions.ts';
 
 const TScratch = {
     // Main
@@ -45,6 +48,8 @@ const TScratch = {
     Button,
     Watermark,
     ImageSprite,
+
+    RigidCircle,
 
     // Canvas
     scale,
@@ -78,6 +83,8 @@ export {
     Watermark,
     ImageSprite,
 
+    RigidCircle,
+
     // Options
     type SpriteOptions,
     type RectangleOptions,
@@ -92,6 +99,9 @@ export {
     type ButtonOptions,
     type TextOptions as WatermarkOptions,
     type ImageSpriteOptions,
+
+    type RigidBodyOptions,
+    type RigidCircleOptions,
 
     // Other types
     type Vec2,

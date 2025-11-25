@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
-<!-- 0.6.6 - Fixed Watermark not drawing initially -->
+## [0.6.6] - 25.11.2025
+
+### Added
+
+- `RigidCircle` - A built-in rigid body sprite (only collides with circles)
+- `RigidBodyOptions` - Implement & create your own rigid bodies (use engine.sceneMap to access sprites)
+
+### Fixed
+
+- `Watermark` not drawing initially
+- Optimized `touching(sprite)` by tightening the bounding boxes
 
 ## [0.6.5] - 24.11.2025
 

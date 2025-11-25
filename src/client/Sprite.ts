@@ -25,6 +25,8 @@ export default abstract class Sprite {
     public hidden: boolean = false;
     public layer: number = 0;
 
+    public abstract discriminant: string;
+
     private cachedPath: Path2D | null = null;
     private pathDirty: boolean = true;
 

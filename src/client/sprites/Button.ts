@@ -1,4 +1,5 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface ButtonOptions extends SpriteOptions {
@@ -35,21 +36,31 @@ export default class Button extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
+        const engine = Engine.init();
+
         ctx.save();
         
         ctx.font = this.font;
 
         const metrics = ctx.measureText(String(this.content));
-        const width = Math.max(metrics.width, this.width);
-        const height = Math.max(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent, this.width);
+        const w = Math.max(metrics.width, this.width);
+        const h = Math.max(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent, this.height);
 
         ctx.restore();
+
+        const dir = this.dir;
+
+        const cos = Math.abs(engine.cos(dir));
+        const sin = Math.abs(engine.sin(dir));
+
+        const bboxWidth = w * cos + h * sin;
+        const bboxHeight = w * sin + h * cos;
 
         return {
             x: this.x,
             y: this.y,
-            width: Math.hypot(width, height),
-            height: Math.hypot(width, height)
+            width: bboxWidth,
+            height: bboxHeight
         };
     }
 

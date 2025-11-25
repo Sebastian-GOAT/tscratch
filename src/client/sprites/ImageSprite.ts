@@ -1,4 +1,5 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface ImageSpriteOptions extends SpriteOptions {
@@ -22,11 +23,24 @@ export default class ImageSprite extends Sprite {
     protected img: HTMLImageElement;
 
     public getBoundingBox(): BoundingBox {
+
+        const engine = Engine.init();
+
+        const w = this.width;
+        const h = this.height;
+        const dir = this.dir;
+
+        const cos = Math.abs(engine.cos(dir));
+        const sin = Math.abs(engine.sin(dir));
+
+        const bboxWidth = w * cos + h * sin;
+        const bboxHeight = w * sin + h * cos;
+
         return {
             x: this.x,
             y: this.y,
-            width: this.width,
-            height: this.height
+            width: bboxWidth,
+            height: bboxHeight
         };
     }
 

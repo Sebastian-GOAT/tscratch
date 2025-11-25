@@ -1,3 +1,4 @@
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
 
@@ -20,11 +21,24 @@ export default class Oval extends Sprite {
     public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
+
+        const engine = Engine.init();
+
+        const rX = this.radX;
+        const rY = this.radY;
+        const dir = this.dir;
+
+        const cos = Math.abs(engine.cos(dir));
+        const sin = Math.abs(engine.sin(dir));
+
+        const bboxWidth = rX * cos + rY * sin;
+        const bboxHeight = rX * sin + rY * cos;
+
         return {
             x: this.x,
             y: this.y,
-            width: Math.hypot(this.radX * 2, this.radY * 2),
-            height: Math.hypot(this.radX * 2, this.radY * 2)
+            width: bboxWidth,
+            height: bboxHeight
         };
     }
 
