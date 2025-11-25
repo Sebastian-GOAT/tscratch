@@ -1,3 +1,4 @@
+import { canvas } from '../../canvas.ts';
 import Engine from '../../Engine.ts';
 import Circle, { type CircleOptions } from '../Circle.ts';
 import type { RigidBodyOptions } from './RigidBodyOptions.ts';
@@ -25,13 +26,13 @@ export default class RigidCircle extends Circle implements RigidBodyOptions {
 
         const localCircles = engine.sceneMap.get(this.scene)!.sprites.filter(s => s.discriminant === 'circle');
         const globalCircles = engine.sceneMap.get('*')!.sprites.filter(s => s.discriminant === 'circle');
-        const circles = [...localCircles, ...globalCircles];
+        const circles = [...localCircles, ...globalCircles] as Circle[];
 
         const steps = Math.ceil(this.distanceTo(x, y) / (2 * this.radius));
 
         for (let i = 0; i < steps; i++) {
             for (const circle of circles) {
-                if (this.touching(circle)) {
+                if (this.distanceTo(circle.x, circle.y) < this.radius + circle.radius) {
 
                     const nx = this.x - circle.x;
                     const ny = this.y - circle.y;
@@ -50,19 +51,42 @@ export default class RigidCircle extends Circle implements RigidBodyOptions {
                     this.vX = (this.vX - 2 * dot * nxn) * this.bounceLoss;
                     this.vY = (this.vY - 2 * dot * nyn) * this.bounceLoss;
 
+                    this.changeX(this.vX);
+                    this.changeY(this.vY);
+
                     return;
                 }
             }
         }
 
         this.goTo(x, y);
+
+        // Bounce off canvas edges
+        const cX = canvas.width / 2;
+        const cY = canvas.height / 2;
+
+        if (this.x - this.radius < -cX) {
+            this.setX(-cX + this.radius);
+            this.vX = Math.abs(this.vX) * this.bounceLoss;
+        } else if (this.x + this.radius > cX) {
+            this.setX(cX - this.radius);
+            this.vX = -Math.abs(this.vX) * this.bounceLoss;
+        }
+
+        if (this.y - this.radius < -cY) {
+            this.setY(-cY + this.radius);
+            this.vY = Math.abs(this.vY) * this.bounceLoss;
+        } else if (this.y + this.radius > cY) {
+            this.setY(cY - this.radius);
+            this.vY = -Math.abs(this.vY) * this.bounceLoss;
+        }
     }
 
     constructor(options?: RigidCircleOptions) {
         super(options);
 
-        this.gravity = options?.gravity ?? -0.9;
-        this.drag = options?.drag ?? 0.98;
+        this.gravity = options?.gravity ?? -1.8;
+        this.drag = options?.drag ?? 0.96;
         this.bounceLoss = options?.bounceLoss ?? 0.9;
         this.vX = options?.vX ?? 0;
         this.vY = options?.vY ?? 0;
