@@ -3,9 +3,10 @@ import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface ImageSpriteOptions extends SpriteOptions {
-    src?: string;
-    width: number;
-    height: number;
+    costumes?: string[];
+    costumeNumber?: number;
+    width?: number;
+    height?: number;
     outlineColor?: string;
     outlineWidth?: number;
 };
@@ -13,9 +14,10 @@ export interface ImageSpriteOptions extends SpriteOptions {
 export default class ImageSprite extends Sprite {
 
     public discriminant = 'imagesprite';
-    public tags = new Set('imagesprite');
+    public tags = new Set(['imagesprite']);
 
-    public src: string;
+    public costumes: string[];
+    public costumeNumber: number;
     public width: number;
     public height: number;
     public outlineColor: string;
@@ -90,9 +92,12 @@ export default class ImageSprite extends Sprite {
 
     // Methods
 
-    public setSrc(src: string) {
-        this.src = src;
-        this.refresh();
+    public setCostume(costumeNumber: number) {
+        this.costumeNumber = costumeNumber < this.costumes.length
+            ? costumeNumber
+            : this.costumes.length - 1;
+        this.img.src = this.costumes[this.costumeNumber]!;
+        this.img.onload = () => this.refresh();
     }
 
     public setWidth(width: number) {
@@ -112,16 +117,22 @@ export default class ImageSprite extends Sprite {
     constructor(options?: ImageSpriteOptions) {
         super(options);
 
-        this.src = options?.src ?? '';
-        this.img = new Image();
-        this.img.src = this.src;
+        this.costumes = options?.costumes ?? [];
+        this.costumeNumber = options?.costumeNumber ?? 0;
 
-        this.width = options?.width ?? this.img.width;
-        this.height = options?.height ?? this.img.height;
+        this.img = new Image();
+        this.img.src = this.costumes[this.costumeNumber] ?? '';
+
+        this.width = options?.width ?? 0;
+        this.height = options?.height ?? 0;
 
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
         
-        this.img.onload = () => this.draw();
+        this.img.onload = () => {
+            if (!options?.width) this.width = this.img.width;
+            if (!options?.height) this.height = this.img.height;
+            this.draw();
+        };
     }
 }

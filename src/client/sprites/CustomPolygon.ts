@@ -13,7 +13,7 @@ export interface CustomPolygonOptions extends SpriteOptions {
 export default class CustomPolygon extends Sprite {
 
     public discriminant = 'custompolygon';
-    public tags = new Set('custompolygon');
+    public tags = new Set(['custompolygon']);
 
     public vertices: Vec2[];
     public color: string;

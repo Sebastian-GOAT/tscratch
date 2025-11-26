@@ -12,7 +12,7 @@ export interface RegularPolygonOptions extends SpriteOptions {
 export default class RegularPolygon extends Sprite {
 
     public discriminant = 'regularpolygon';
-    public tags = new Set('regularpolygon');
+    public tags = new Set(['regularpolygon']);
 
     public sides: number;
     public radius: number;
