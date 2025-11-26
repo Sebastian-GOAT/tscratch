@@ -13,6 +13,7 @@ export interface OvalOptions extends SpriteOptions {
 export default class Oval extends Sprite {
 
     public discriminant = 'oval';
+    public tags = new Set('oval');
 
     public radX: number;
     public radY: number;

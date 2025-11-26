@@ -7,6 +7,8 @@ export interface RigidCircleOptions extends CircleOptions, Partial<RigidBodyOpti
 
 export default class RigidCircle extends Circle implements RigidBodyOptions {
 
+    public tags = new Set(['circle', 'rigidbody']);
+
     public gravity: number;
     public vX: number;
     public vY: number;

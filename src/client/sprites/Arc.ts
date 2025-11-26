@@ -13,6 +13,7 @@ export interface ArcOptions extends SpriteOptions {
 export default class Arc extends Sprite {
 
     public discriminant = 'arc';
+    public tags = new Set('arc');
 
     public radius: number;
     public angle: number;

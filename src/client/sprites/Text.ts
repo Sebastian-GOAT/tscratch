@@ -14,6 +14,7 @@ export interface TextOptions extends SpriteOptions {
 export default class Text extends Sprite {
 
     public discriminant = 'text';
+    public tags = new Set('text');
 
     public content: string | number;
     public color: string;

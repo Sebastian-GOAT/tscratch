@@ -26,6 +26,7 @@ export default abstract class Sprite {
     public layer: number = 0;
 
     public abstract discriminant: string;
+    public abstract tags: Set<string>;
 
     private cachedPath: Path2D | null = null;
     private pathDirty: boolean = true;

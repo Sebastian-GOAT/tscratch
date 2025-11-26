@@ -12,6 +12,7 @@ export interface SquareOptions extends SpriteOptions {
 export default class Square extends Sprite {
 
     public discriminant = 'square';
+    public tags = new Set('square');
 
     public sideLength: number;
     public color: string;

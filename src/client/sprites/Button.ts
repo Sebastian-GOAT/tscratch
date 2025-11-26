@@ -19,6 +19,7 @@ export interface ButtonOptions extends SpriteOptions {
 export default class Button extends Sprite {
 
     public discriminant = 'button';
+    public tags = new Set('button');
 
     public content: string | number;
     public fontColor: string;

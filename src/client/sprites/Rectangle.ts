@@ -13,6 +13,7 @@ export interface RectangleOptions extends SpriteOptions {
 export default class Rectangle extends Sprite {
 
     public discriminant = 'rectangle';
+    public tags = new Set('rectangle');
 
     public width: number;
     public height: number;

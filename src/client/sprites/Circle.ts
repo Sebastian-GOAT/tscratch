@@ -12,6 +12,7 @@ export interface CircleOptions extends SpriteOptions {
 export default class Circle extends Sprite {
 
     public discriminant = 'circle';
+    public tags = new Set('circle');
 
     public radius: number;
     public color: string;
