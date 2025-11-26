@@ -61,10 +61,16 @@ export default class CustomPolygon extends Sprite {
 
         if (vertices.length < 2) return path;
 
-        path.moveTo(vertices[0]![0], vertices[0]![1]);
+        path.moveTo(
+            vertices[0]![0] + canvas.width / 2,
+            canvas.height / 2 - vertices[0]![1]
+        );
 
         for (let i = 1; i < vertices.length; i++)
-            path.lineTo(vertices[i]![0], vertices[i]![1]);
+            path.lineTo(
+                vertices[i]![0] + canvas.width / 2,
+                canvas.height / 2 - vertices[i]![1]
+            );
 
         path.closePath();
 

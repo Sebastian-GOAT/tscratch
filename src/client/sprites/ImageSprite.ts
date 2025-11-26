@@ -123,6 +123,6 @@ export default class ImageSprite extends Sprite {
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
         
-        this.draw();
+        this.img.onload = () => this.draw();
     }
 }
