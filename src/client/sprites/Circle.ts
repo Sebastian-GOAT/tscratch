@@ -81,10 +81,12 @@ export default class Circle extends Sprite {
 
     constructor(options?: CircleOptions) {
         super(options);
+
         this.radius = options?.radius ?? 25;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        
         this.draw();
     }
 

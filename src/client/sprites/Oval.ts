@@ -26,19 +26,17 @@ export default class Oval extends Sprite {
 
         const rX = this.radX;
         const rY = this.radY;
-        const dir = this.dir;
 
-        const cos = Math.abs(engine.cos(dir));
-        const sin = Math.abs(engine.sin(dir));
+        const cos = engine.cos(this.dir);
+        const sin = engine.sin(this.dir);
 
-        const bboxWidth = rX * cos + rY * sin;
-        const bboxHeight = rX * sin + rY * cos;
+        const width  = 2 * Math.sqrt(rX*rX * cos*cos + rY*rY * sin*sin);
+        const height = 2 * Math.sqrt(rX*rX * sin*sin + rY*rY * cos*cos);
 
         return {
             x: this.x,
             y: this.y,
-            width: bboxWidth,
-            height: bboxHeight
+            width, height
         };
     }
 
@@ -102,11 +100,13 @@ export default class Oval extends Sprite {
 
     constructor(options?: OvalOptions) {
         super(options);
+
         this.radX = options?.radX ?? 25;
         this.radY = options?.radY ?? 25;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        
         this.draw();
     }
 

@@ -22,19 +22,18 @@ export default class Square extends Sprite {
 
         const engine = Engine.init();
 
-        const sideLength = this.sideLength;
-        const dir = this.dir;
+        const s = this.sideLength / 2;
 
-        const cos = Math.abs(engine.cos(dir));
-        const sin = Math.abs(engine.sin(dir));
+        const cos = engine.cos(this.dir);
+        const sin = engine.sin(this.dir);
 
-        const bboxSize = sideLength * cos + sideLength * sin;
+        const size  = 2 * Math.sqrt((s * cos)**2 + (s * sin)**2);
 
         return {
             x: this.x,
             y: this.y,
-            width: bboxSize,
-            height: bboxSize
+            width: size,
+            height: size
         };
     }
 

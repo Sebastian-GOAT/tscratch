@@ -85,11 +85,13 @@ export default class RegularPolygon extends Sprite {
 
     constructor(options?: RegularPolygonOptions) {
         super(options);
+
         this.sides = options?.sides ?? 5;
         this.radius = options?.radius ?? 50;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        
         this.draw();
     }
 

@@ -31,6 +31,15 @@ export default class CustomPolygon extends Sprite {
         let minY = Infinity;
         let maxY = -Infinity;
 
+        if (this.vertices.length === 0) {
+            return {
+                x: this.x,
+                y: this.y,
+                width: 0,
+                height: 0
+            };
+        }
+
         for (const v of this.vertices) {
 
             // Rotate
@@ -47,30 +56,27 @@ export default class CustomPolygon extends Sprite {
             if (fy > maxY) maxY = fy;
         }
 
+        const width = maxX - minX;
+        const height = maxY - minY;
+        const x = minX + width / 2;
+        const y = minY + height / 2;
+
         return {
-            x: minX,
-            y: minY,
-            width:  maxX - minX,
-            height: maxY - minY
+            x, y,
+            width, height
         };
     }
 
     public getPath(): Path2D {
         const path = new Path2D();
-        const vertices = this.vertices;
+        
+        if (this.vertices.length < 2) return path;
 
-        if (vertices.length < 2) return path;
+        const vertices = this.vertices as [Vec2, Vec2, ...Vec2[]];
+        const [first, ...rest] = vertices;
 
-        path.moveTo(
-            vertices[0]![0] + canvas.width / 2,
-            canvas.height / 2 - vertices[0]![1]
-        );
-
-        for (let i = 1; i < vertices.length; i++)
-            path.lineTo(
-                vertices[i]![0] + canvas.width / 2,
-                canvas.height / 2 - vertices[i]![1]
-            );
+        path.moveTo(first[0], -first[1]);
+        for (const v of rest) path.lineTo(v[0], -v[1]);
 
         path.closePath();
 
@@ -84,8 +90,8 @@ export default class CustomPolygon extends Sprite {
 
         const cX = this.x + canvas.width / 2;
         const cY = -this.y + canvas.height / 2;
-        c.translate(cX, cY);
 
+        c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
 
         const path = this.getCachedPath();

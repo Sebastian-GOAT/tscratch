@@ -29,21 +29,19 @@ export default class Text extends Sprite {
         const engine = Engine.init();
 
         const metrics = ctx.measureText(String(this.content));
-        const w = metrics.width;
-        const h = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-        const dir = this.dir;
+        const w = metrics.width / 2; // half-width
+        const h = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent / 2; // half-height
 
-        const cos = Math.abs(engine.cos(dir));
-        const sin = Math.abs(engine.sin(dir));
+        const cos = engine.cos(this.dir);
+        const sin = engine.sin(this.dir);
 
-        const bboxWidth = w * cos + h * sin;
-        const bboxHeight = w * sin + h * cos;
+        const width  = 2 * Math.sqrt((w * cos)**2 + (h * sin)**2);
+        const height = 2 * Math.sqrt((w * sin)**2 + (h * cos)**2);
 
         return {
             x: this.x,
             y: this.y,
-            width: bboxWidth,
-            height: bboxHeight
+            width, height
         };
     }
 
@@ -119,13 +117,11 @@ export default class Text extends Sprite {
 
     public setAlign(align: CanvasTextAlign) {
         this.align = align;
-        this.invalidatePath();
         this.refresh();
     }
 
     public setBaseline(baseline: CanvasTextBaseline) {
         this.baseline = baseline;
-        this.invalidatePath();
         this.refresh();
     }
 

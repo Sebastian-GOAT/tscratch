@@ -121,32 +121,36 @@ export default abstract class Sprite {
             Sprite.collisionCtx = Sprite.collisionCanvas.getContext('2d', { willReadFrequently: true })!;
         }
 
-        // Resize if needed
-        if (Sprite.collisionCanvas.width < width || Sprite.collisionCanvas.height < height) {
-            Sprite.collisionCanvas.width = Math.max(width, Sprite.collisionCanvas.width);
-            Sprite.collisionCanvas.height = Math.max(height, Sprite.collisionCanvas.height);
-        }
-
+        // Prepare canvas
         const ctx = Sprite.collisionCtx!;
+        if (Sprite.collisionCanvas.width < width) Sprite.collisionCanvas.width = width;
+        if (Sprite.collisionCanvas.height < height) Sprite.collisionCanvas.height = height;
         ctx.clearRect(0, 0, width, height);
 
-        // Draw first sprite
-        ctx.save();
-        ctx.translate(this.x - xMin, height - this.y + yMin);
-        ctx.rotate(this.toRadians(this.dir));
-        ctx.fillStyle = 'red';
-        ctx.fill(this.getCachedPath());
-        ctx.restore();
+        // Helper to draw a sprite into collision canvas
+        const drawSprite = (sprite: Sprite, color: string) => {
+            ctx.save();
+
+            // Translate to intersection box coordinates (centered)
+            const dx = sprite.x - xMin;
+            const dy = yMax - sprite.y; // flip Y to match draw()
+
+            ctx.translate(dx, dy);
+            ctx.rotate(sprite.toRadians(sprite.dir));
+
+            ctx.fillStyle = color;
+            ctx.fill(sprite.getCachedPath());
+
+            ctx.restore();
+        };
+
+        // Draw sprite 1 in red
+        drawSprite(this, 'red');
         const img1 = ctx.getImageData(0, 0, width, height).data;
 
-        // Draw second sprite
+        // Draw sprite 2 in blue
         ctx.clearRect(0, 0, width, height);
-        ctx.save();
-        ctx.translate(sprite.x - xMin, height - sprite.y + yMin);
-        ctx.rotate(this.toRadians(sprite.dir));
-        ctx.fillStyle = 'blue';
-        ctx.fill(sprite.getCachedPath());
-        ctx.restore();
+        drawSprite(sprite, 'blue');
         const img2 = ctx.getImageData(0, 0, width, height).data;
 
         // Check for overlapping non-transparent pixels

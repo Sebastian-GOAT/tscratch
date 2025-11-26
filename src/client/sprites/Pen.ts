@@ -138,6 +138,7 @@ export default class Pen extends Sprite {
 
     constructor(options?: PenOptions) {
         super(options);
+        
         this.drawing = options?.drawing ?? false;
         this.size = options?.size ?? 5;
         this.color = options?.color ?? 'black';

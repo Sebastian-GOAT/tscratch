@@ -24,21 +24,19 @@ export default class Rectangle extends Sprite {
 
         const engine = Engine.init();
 
-        const w = this.width;
-        const h = this.height;
-        const dir = this.dir;
+        const w = this.width / 2;   // half-width
+        const h = this.height / 2;  // half-height
 
-        const cos = Math.abs(engine.cos(dir));
-        const sin = Math.abs(engine.sin(dir));
+        const cos = engine.cos(this.dir);
+        const sin = engine.sin(this.dir);
 
-        const bboxWidth = w * cos + h * sin;
-        const bboxHeight = w * sin + h * cos;
+        const width  = 2 * Math.sqrt((w * cos)**2 + (h * sin)**2);
+        const height = 2 * Math.sqrt((w * sin)**2 + (h * cos)**2);
 
         return {
             x: this.x,
             y: this.y,
-            width: bboxWidth,
-            height: bboxHeight
+            width, height
         };
     }
 
@@ -101,11 +99,13 @@ export default class Rectangle extends Sprite {
 
     constructor(options?: RectangleOptions) {
         super(options);
+
         this.width = options?.width ?? 50;
         this.height = options?.height ?? 50;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        
         this.draw();
     }
 
