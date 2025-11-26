@@ -64,14 +64,20 @@ export default abstract class Sprite {
         Engine.init().addSprite(this);
     }
 
-    public clone(options?: SpriteOptions): this {
-        return this.create({
+    protected getCreateOptions(): SpriteOptions & Record<string, any> {
+        return {
             x: this.x,
             y: this.y,
             dir: this.dir,
             scene: this.scene,
             layer: this.layer,
-            hidden: this.hidden,
+            hidden: this.hidden
+        };
+    }
+
+    public clone(options?: SpriteOptions): this {
+        return this.create({
+            ...this.getCreateOptions(),
             ...options
         });
     }

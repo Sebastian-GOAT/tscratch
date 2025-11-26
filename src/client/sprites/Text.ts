@@ -89,6 +89,18 @@ export default class Text extends Sprite {
         return new Text(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions,
+            content: this.content,
+            color: this.color,
+            fontFamily: this.fontFamily,
+            fontSize: this.fontSize,
+            align: this.align,
+            baseline: this.baseline
+        };
+    }
+
     // Methods
 
     public setContent(content: string | number) {

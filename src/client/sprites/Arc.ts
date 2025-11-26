@@ -70,6 +70,17 @@ export default class Arc extends Sprite {
         return new Arc(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            radius: this.radius,
+            angle: this.angle,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();

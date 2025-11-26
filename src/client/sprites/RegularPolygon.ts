@@ -67,6 +67,17 @@ export default class RegularPolygon extends Sprite {
         return new RegularPolygon(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            sides: this.sides,
+            radius: this.radius,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setSides(sides: number) {
         this.sides = sides;
         this.invalidatePath();

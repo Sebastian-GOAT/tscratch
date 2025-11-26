@@ -78,6 +78,16 @@ export default class Square extends Sprite {
         return new Square(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            sideLength: this.sideLength,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setSideLength(sideLength: number) {
         this.sideLength = sideLength;
         this.invalidatePath();

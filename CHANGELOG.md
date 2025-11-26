@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: DD.MM.YYYY
 
+## [0.6.9] - 26.11.2025
+
+### Added
+
+- `tags` property on `Sprite`, can be used to filter between different sprites
+
+### Fixed
+
+- `getBoundingBox()` is now implemented correctly, so `touching(sprite)` checks shouldn't be a problem
+- `clone()` should work better now
+
 ## [0.6.6] - 25.11.2025
 
 ### Added

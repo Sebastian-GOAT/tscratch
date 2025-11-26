@@ -69,6 +69,16 @@ export default class Circle extends Sprite {
         return new Circle(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            radius: this.radius,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();

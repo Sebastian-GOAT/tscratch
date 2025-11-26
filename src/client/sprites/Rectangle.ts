@@ -81,6 +81,17 @@ export default class Rectangle extends Sprite {
         return new Rectangle(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            width: this.width,
+            height: this.height,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setWidth(width: number) {
         this.width = width;
         this.invalidatePath();

@@ -111,6 +111,16 @@ export default class CustomPolygon extends Sprite {
         return new CustomPolygon(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            vertices: this.vertices,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setVertices(vertices: Vec2[]) {
         this.vertices = vertices;
         this.invalidatePath();

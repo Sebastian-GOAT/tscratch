@@ -10,7 +10,7 @@ export interface PenOptions extends SpriteOptions {
 export default class Pen extends Sprite {
 
     public discriminant = 'pen';
-    public tags = new Set('pen');
+    public tags = new Set(['pen']);
 
     public drawing: boolean;
     public size: number;
@@ -32,6 +32,15 @@ export default class Pen extends Sprite {
 
     public create(options?: PenOptions): this {
         return new Pen(options) as this;
+    }
+
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            drawing: this.drawing,
+            size: this.size,
+            color: this.color
+        };
     }
 
     public up() {

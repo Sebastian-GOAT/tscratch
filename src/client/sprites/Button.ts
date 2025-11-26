@@ -19,7 +19,7 @@ export interface ButtonOptions extends SpriteOptions {
 export default class Button extends Sprite {
 
     public discriminant = 'button';
-    public tags = new Set('button');
+    public tags = new Set(['button']);
 
     public content: string | number;
     public fontColor: string;
@@ -107,6 +107,21 @@ export default class Button extends Sprite {
 
     public create(options?: ButtonOptions): this {
         return new Button(options) as this;
+    }
+
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            content: this.content,
+            fontColor: this.fontColor,
+            fontFamily: this.fontFamily,
+            fontSize: this.fontSize,
+            width: this.width,
+            height: this.height,
+            backgroundColor: this.backgroundColor,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
     }
 
     // Methods

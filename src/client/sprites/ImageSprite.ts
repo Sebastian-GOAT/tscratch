@@ -90,6 +90,18 @@ export default class ImageSprite extends Sprite {
         return new ImageSprite(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            costumes: this.costumes,
+            costumeNumber: this.costumeNumber,
+            width: this.width,
+            height: this.height,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     // Methods
 
     public setCostume(costumeNumber: number) {

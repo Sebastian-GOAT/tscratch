@@ -82,6 +82,17 @@ export default class Oval extends Sprite {
         return new Oval(options) as this;
     }
 
+    protected getCreateOptions() {
+        return {
+            ...super.getCreateOptions(),
+            radX: this.radX,
+            radY: this.radY,
+            color: this.color,
+            outlineColor: this.outlineColor,
+            outlineWidth: this.outlineWidth
+        };
+    }
+
     public setRadX(radX: number) {
         this.radX = radX;
         this.invalidatePath();
