@@ -105,11 +105,25 @@ export default class ImageSprite extends Sprite {
     // Methods
 
     public setCostume(costumeNumber: number) {
-        this.costumeNumber = costumeNumber < this.costumes.length
+        this.costumeNumber = costumeNumber < this.costumes.length && costumeNumber >= 0
             ? costumeNumber
-            : this.costumes.length - 1;
+            : 0;
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = () => this.refresh();
+        this.img.onload = this.refresh;
+    }
+
+    public nextCostume() {
+        this.costumeNumber = (this.costumeNumber + 1) % this.costumes.length;
+        this.img.src = this.costumes[this.costumeNumber]!;
+        this.img.onload = this.refresh;
+    }
+
+    public previousCostume() {
+        this.costumeNumber--;
+        if (this.costumeNumber < 0) this.costumeNumber = this.costumes.length - 1;
+
+        this.img.src = this.costumes[this.costumeNumber]!;
+        this.img.onload = this.refresh;
     }
 
     public setWidth(width: number) {
@@ -130,7 +144,9 @@ export default class ImageSprite extends Sprite {
         super(options);
 
         this.costumes = options?.costumes ?? [];
-        this.costumeNumber = options?.costumeNumber ?? 0;
+        this.costumeNumber = options?.costumeNumber && options.costumeNumber < this.costumes.length && options.costumeNumber >= 0
+            ? options.costumeNumber
+            : 0;
 
         this.img = new Image();
         this.img.src = this.costumes[this.costumeNumber] ?? '';
