@@ -28,7 +28,7 @@ export default class Square extends Sprite {
         const cos = engine.cos(this.dir);
         const sin = engine.sin(this.dir);
 
-        const size  = 2 * Math.sqrt((s * cos)**2 + (s * sin)**2);
+        const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin));
 
         return {
             x: this.x,
