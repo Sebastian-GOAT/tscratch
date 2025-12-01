@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-The dates are in the following format: DD.MM.YYYY
+The dates are in the following format: D?D.M?M.YYYY
+
+## [0.7.0] - 1.12.12.2025
+
+### Added
+
+- `size` property on `Sprite` for easy resizing
+
+### Changed
+
+- The `size` property on `Pen` was changed to `penSize` after the addition of the `size` property on `Sprite`
+
+### Fixed
+
+- Bounding box calculations for some sprites
 
 ## [0.6.9] - 26.11.2025
 

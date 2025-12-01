@@ -36,8 +36,8 @@ export default class Text extends Sprite {
         const cos = engine.cos(this.dir);
         const sin = engine.sin(this.dir);
 
-        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin));
-        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos));
+        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
+        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
         return {
             x: this.x,
@@ -54,8 +54,8 @@ export default class Text extends Sprite {
         ctx.font = this.font;
 
         const metrics = ctx.measureText(String(this.content));
-        const width = metrics.width;
-        const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+        const width = metrics.width * this.size;
+        const height = (metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) * this.size;
 
         ctx.restore();
 

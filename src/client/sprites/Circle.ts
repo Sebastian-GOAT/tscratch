@@ -23,8 +23,8 @@ export default class Circle extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.radius * 2,
-            height: this.radius * 2
+            width: this.radius * 2 * this.size,
+            height: this.radius * 2 * this.size
         };
     }
 
@@ -33,8 +33,8 @@ export default class Circle extends Sprite {
 
         path.ellipse(
             0, 0,
-            this.radius,
-            this.radius,
+            this.radius * this.size,
+            this.radius * this.size,
             0, 0,
             Math.PI * 2
         );

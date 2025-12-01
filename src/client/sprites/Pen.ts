@@ -3,7 +3,7 @@ import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface PenOptions extends SpriteOptions {
     drawing?: boolean;
-    size?: number;
+    penSize?: number;
     color?: string;
 }
 
@@ -13,15 +13,15 @@ export default class Pen extends Sprite {
     public tags = new Set(['pen']);
 
     public drawing: boolean;
-    public size: number;
+    public penSize: number;
     public color: string;
 
     public getBoundingBox(): BoundingBox {
         return {
             x: this.x,
             y: this.y,
-            width: this.size,
-            height: this.size
+            width: this.penSize * this.penSize,
+            height: this.penSize * this.penSize
         };
     }
 
@@ -38,7 +38,7 @@ export default class Pen extends Sprite {
         return {
             ...super.getCreateOptions(),
             drawing: this.drawing,
-            size: this.size,
+            penSize: this.penSize,
             color: this.color
         };
     }
@@ -62,10 +62,10 @@ export default class Pen extends Sprite {
     public dot() {
         penCtx.fillStyle = this.color;
         penCtx.fillRect(
-            this.x - this.size / 2 + canvas.width / 2,
-            -this.y - this.size / 2 + canvas.height / 2,
-            this.size,
-            this.size
+            this.x - this.penSize / 2 + canvas.width / 2,
+            -this.y - this.penSize / 2 + canvas.height / 2,
+            this.penSize,
+            this.penSize
         );
     }
 
@@ -75,7 +75,7 @@ export default class Pen extends Sprite {
         penCtx.moveTo(lastX + canvas.width / 2, -lastY + canvas.height / 2);
         penCtx.lineTo(this.x + canvas.width / 2, -this.y + canvas.height / 2);
 
-        penCtx.lineWidth = this.size;
+        penCtx.lineWidth = this.penSize;
         penCtx.strokeStyle = this.color;
         penCtx.stroke();
     }
@@ -150,7 +150,7 @@ export default class Pen extends Sprite {
         super(options);
         
         this.drawing = options?.drawing ?? false;
-        this.size = options?.size ?? 5;
+        this.penSize = options?.penSize ?? 5;
         this.color = options?.color ?? 'black';
     }
 

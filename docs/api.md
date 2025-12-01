@@ -77,6 +77,7 @@
 
 ### Looks
 
+- `size` - the scale factor (default 1)
 - `scene` - the scene that it's rendered in (`*` for global rendering)
 - `hidden` - is currently hidden?
 - `layer` - the layer (z-index)
@@ -254,7 +255,7 @@ Draws an image centered on `(x, y)`.
 ## Pen (built-in sprite)
 
 - `color` - the color
-- `size` - the size
+- `penSize` - the size of the stroke
 - `drawing` - is currently drawing?
 
 - `down()` - starts drawing

@@ -11,6 +11,7 @@ export interface SpriteOptions {
     x?: number;
     y?: number;
     dir?: number;
+    size?: number;
     scene?: string;
     hidden?: boolean;
     layer?: number;
@@ -21,6 +22,7 @@ export default abstract class Sprite {
     public x: number = 0;
     public y: number = 0;
     public dir: number = 0;
+    public size: number = 1;
     public scene: string = 'main';
     public hidden: boolean = false;
     public layer: number = 0;
@@ -69,6 +71,7 @@ export default abstract class Sprite {
             x: this.x,
             y: this.y,
             dir: this.dir,
+            size: this.size,
             scene: this.scene,
             layer: this.layer,
             hidden: this.hidden
@@ -240,6 +243,18 @@ export default abstract class Sprite {
 
     public hide() {
         this.hidden = true;
+        this.refresh();
+    }
+
+    public setSize(size: number) {
+        this.size = size > 0 ? size : 0;
+        this.invalidatePath();
+        this.refresh();
+    }
+
+    public changeSize(dS: number) {
+        this.size = this.size + dS > 0 ? this.size + dS : 0;
+        this.invalidatePath();
         this.refresh();
     }
 

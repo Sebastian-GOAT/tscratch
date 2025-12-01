@@ -63,8 +63,10 @@ export default class CustomPolygon extends Sprite {
         const y = minY + height / 2;
 
         return {
-            x, y,
-            width, height
+            x: x * this.size,
+            y: y * this.size,
+            width: width * this.size,
+            height: height * this.size
         };
     }
 
@@ -76,8 +78,8 @@ export default class CustomPolygon extends Sprite {
         const vertices = this.vertices as [Vec2, Vec2, ...Vec2[]];
         const [first, ...rest] = vertices;
 
-        path.moveTo(first[0], -first[1]);
-        for (const v of rest) path.lineTo(v[0], -v[1]);
+        path.moveTo(first[0] * this.size, -first[1] * this.size);
+        for (const v of rest) path.lineTo(v[0] * this.size, -v[1] * this.size);
 
         path.closePath();
 

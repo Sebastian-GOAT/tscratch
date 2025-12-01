@@ -31,8 +31,8 @@ export default class Oval extends Sprite {
         const cos = engine.cos(this.dir);
         const sin = engine.sin(this.dir);
 
-        const width  = 2 * Math.sqrt(rX*rX * cos*cos + rY*rY * sin*sin);
-        const height = 2 * Math.sqrt(rX*rX * sin*sin + rY*rY * cos*cos);
+        const width  = 2 * (Math.abs(rX * cos) + Math.abs(rY * sin)) * this.size;
+        const height = 2 * (Math.abs(rX * sin) + Math.abs(rY * cos)) * this.size;
 
         return {
             x: this.x,
@@ -46,8 +46,8 @@ export default class Oval extends Sprite {
 
         path.ellipse(
             0, 0,
-            this.radX,
-            this.radY,
+            this.radX * this.size,
+            this.radY * this.size,
             0, 0,
             Math.PI * 2
         );

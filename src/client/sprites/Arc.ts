@@ -24,8 +24,8 @@ export default class Arc extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.radius * 2,
-            height: this.radius * 2
+            width: this.radius * 2 * this.size,
+            height: this.radius * 2 * this.size
         };
     }
 
@@ -34,7 +34,7 @@ export default class Arc extends Sprite {
 
         path.arc(
             0, 0,
-            this.radius,
+            this.radius * this.size,
             this.toRadians(this.angle / 2 - 90),
             this.toRadians(-this.angle / 2 - 90)
         );

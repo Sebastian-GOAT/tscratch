@@ -24,8 +24,8 @@ export default class RegularPolygon extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.radius * 2,
-            height: this.radius * 2
+            width: this.radius * 2 * this.size,
+            height: this.radius * 2 * this.size
         };
     }
 
@@ -34,9 +34,12 @@ export default class RegularPolygon extends Sprite {
         
         const step = (2 * Math.PI) / this.sides;
 
-        path.moveTo(this.radius, 0);
+        path.moveTo(this.radius * this.size, 0);
         for (let i = 1; i < this.sides; i++)
-            path.lineTo(this.radius * Math.cos(step * i), this.radius * Math.sin(step * i));
+            path.lineTo(
+                this.radius * Math.cos(step * i) * this.size,
+                this.radius * Math.sin(step * i) * this.size
+            );
         
         path.closePath();
         return path;

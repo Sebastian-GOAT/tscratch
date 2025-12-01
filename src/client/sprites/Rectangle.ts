@@ -31,8 +31,8 @@ export default class Rectangle extends Sprite {
         const cos = engine.cos(this.dir);
         const sin = engine.sin(this.dir);
 
-        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin));
-        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos));
+        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
+        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
         return {
             x: this.x,
@@ -45,10 +45,10 @@ export default class Rectangle extends Sprite {
         const path = new Path2D();
 
         path.rect(
-            -this.width / 2,
-            -this.height / 2,
-            this.width,
-            this.height
+            -this.width / 2 * this.size,
+            -this.height / 2 * this.size,
+            this.width * this.size,
+            this.height * this.size
         );
 
         return path;

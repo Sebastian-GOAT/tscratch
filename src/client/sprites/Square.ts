@@ -28,7 +28,7 @@ export default class Square extends Sprite {
         const cos = engine.cos(this.dir);
         const sin = engine.sin(this.dir);
 
-        const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin));
+        const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin)) * this.size;
 
         return {
             x: this.x,
@@ -42,10 +42,10 @@ export default class Square extends Sprite {
         const path = new Path2D();
 
         path.rect(
-            -this.sideLength / 2,
-            -this.sideLength / 2,
-            this.sideLength,
-            this.sideLength
+            -this.sideLength / 2 * this.size,
+            -this.sideLength / 2 * this.size,
+            this.sideLength * this.size,
+            this.sideLength * this.size
         );
 
         return path;
