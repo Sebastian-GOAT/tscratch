@@ -1,4 +1,5 @@
 import Engine from './Engine.ts';
+import type { Vec2 } from './types/Vectors.ts';
 
 export interface BoundingBox {
     x: number;
@@ -12,6 +13,7 @@ export interface SpriteOptions {
     y?: number;
     dir?: number;
     size?: number;
+    pivot?: Vec2;
     scene?: string;
     hidden?: boolean;
     layer?: number;
@@ -23,6 +25,7 @@ export default abstract class Sprite {
     public y: number = 0;
     public dir: number = 0;
     public size: number = 1;
+    public pivot: Vec2 = [0, 0];
     public scene: string = 'main';
     public hidden: boolean = false;
     public layer: number = 0;
@@ -41,7 +44,6 @@ export default abstract class Sprite {
 
     public abstract getBoundingBox(): BoundingBox;
     public abstract getPath(): Path2D;
-    public abstract draw(stamping?: true): void;
     protected abstract create(options?: SpriteOptions): this;
 
     protected refresh() {
@@ -231,6 +233,11 @@ export default abstract class Sprite {
 
     public changeY(dY: number) {
         this.y += dY;
+        this.refresh();
+    }
+
+    public setPivot(x: number, y: number) {
+        this.pivot = [x, y];
         this.refresh();
     }
 

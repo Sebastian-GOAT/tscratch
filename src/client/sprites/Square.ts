@@ -59,8 +59,8 @@ export default class Square extends Sprite {
         const cX = this.x + canvas.width / 2;
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
-
         c.rotate(this.toRadians(this.dir));
+        c.translate(-this.pivot[0], this.pivot[1]);
 
         const path = this.getCachedPath();
 

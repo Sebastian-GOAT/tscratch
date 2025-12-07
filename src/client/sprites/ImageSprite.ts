@@ -59,7 +59,7 @@ export default class ImageSprite extends Sprite {
         return path;
     }
 
-    public override draw(stamping?: true) {
+    public draw(stamping?: true) {
         const c = stamping ? penCtx : ctx;
 
         c.save();
@@ -67,8 +67,8 @@ export default class ImageSprite extends Sprite {
         const cX = this.x + canvas.width / 2;
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
-
         c.rotate(this.toRadians(this.dir));
+        c.translate(-this.pivot[0], this.pivot[1]);
 
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;

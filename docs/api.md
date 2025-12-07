@@ -64,12 +64,14 @@
 - `x` - the x position (-left, +right, 0 center)
 - `y` - the y position (-bottom, +top, 0 center)
 - `dir` - the x position (-counterclockwise, +clockwise, 0 top)
+- `pivot` - the pivot point of the sprite (rotation, position)
 
 - `goTo(x, y)` - move to coordinates
 - `setX(x)` - set the x position
 - `setY(y)` - set the y position
 - `changeX(dX)` - changes the x position
 - `changeY(dY)` - changes the y position
+- `setPivot(x, y)` - sets the pivot
 - `turn(deg)` - changes the direction
 - `point(deg)` - points in some direction
 - `pointTowards(x, y)` - points towards coordinates
