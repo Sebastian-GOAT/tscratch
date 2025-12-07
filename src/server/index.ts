@@ -1,2 +1,2 @@
 export { default as Server } from './server.ts';
-export type { Socket } from 'socket.io';
+export type { Socket as Client } from 'socket.io';

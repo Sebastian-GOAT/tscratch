@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.7.1] - 7.12.2025
+
+### Added
+
+- The `drawSprite(sprite)` method on `Pen` allows drawing sprites to the pen layer
+
+### Changed
+
+- Renamed `engine.changeScene(scene)` to `engine.setScene(scene)`
+- Renamed `engine.setMaxFramesPerSecond(FPS)` to `engine.setMaxFPS(FPS)`
+
 ## [0.7.0] - 1.12.12.2025
 
 ### Added

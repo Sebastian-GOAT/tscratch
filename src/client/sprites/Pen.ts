@@ -1,4 +1,5 @@
 import { canvas, penCtx } from '../canvas.ts';
+import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 
 export interface PenOptions extends SpriteOptions {
@@ -20,8 +21,8 @@ export default class Pen extends Sprite {
         return {
             x: this.x,
             y: this.y,
-            width: this.penSize * this.penSize,
-            height: this.penSize * this.penSize
+            width: this.penSize * this.size * 2,
+            height: this.penSize * this.size * 2
         };
     }
 
@@ -67,6 +68,11 @@ export default class Pen extends Sprite {
             this.penSize,
             this.penSize
         );
+    }
+
+    public drawSprite(sprite: Sprite) {
+        sprite.draw(true);
+        Engine.init().removeSprite(sprite);
     }
 
     private drawLine(lastX: number, lastY: number) {

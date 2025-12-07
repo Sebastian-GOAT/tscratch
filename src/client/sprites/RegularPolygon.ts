@@ -45,7 +45,7 @@ export default class RegularPolygon extends Sprite {
         return path;
     }
 
-    public draw(stamping?: boolean) {
+    public draw(stamping?: true) {
         const c = stamping ? penCtx : ctx;
 
         c.save();

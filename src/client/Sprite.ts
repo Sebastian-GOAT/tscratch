@@ -41,7 +41,7 @@ export default abstract class Sprite {
 
     public abstract getBoundingBox(): BoundingBox;
     public abstract getPath(): Path2D;
-    public abstract draw(stamping?: boolean): void;
+    public abstract draw(stamping?: true): void;
     protected abstract create(options?: SpriteOptions): this;
 
     protected refresh() {

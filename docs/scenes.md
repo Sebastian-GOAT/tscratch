@@ -4,7 +4,7 @@ TScratch supports scenes with the `scene` property. In every sprite you create,
 you can specify, in which scene you want it to render. TScratch will default it
 to 'main' if not specified.
 
-After that, you can switch between scenes by using `engine.changeScene(scene)`.
+After that, you can switch between scenes by using `engine.setScene(scene)`.
 TScratch will then render only the sprites, that belong in that specific scene.
 
 You can also specify 1 loop per scene using `engine.setLoop(scene, callback)`.

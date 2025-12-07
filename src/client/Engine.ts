@@ -48,14 +48,14 @@ export default class Engine {
 
     // Change the scene
 
-    public changeScene(scene: string) {
+    public setScene(scene: string) {
         if (!this.sceneMap.get(scene))
             this.sceneMap.set(scene, { sprites: [], loop: null });
 
         this.loopRunning = false;
         this.currentScene = scene;
         this.gameLoop = this.sceneMap.get(scene)!.loop;
-        this.setMaxFramesPerSecond(this.maxFPS); // Update the interval function
+        this.setMaxFPS(this.maxFPS); // Update the interval function
     }
 
     // Loops
@@ -64,13 +64,13 @@ export default class Engine {
         if (!this.sceneMap.get(scene)) {
             this.sceneMap.set(scene, { sprites: [], loop });
             if (scene === this.currentScene)
-                this.changeScene(scene);
+                this.setScene(scene);
             return;
         }
 
         this.sceneMap.get(scene)!.loop = loop;
         if (scene === this.currentScene)
-            this.changeScene(scene);
+            this.setScene(scene);
     }
 
     public pauseLoop() {
@@ -83,7 +83,7 @@ export default class Engine {
 
     public resumeLoop() {
         this.loopRunning = true;
-        void this.setMaxFramesPerSecond(this.maxFPS);
+        void this.setMaxFPS(this.maxFPS);
     }
 
     // Internal
@@ -115,7 +115,7 @@ export default class Engine {
         this.refresh();
     }
 
-    public async setMaxFramesPerSecond(maxFPS: number) {
+    public async setMaxFPS(maxFPS: number) {
         this.maxFPS = maxFPS;
 
         let loop = this.gameLoop;
@@ -330,7 +330,7 @@ export default class Engine {
     // Private constructor
 
     private constructor() {
-        void this.setMaxFramesPerSecond(24);
+        void this.setMaxFPS(24);
         this.sceneMap.set('main', { loop: null, sprites: [] });
         this.sceneMap.set('*', { loop: null, sprites: [] });
 

@@ -51,7 +51,7 @@ export default class Square extends Sprite {
         return path;
     }
 
-    public draw(stamping?: boolean): void {
+    public draw(stamping?: true): void {
         const c = stamping ? penCtx : ctx;
 
         c.save();

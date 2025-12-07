@@ -5,12 +5,12 @@
 ### Initialization
 
 - `Engine.init()` - get the singleton instance
-- `setMaxFramesPerSecond(FPS)`- sets the maximum FPS
+- `setMaxFPS(FPS)`- sets the maximum FPS
 
 ### Scenes
 
 - `setLoop(scene, callback)` - game loop logic
-- `changeScene(scene)` - changes the scene, renders only the targeted sprites
+- `setScene(scene)` - changes the scene, renders only the targeted sprites
 
 ### Mouse Events
 
@@ -261,6 +261,7 @@ Draws an image centered on `(x, y)`.
 - `down()` - starts drawing
 - `up()` - stops drawing
 - `dot()` - draws a single dot
+- `drawSprite(sprite)` - draws a sprite to the pen layer, doesn't get tracked by `Engine`
 
 Movement methods, such as `move()`, can draw a line based on if `drawing` is true.
 

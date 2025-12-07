@@ -58,7 +58,7 @@ export default class ImageSprite extends Sprite {
         return path;
     }
 
-    public override draw(stamping?: boolean) {
+    public override draw(stamping?: true) {
         const c = stamping ? penCtx : ctx;
 
         c.save();
