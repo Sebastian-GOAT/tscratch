@@ -1,11 +1,12 @@
 # Collisions
 
 Sprites have a `touching(sprite)` method, which can detect pixel perfect
-collisions. It's optimized by first checking AABB (axis-aligned bounding
-boxes), and only if they're overlapping, check for more. This is an **EXPERIMENTAL**
-feature, and it might behave unpredictably for some sprites, like `RegularPolygon`.
-It can also be **VERY SLOW**, as pixel perfect calculations can be very
-computationaly heavy.
+collisions. This method uses the following optimizations:
+
+- Tight Axis-Aligned Bounding Boxes using trigonometric functions
+- 1 per-sprite collision canvas
+- The collision canvas is the minimum size needed (only the collision box)
+- `willReadFrequently` flag on the collision canvas rendering context to minimize GPU-CPU data transfer
 
 TScratch also has methods for mouse interactions! You can use the
 `engine.isHovering(sprite)` method to check, if the user is hovering a
