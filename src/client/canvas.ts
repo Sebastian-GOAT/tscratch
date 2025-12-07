@@ -3,7 +3,6 @@ export const ctx = canvas.getContext('2d')!;
 
 export const penCanvas = document.createElement('canvas');
 export const penCtx = penCanvas.getContext('2d')!;
-penCanvas.id = 'pen-canvas';
 
 export let aspectRatio: number = 16 / 9;
 export let scale: number;

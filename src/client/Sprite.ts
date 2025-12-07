@@ -34,8 +34,8 @@ export default abstract class Sprite {
     private pathDirty: boolean = true;
 
     // Reusable collision detection canvas
-    private static collisionCanvas: HTMLCanvasElement | null = null;
-    private static collisionCtx: CanvasRenderingContext2D | null = null;
+    private static collisionCanvas: OffscreenCanvas | null = null;
+    private static collisionCtx: OffscreenCanvasRenderingContext2D | null = null;
 
     // Rendering
 
@@ -123,11 +123,11 @@ export default abstract class Sprite {
         const width = xMax - xMin;
         const height = yMax - yMin;
 
-        if (width <= 1 || height <= 1) return false;
+        if (width < 1 || height < 1) return false;
 
         // Reuse or create offscreen canvas for collision detection
         if (!Sprite.collisionCanvas) {
-            Sprite.collisionCanvas = document.createElement('canvas');
+            Sprite.collisionCanvas = new OffscreenCanvas(1, 1);
             Sprite.collisionCtx = Sprite.collisionCanvas.getContext('2d', { willReadFrequently: true })!;
         }
 

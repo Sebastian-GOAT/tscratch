@@ -23,6 +23,7 @@ export default class ImageSprite extends Sprite {
     public outlineColor: string;
     public outlineWidth: number;
 
+    private imgBitmap: ImageBitmap | null = null;
     protected img: HTMLImageElement;
 
     public getBoundingBox(): BoundingBox {
@@ -72,7 +73,7 @@ export default class ImageSprite extends Sprite {
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;
         c.drawImage(
-            this.img,
+            this.imgBitmap ?? this.img,
             0, 0,
             this.img.width,
             this.img.height,
@@ -109,13 +110,24 @@ export default class ImageSprite extends Sprite {
             ? costumeNumber
             : 0;
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = this.refresh;
+        this.img.onload = () => {
+            createImageBitmap(this.img).then(bitmap => {
+                this.imgBitmap = bitmap;
+            });
+            this.refresh()
+        };
     }
 
     public nextCostume() {
         this.costumeNumber = (this.costumeNumber + 1) % this.costumes.length;
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = this.refresh;
+        this.img.onload = () => {
+            this.imgBitmap = null;
+            createImageBitmap(this.img).then(bitmap => {
+                this.imgBitmap = bitmap;
+            });
+            this.refresh()
+        };
     }
 
     public previousCostume() {
@@ -123,7 +135,13 @@ export default class ImageSprite extends Sprite {
         if (this.costumeNumber < 0) this.costumeNumber = this.costumes.length - 1;
 
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = this.refresh;
+        this.img.onload = () => {
+            this.imgBitmap = null;
+            createImageBitmap(this.img).then(bitmap => {
+                this.imgBitmap = bitmap;
+            });
+            this.refresh()
+        };
     }
 
     public setWidth(width: number) {
@@ -160,6 +178,9 @@ export default class ImageSprite extends Sprite {
         this.img.onload = () => {
             if (!options?.width) this.width = this.img.width;
             if (!options?.height) this.height = this.img.height;
+            createImageBitmap(this.img).then(bitmap => {
+                this.imgBitmap = bitmap;
+            });
             this.draw();
         };
     }
