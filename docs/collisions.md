@@ -13,3 +13,5 @@ TScratch also has methods for mouse interactions! You can use the
 specific sprite. By combining this with `engine.mouseDown`, you can
 create click events. You can also make your own custom events using
 `engine.mouseX` and `engine.mouseY`.
+
+Remember that `touching(sprite)` doesn't work with pivots yet.

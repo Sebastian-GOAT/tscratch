@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
-## [0.7.2] - xxxxxxxxxxxxxxxxxxxxxxxxx.12.2025
+## [0.7.2] - 12.12.2025
 
 ### Added
 
-- `pivot`, `setPivot(x, y)` to add offsets to sprites
+- `pivot`, `setPivot(x, y)` to add offsets to sprites (doesn't work witg touching())
+- `WireframeRenderer3D`, a sprite that can render any wireframe of a model given its vertices and coords
+- `Object3D` to easily manage 3D objects for `WireframeRenderer3D`
 
 ## [0.7.1] - 7.12.2025
 

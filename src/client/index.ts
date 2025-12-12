@@ -22,6 +22,17 @@ import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 
 import RigidCircle, { type RigidCircleOptions } from './sprites/physics/RigidCircle.ts';
 
+// 3D
+import WireframeRenderer3D, { type WireframeRenderer3DOptions } from './sprites/3d/WireframeRenderer3D.ts';
+import Object3D, { type Object3DOptions } from './sprites/3d/Object3D.ts';
+
+import cubeVertices from './sprites/3d/vertices/cube.ts';
+import cubeFaces from './sprites/3d/faces/cube.ts';
+import tetrahedronVertices from './sprites/3d/vertices/tetrahedron.ts';
+import tetrahedronFaces from './sprites/3d/faces/tetrahedron.ts';
+import octahedronVertices from './sprites/3d/vertices/octahedron.ts';
+import octahedronFaces from './sprites/3d/faces/octahedron.ts';
+
 // Types
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 import type { Mat2, Mat3, Mat4 } from './types/Matricies.ts';
@@ -50,6 +61,17 @@ const TScratch = {
     ImageSprite,
 
     RigidCircle,
+
+    // 3D
+    WireframeRenderer3D,
+    Object3D,
+
+    cubeVertices,
+    cubeFaces,
+    tetrahedronVertices,
+    tetrahedronFaces,
+    octahedronVertices,
+    octahedronFaces,
 
     // Canvas
     scale,
@@ -85,6 +107,17 @@ export {
 
     RigidCircle,
 
+    // 3D
+    WireframeRenderer3D,
+    Object3D,
+
+    cubeVertices,
+    cubeFaces,
+    tetrahedronVertices,
+    tetrahedronFaces,
+    octahedronVertices,
+    octahedronFaces,
+
     // Options
     type SpriteOptions,
     type RectangleOptions,
@@ -102,6 +135,8 @@ export {
 
     type RigidBodyOptions,
     type RigidCircleOptions,
+    type WireframeRenderer3DOptions,
+    type Object3DOptions,
 
     // Other types
     type Vec2,

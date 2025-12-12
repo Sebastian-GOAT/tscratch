@@ -1,0 +1,8 @@
+export const tetrahedronFaces: [number, number, ...number[]][] = [
+    [0, 1, 2],
+    [0, 3, 1],
+    [0, 2, 3],
+    [1, 3, 2]
+];
+
+export default tetrahedronFaces;

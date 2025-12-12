@@ -64,18 +64,18 @@
 - `x` - the x position (-left, +right, 0 center)
 - `y` - the y position (-bottom, +top, 0 center)
 - `dir` - the x position (-counterclockwise, +clockwise, 0 top)
-- `pivot` - the pivot point of the sprite (rotation, position)
+- `pivot` - the pivot point of the sprite (rotation, position) (doesn't work with `touching(sprite)`)
 
 - `goTo(x, y)` - move to coordinates
 - `setX(x)` - set the x position
 - `setY(y)` - set the y position
 - `changeX(dX)` - changes the x position
 - `changeY(dY)` - changes the y position
-- `setPivot(x, y)` - sets the pivot
+- `setPivot(x, y)` - sets the pivot (doesn't work with `touching(sprite)`)
 - `turn(deg)` - changes the direction
 - `point(deg)` - points in some direction
 - `pointTowards(x, y)` - points towards coordinates
-- `touching(sprite)` - checks for a collision with another sprite
+- `touching(sprite)` - checks for a collision with another sprite (doesn't work with pivots)
 
 ### Looks
 
@@ -266,6 +266,28 @@ Draws an image centered on `(x, y)`.
 - `drawSprite(sprite)` - draws a sprite to the pen layer, doesn't get tracked by `Engine`
 
 Movement methods, such as `move()`, can draw a line based on if `drawing` is true.
+
+## WireframeRenderer3D (built-in sprite)
+
+- All pen properties & methods
+
+- `registerControls()` - handles movement events (per frame, can be overriden inside a subclass)
+- `render()` - renders the objects (per frame)
+
+Usage:
+```ts
+import { Engine, WireframeRenderer3D as Renderer } from 'tscratch';
+import objects from './lib/data.ts';
+
+const engine = Engine.init();
+const renderer = new Renderer({ objects });
+
+engine.setLoop('main', () => {
+    renderer.eraseAll();
+    renderer.registerControls();
+    renderer.update();
+});
+```
 
 ## Canvas (not a class)
 
