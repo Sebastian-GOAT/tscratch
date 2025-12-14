@@ -1,4 +1,4 @@
-const cubeFaces: [number, number, ...number[]][] = [
+const cuboidFaces: [number, number, ...number[]][] = [
     [0, 1, 2, 3],
     [4, 5, 6, 7],
     [0, 4],
@@ -7,4 +7,4 @@ const cubeFaces: [number, number, ...number[]][] = [
     [3, 7]
 ];
 
-export default cubeFaces;
+export default cuboidFaces;

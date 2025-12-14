@@ -32,6 +32,7 @@ import Octahedron from './sprites/3d/models/Octahedron.ts';
 import Icosahedron from './sprites/3d/models/Icosahedron.ts';
 import Icosphere from './sprites/3d/models/Icosphere.ts';
 import Monkey from './sprites/3d/models/Monkey.ts';
+import Cuboid, { type CuboidOptions } from './sprites/3d/models/Cuboid.ts';
 
 // Types
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
@@ -72,6 +73,8 @@ const TScratch = {
     Icosahedron,
     Icosphere,
     Monkey,
+
+    Cuboid,
 
     // Canvas
     scale,
@@ -118,6 +121,8 @@ export {
     Icosphere,
     Monkey,
 
+    Cuboid,
+
     // Options
     type SpriteOptions,
     type RectangleOptions,
@@ -137,6 +142,8 @@ export {
     type RigidCircleOptions,
     type WireframeRenderer3DOptions,
     type Object3DOptions,
+
+    type CuboidOptions,
 
     // Other types
     type Vec2,
