@@ -8,17 +8,29 @@ export interface Object3DOptions {
     x?: number;
     y?: number;
     z?: number;
+
+    rotX?: number;
+    rotY?: number;
+    rotZ?: number;
+
+    color?: string;
+
+    scale?: number;
 }
 
 export default class Object3D {
 
-    public x = 0;
-    public y = 0;
-    public z = 0;
+    public x: number;
+    public y: number;
+    public z: number;
 
-    public rotX = 0;
-    public rotY = 0;
-    public rotZ = 0;
+    public rotX: number;
+    public rotY: number;
+    public rotZ: number;
+
+    public color: string;
+
+    public scale: number;
 
     public vertices: Vec3[];
     public faces: [number, number, ...number[]][];
@@ -30,6 +42,14 @@ export default class Object3D {
         this.x = options.x ?? 0;
         this.y = options.y ?? 0;
         this.z = options.z ?? 2;
+
+        this.rotX = options.rotX ?? 0;
+        this.rotY = options.rotY ?? 0;
+        this.rotZ = options.rotZ ?? 0;
+
+        this.color = options.color ?? 'black';
+
+        this.scale = options.scale ?? 1;
     }
 
     public rotateX(deg: number) {
@@ -93,5 +113,25 @@ export default class Object3D {
         const delta = deg - this.rotZ;
         this.rotZ = deg;
         this.rotateZ(delta);
+    }
+
+    // Parses an .obj file
+    public static loadObj(data: string) {
+
+        const lines = data.split('\n');
+
+        // Vertices
+        const vertices = lines
+            .filter(l => l.startsWith('v '))
+            .map(l => l.split(' ').slice(1).map(parseFloat)) as Vec3[];
+
+        // Faces
+        const faces = lines
+            .filter(l => l.startsWith('f '))
+            .map(l => l.split(' ').slice(1).map(
+                f => parseInt(f.split('/')[0]!) - 1
+            )) as [number, number, ...number[]][];
+
+        return { vertices, faces };
     }
 }

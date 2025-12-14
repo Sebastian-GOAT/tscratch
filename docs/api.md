@@ -285,7 +285,7 @@ const renderer = new Renderer({ objects });
 engine.setLoop('main', () => {
     renderer.eraseAll();
     renderer.registerControls();
-    renderer.update();
+    renderer.render();
 });
 ```
 

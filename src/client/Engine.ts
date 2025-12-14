@@ -7,7 +7,7 @@ type GameLoop = (() => void) | (() => Promise<void>);
 type SceneMap = Map<string, {
     sprites: Sprite[];
     loop: GameLoop | null;
-}>
+}>;
 
 export default class Engine {
 
@@ -16,7 +16,7 @@ export default class Engine {
     private loopRunning: boolean = false;
     private gameLoop: GameLoop | null = null;
 
-    public maxFPS: number = 24;
+    public maxFPS: number = 30;
     public deltaTime: number = 1 / this.maxFPS;
     private lastFrame: number = performance.now();
     private refreshScheduled: boolean = false;
@@ -330,7 +330,7 @@ export default class Engine {
     // Private constructor
 
     private constructor() {
-        void this.setMaxFPS(24);
+        void this.setMaxFPS(30);
         this.sceneMap.set('main', { loop: null, sprites: [] });
         this.sceneMap.set('*', { loop: null, sprites: [] });
 

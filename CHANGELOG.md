@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.7.3] - xxxxxxxxxxxxxxxxxxx.12.2025
+
+### Added
+
+- `Object3D.loadObj(srcCode)` static method that parses raw .obj contents into vertices and faces, which can be directly passed to a 3D object
+
+### Changed
+
+- Default `Engine.maxFPS` changed from 24 to 30
+- Renamed `WireFrameRenderer3D.update()` to `WireFrameRenderer3D.render()`
+
 ## [0.7.2] - 12.12.2025
 
 ### Added

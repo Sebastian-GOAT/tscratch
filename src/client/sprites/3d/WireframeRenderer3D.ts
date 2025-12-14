@@ -15,7 +15,7 @@ export default class WireframeRenderer3D extends Pen {
     public Z_NEAR = 0.01;
 
     public SPEED = 2;
-    public SENSITIVITY = 300;
+    public SENSITIVITY = 225;
 
     public camX = 0;
     public camY = 0;
@@ -70,6 +70,9 @@ export default class WireframeRenderer3D extends Pen {
             this.camDirY -= this.SENSITIVITY * dt;
         if (engine.keyPressed('right'))
             this.camDirY += this.SENSITIVITY * dt;
+
+        const maxPitch = 89;
+        this.camDirX = Math.max(-maxPitch, Math.min(maxPitch, this.camDirX));
     }
 
     // Perspective projection
@@ -90,8 +93,8 @@ export default class WireframeRenderer3D extends Pen {
         });
     }
 
-    // Render update (run every frame)
-    public update() {
+    // Render (run every frame)
+    public render() {
         const engine = Engine.init();
 
         const sinX = engine.sin(this.camDirX);
@@ -103,27 +106,29 @@ export default class WireframeRenderer3D extends Pen {
 
         for (const obj of this.objects) {
 
-        const projected = this.project(
-            obj.vertices.map(v => {
-                let x = v[0] + obj.x - this.camX;
-                let y = v[1] + obj.y - this.camY;
-                let z = v[2] + obj.z - this.camZ;
+            const projected = this.project(
+                obj.vertices.map(v => {
+                    let x = v[0] * obj.scale + obj.x - this.camX;
+                    let y = v[1] * obj.scale + obj.y - this.camY;
+                    let z = v[2] * obj.scale + obj.z - this.camZ;
 
-                // Y (yaw)
-                let x1 = x * cosY - z * sinY;
-                let z1 = x * sinY + z * cosY;
+                    // Y (yaw)
+                    let x1 = x * cosY - z * sinY;
+                    let z1 = x * sinY + z * cosY;
 
-                // X (pitch)
-                let y2 = y * cosX - z1 * sinX;
-                let z2 = y * sinX + z1 * cosX;
+                    // X (pitch)
+                    let y2 = y * cosX - z1 * sinX;
+                    let z2 = y * sinX + z1 * cosX;
 
-                // Z (roll)
-                let x3 = x1 * cosZ - y2 * sinZ;
-                let y3 = x1 * sinZ + y2 * cosZ;
+                    // Z (roll)
+                    let x3 = x1 * cosZ - y2 * sinZ;
+                    let y3 = x1 * sinZ + y2 * cosZ;
 
-                return [x3, y3, z2] as Vec3;
-            })
-        );
+                    return [x3, y3, z2] as Vec3;
+                })
+            );
+
+            this.color = obj.color || 'black';
     
             for (const f of obj.faces) {
     
