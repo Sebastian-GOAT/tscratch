@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../types/Vectors.ts';
+import type { Vec3 } from '../../../../types/Vectors.ts';
 
 const cubeVertices: Vec3[] = [
     // Bottom

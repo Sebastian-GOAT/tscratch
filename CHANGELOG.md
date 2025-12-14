@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
-## [0.7.3] - xxxxxxxxxxxxxxxxxxx.12.2025
+## [0.7.3] - 14.12.2025
 
 ### Added
 
 - `Object3D.loadObj(srcCode)` static method that parses raw .obj contents into vertices and faces, which can be directly passed to a 3D object
+- Built-in 3D objects:
+    - Tetrahedron
+    - Cube
+    - Octahedron
+    - Icosahedron
+    - Icosphere
+    - Monkey
 
 ### Changed
 
