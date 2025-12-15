@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
-## [0.7.4] - xxxxxxxxxxxxxxxxxxxx.12.2025
+## [0.7.4] - 15.12.2025
 
 ### Added
 
 - `Cuboid` 3D object
+- `SolidRenderer3D` for rendering solid objects
 
 ## [0.7.3] - 14.12.2025
 
