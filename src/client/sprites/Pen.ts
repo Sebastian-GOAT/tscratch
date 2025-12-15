@@ -1,6 +1,7 @@
 import { canvas, penCtx } from '../canvas.ts';
-import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
+import TSCMath from '../TSCMath.ts';
+import Engine from '../Engine.ts';
 
 export interface PenOptions extends SpriteOptions {
     drawing?: boolean;
@@ -92,8 +93,8 @@ export default class Pen extends Sprite {
         const lastX = this.x;
         const lastY = this.y;
 
-        this.x += steps * Math.sin(this.toRadians(this.dir));
-        this.y += steps * Math.cos(this.toRadians(this.dir));
+        this.x += steps * Math.sin(TSCMath.toRadians(this.dir));
+        this.y += steps * Math.cos(TSCMath.toRadians(this.dir));
         if (this.drawing)
             this.drawLine(lastX, lastY);
         this.refresh();

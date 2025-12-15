@@ -3,6 +3,7 @@ import Pen, { type PenOptions } from '../Pen.ts';
 import Engine from '../../Engine.ts';
 import type Object3D from './Object3D.ts';
 import type { Vec2, Vec3 } from '../../types/Vectors.ts';
+import TSCMath from '../../TSCMath.ts';
 
 export interface WireframeRenderer3DOptions extends PenOptions {
     objects: Object3D[];
@@ -37,8 +38,8 @@ export default class WireframeRenderer3D extends Pen {
 
         const dt = engine.deltaTime;
 
-        const sinY = engine.sin(this.camDirY);
-        const cosY = engine.cos(this.camDirY);
+        const sinY = TSCMath.sin(this.camDirY);
+        const cosY = TSCMath.cos(this.camDirY);
 
         if (engine.keyPressed('w')) {
             this.camX += this.SPEED * sinY * dt;
@@ -78,7 +79,7 @@ export default class WireframeRenderer3D extends Pen {
     // Perspective projection
     private project(vertices: Vec3[]): Vec2[] {
 
-        const f = 1 / Engine.init().tan(this.FOV / 2);
+        const f = 1 / TSCMath.tan(this.FOV / 2);
 
         return vertices.map(v => {
             const x = v[0];
@@ -95,14 +96,12 @@ export default class WireframeRenderer3D extends Pen {
 
     // Render (run every frame)
     public render() {
-        const engine = Engine.init();
-
-        const sinX = engine.sin(this.camDirX);
-        const cosX = engine.cos(this.camDirX);
-        const sinY = engine.sin(this.camDirY);
-        const cosY = engine.cos(this.camDirY);
-        const sinZ = engine.sin(this.camDirZ);
-        const cosZ = engine.cos(this.camDirZ);
+        const sinX = TSCMath.sin(this.camDirX);
+        const cosX = TSCMath.cos(this.camDirX);
+        const sinY = TSCMath.sin(this.camDirY);
+        const cosY = TSCMath.cos(this.camDirY);
+        const sinZ = TSCMath.sin(this.camDirZ);
+        const cosZ = TSCMath.cos(this.camDirZ);
 
         for (const obj of this.objects) {
 

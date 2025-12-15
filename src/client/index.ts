@@ -2,6 +2,7 @@
 import Engine from './Engine.ts';
 import Sprite, { type SpriteOptions } from './Sprite.ts';
 import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
+import TSCMath from './TSCMath.ts';
 
 // Multiplayer
 import Multiplayer from './Multiplayer.ts';
@@ -24,6 +25,7 @@ import RigidCircle, { type RigidCircleOptions } from './sprites/physics/RigidCir
 
 // 3D
 import WireframeRenderer3D, { type WireframeRenderer3DOptions } from './sprites/3d/WireframeRenderer3D.ts';
+import SolidRenderer3D, { type SolidRenderer3DOptions } from './sprites/3d/SolidRenderer3D.ts';
 import Object3D, { type Object3DOptions } from './sprites/3d/Object3D.ts';
 
 import Tetrahedron from './sprites/3d/models/Tetrahedron.ts';
@@ -43,6 +45,7 @@ const TScratch = {
     // Main
     Engine,
     Sprite,
+    TSCMath,
 
     // Multiplayer
     Multiplayer,
@@ -65,6 +68,7 @@ const TScratch = {
 
     // 3D
     WireframeRenderer3D,
+    SolidRenderer3D,
     Object3D,
 
     Tetrahedron,
@@ -90,6 +94,7 @@ export {
     // Main
     Engine,
     Sprite,
+    TSCMath,
 
     // Multiplayer
     Multiplayer,
@@ -112,6 +117,7 @@ export {
 
     // 3D
     WireframeRenderer3D,
+    SolidRenderer3D,
     Object3D,
 
     Tetrahedron,
@@ -141,6 +147,7 @@ export {
     type RigidBodyOptions,
     type RigidCircleOptions,
     type WireframeRenderer3DOptions,
+    type SolidRenderer3DOptions,
     type Object3DOptions,
 
     type CuboidOptions,

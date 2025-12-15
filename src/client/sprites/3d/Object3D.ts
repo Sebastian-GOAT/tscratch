@@ -1,4 +1,4 @@
-import Engine from '../../Engine.ts';
+import TSCMath from '../../TSCMath.ts';
 import type { Vec3 } from '../../types/Vectors.ts';
 
 export interface Object3DOptions {
@@ -53,11 +53,8 @@ export default class Object3D {
     }
 
     public rotateX(deg: number) {
-
-        const engine = Engine.init();
-
-        const cos = engine.cos(deg);
-        const sin = engine.sin(deg);
+        const cos = TSCMath.cos(deg);
+        const sin = TSCMath.sin(deg);
 
         for (let i = 0; i < this.vertices.length; i++) {
             const [_, y, z] = this.vertices[i]!;
@@ -68,11 +65,8 @@ export default class Object3D {
     }
 
     public rotateY(deg: number) {
-
-        const engine = Engine.init();
-
-        const cos = engine.cos(deg);
-        const sin = engine.sin(deg);
+        const cos = TSCMath.cos(deg);
+        const sin = TSCMath.sin(deg);
 
         for (let i = 0; i < this.vertices.length; i++) {
             const [x, _, z] = this.vertices[i]!;
@@ -83,11 +77,8 @@ export default class Object3D {
     }
 
     public rotateZ(deg: number) {
-
-        const engine = Engine.init();
-
-        const cos = engine.cos(deg);
-        const sin = engine.sin(deg);
+        const cos = TSCMath.cos(deg);
+        const sin = TSCMath.sin(deg);
 
         for (let i = 0; i < this.vertices.length; i++) {
             const [x, y, _] = this.vertices[i]!;

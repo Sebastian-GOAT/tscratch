@@ -1,6 +1,6 @@
-import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { ctx, canvas, penCtx } from '../canvas.ts';
+import TSCMath from '../TSCMath.ts';
 
 export interface SquareOptions extends SpriteOptions {
     sideLength?: number;
@@ -21,12 +21,10 @@ export default class Square extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
-        const engine = Engine.init();
-
         const s = this.sideLength / 2;
 
-        const cos = engine.cos(this.dir);
-        const sin = engine.sin(this.dir);
+        const cos = TSCMath.cos(this.dir);
+        const sin = TSCMath.sin(this.dir);
 
         const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin)) * this.size;
 
@@ -61,7 +59,7 @@ export default class Square extends Sprite {
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
-
+TSCMath
         const path = this.getCachedPath();
 
         c.fillStyle = this.color;

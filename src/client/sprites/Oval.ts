@@ -1,6 +1,6 @@
-import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
 import { canvas, ctx, penCtx } from '../canvas.ts';
+import TSCMath from '../TSCMath.ts';
 
 export interface OvalOptions extends SpriteOptions {
     radX?: number;
@@ -23,13 +23,11 @@ export default class Oval extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
-        const engine = Engine.init();
-
         const rX = this.radX;
         const rY = this.radY;
 
-        const cos = engine.cos(this.dir);
-        const sin = engine.sin(this.dir);
+        const cos = TSCMath.cos(this.dir);
+        const sin = TSCMath.sin(this.dir);
 
         const width  = 2 * (Math.abs(rX * cos) + Math.abs(rY * sin)) * this.size;
         const height = 2 * (Math.abs(rX * sin) + Math.abs(rY * cos)) * this.size;
@@ -65,7 +63,7 @@ export default class Oval extends Sprite {
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
-
+TSCMath
         const path = this.getCachedPath();
 
         c.fillStyle = this.color;

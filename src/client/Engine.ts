@@ -1,5 +1,6 @@
 import { canvas, ctx, penCanvas } from './canvas.ts';
 import Sprite from './Sprite.ts';
+import TSCMath from './TSCMath.ts';
 import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
 
 type GameLoop = (() => void) | (() => Promise<void>);
@@ -210,7 +211,7 @@ export default class Engine {
         const localY = canvasMouseY - (canvas.height / 2 - sprite.y);
 
         // Rotate mouse point by -dir to align with the path's local coordinates
-        const angle = -this.toRadians(sprite.dir);
+        const angle = -TSCMath.toRadians(sprite.dir);
         const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
         const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
 
@@ -255,76 +256,6 @@ export default class Engine {
             sound.currentTime = 0;
         });
         this.sounds = [];
-    }
-
-    // Math
-
-    public pickRandom(min: number, max: number) {
-        if (min > max)
-            [min, max] = [max, min];
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
-
-    public dotProduct(...vectors: [Vec2, Vec2] | [Vec3, Vec3] | [Vec4, Vec4]) {
-        const [a, b] = vectors;
-
-        switch (a.length) {
-            case 2: return a[0] * b[0] + a[1] * b[1];
-            case 3: return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]!;
-            case 4: return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]! + a[3] * b[3]!; // TypeScript doesn't narrow down the types on b
-        }
-    }
-
-    // Trigonometric functions
-    public sin(deg: number) {
-        return Math.sin(this.toRadians(deg));
-    }
-
-    public cos(deg: number) {
-        return Math.cos(this.toRadians(deg));
-    }
-
-    public tan(deg: number) {
-        return Math.tan(this.toRadians(deg));
-    }
-
-    public csc(deg: number) {
-        return 1 / Math.sin(this.toRadians(deg));
-    }
-
-    public sec(deg: number) {
-        return 1 / Math.cos(this.toRadians(deg));
-    }
-
-    public cot(deg: number) {
-        return 1 / Math.tan(this.toRadians(deg));
-    }
-
-    // Inverse Trigonometric functions
-    public asin(val: number) {
-        return this.toDegrees(Math.asin(val));
-    }
-
-    public acos(val: number) {
-        return this.toDegrees(Math.acos(val));
-    }
-
-    public acsc(val: number) {
-        return this.toDegrees(Math.asin(1 / val));
-    }
-
-    public asec(val: number) {
-        return this.toDegrees(Math.acos(1 / val));
-    }
-
-    // Helpers
-
-    public toRadians(deg: number) {
-        return deg * Math.PI / 180;
-    }
-
-    public toDegrees(rad: number) {
-        return rad * 180 / Math.PI;
     }
 
     // Private constructor

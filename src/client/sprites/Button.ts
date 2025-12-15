@@ -1,6 +1,6 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
-import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
+import TSCMath from '../TSCMath.ts';
 
 export interface ButtonOptions extends SpriteOptions {
     content?: string | number;
@@ -37,8 +37,6 @@ export default class Button extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
-        const engine = Engine.init();
-
         ctx.save();
         
         ctx.font = this.font;
@@ -49,8 +47,8 @@ export default class Button extends Sprite {
 
         ctx.restore();
 
-        const cos = engine.cos(this.dir);
-        const sin = engine.sin(this.dir);
+        const cos = TSCMath.cos(this.dir);
+        const sin = TSCMath.sin(this.dir);
 
         const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
         const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;

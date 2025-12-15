@@ -1,6 +1,6 @@
 import { canvas, ctx, penCtx } from '../canvas.ts';
-import Engine from '../Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
+import TSCMath from '../TSCMath.ts';
 
 export interface TextOptions extends SpriteOptions {
     content?: string | number;
@@ -27,14 +27,12 @@ export default class Text extends Sprite {
 
     public getBoundingBox(): BoundingBox {
 
-        const engine = Engine.init();
-
         const metrics = ctx.measureText(String(this.content));
         const w = metrics.width / 2; // half-width
         const h = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent / 2; // half-height
 
-        const cos = engine.cos(this.dir);
-        const sin = engine.sin(this.dir);
+        const cos = TSCMath.cos(this.dir);
+        const sin = TSCMath.sin(this.dir);
 
         const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
         const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
@@ -74,7 +72,7 @@ export default class Text extends Sprite {
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
-
+TSCMath
         c.font = this.font;
         c.fillStyle = this.color;
         c.textAlign = this.align;
