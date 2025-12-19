@@ -62,8 +62,8 @@ export default class CustomPolygon extends Sprite {
         const y = minY + height / 2;
 
         return {
-            x: x * this.size - Engine.camera.x,
-            y: y * this.size + Engine.camera.y,
+            x: x * this.size,
+            y: y * this.size,
             width: width * this.size,
             height: height * this.size
         };
@@ -90,8 +90,8 @@ export default class CustomPolygon extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2 - Engine.camera.x;
-        const cY = -this.y + canvas.height / 2 + Engine.camera.y;
+        const cX = this.x + canvas.width / 2;
+        const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);

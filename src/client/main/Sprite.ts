@@ -48,7 +48,7 @@ export default abstract class Sprite {
     protected abstract create(options?: SpriteOptions): this;
 
     protected refresh() {
-        Engine.refresh();
+        Engine.init().refresh();
     }
 
     protected invalidatePath() {
@@ -66,7 +66,7 @@ export default abstract class Sprite {
 
     constructor(options?: SpriteOptions) {
         Object.assign(this, options);
-        Engine.addSprite(this);
+        Engine.init().addSprite(this);
     }
 
     protected getCreateOptions(): SpriteOptions & Record<string, any> {

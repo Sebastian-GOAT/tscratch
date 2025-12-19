@@ -1,7 +1,6 @@
 // Main
 import Engine from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
-import Camera, { type CameraOptions } from '@main/Camera.ts';
 import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
 
@@ -47,7 +46,6 @@ import { type RigidBodyOptions } from '@sprites/physics/RigidBodyOptions.ts';
 const TScratch = {
     // Main
     Engine,
-    Camera,
     Sprite,
     TSCMath,
 
@@ -100,7 +98,6 @@ export {
     // Main
     Engine,
     Sprite,
-    Camera,
     TSCMath,
 
     // Multiplayer
@@ -139,7 +136,6 @@ export {
     Cuboid,
 
     // Options
-    type CameraOptions,
     type SpriteOptions,
     type RectangleOptions,
     type SquareOptions,

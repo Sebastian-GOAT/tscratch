@@ -21,8 +21,8 @@ export default class Circle extends Sprite {
 
     public getBoundingBox(): BoundingBox {
         return {
-            x: this.x - Engine.camera.x,
-            y: this.y + Engine.camera.y,
+            x: this.x,
+            y: this.y,
             width: this.radius * 2 * this.size,
             height: this.radius * 2 * this.size
         };
@@ -47,8 +47,8 @@ export default class Circle extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2 - Engine.camera.x;
-        const cY = -this.y + canvas.height / 2 + Engine.camera.y;
+        const cX = this.x + canvas.width / 2;
+        const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.2] - 19.12.2025
+
+## Changed
+
+- `Engine` is back to a singleton class due to unexpected behaivior
+
+## Removed
+
+- `Camera`
+
 ## [0.8.0] - 19.12.2025
 
 ### Added

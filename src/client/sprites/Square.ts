@@ -30,8 +30,8 @@ export default class Square extends Sprite {
         const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin)) * this.size;
 
         return {
-            x: this.x - Engine.camera.x,
-            y: this.y + Engine.camera.y,
+            x: this.x,
+            y: this.y,
             width: size,
             height: size
         };
@@ -55,8 +55,8 @@ export default class Square extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2 - Engine.camera.x;
-        const cY = -this.y + canvas.height / 2 + Engine.camera.y;
+        const cX = this.x + canvas.width / 2;
+        const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
