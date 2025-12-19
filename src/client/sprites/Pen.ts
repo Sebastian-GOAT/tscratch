@@ -20,8 +20,8 @@ export default class Pen extends Sprite {
 
     public getBoundingBox(): BoundingBox {
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x - Engine.camera.x,
+            y: this.y + Engine.camera.y,
             width: this.penSize * this.size * 2,
             height: this.penSize * this.size * 2
         };
@@ -73,7 +73,7 @@ export default class Pen extends Sprite {
 
     public drawSprite(sprite: Sprite) {
         sprite.draw(true);
-        Engine.init().removeSprite(sprite);
+        Engine.removeSprite(sprite);
     }
 
     private drawLine(lastX: number, lastY: number) {
@@ -160,5 +160,4 @@ export default class Pen extends Sprite {
         this.penSize = options?.penSize ?? 5;
         this.color = options?.color ?? 'black';
     }
-
 }

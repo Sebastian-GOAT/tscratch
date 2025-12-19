@@ -1,6 +1,7 @@
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, canvas, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
+import Engine from '@main/Engine.ts';
 
 export interface RectangleOptions extends SpriteOptions {
     width?: number;
@@ -33,8 +34,8 @@ export default class Rectangle extends Sprite {
         const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x - Engine.camera.x,
+            y: this.y + Engine.camera.y,
             width, height
         };
     }
@@ -57,12 +58,12 @@ export default class Rectangle extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2;
-        const cY = -this.y + canvas.height / 2;
+        const cX = this.x + canvas.width / 2 - Engine.camera.x;
+        const cY = -this.y + canvas.height / 2 + Engine.camera.y;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
-TSCMath
+
         const path = this.getCachedPath();
 
         c.fillStyle = this.color;

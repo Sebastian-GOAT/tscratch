@@ -1,10 +1,10 @@
 # API Overview
 
-## Engine (singleton)
+## Engine (static)
 
 ### Initialization
 
-- `Engine.init()` - get the singleton instance
+- `init()` - initialize the engine
 - `setMaxFPS(FPS)`- sets the maximum FPS
 
 ### Scenes
@@ -37,7 +37,7 @@
 - `async wait(ms)` - wait some time in milliseconds
 - `async waitUntil(() => condition)` - wait until a condition becomes true (pass a getter)
 
-### Math
+## TSCMath (static)
 
 - `toRadians(rad)` - converts degrees to radians
 - `toDegrees(deg)` - converts radians to degrees
@@ -217,13 +217,13 @@ Draws a label aligned to your preference.
 ```ts
 import { Button } from 'tscratch';
 
-const engine = Engine.init();
+Engine.init();
 const button = new Button();
 
-engine.setLoop('main', () => {
-    if (engine.mouseDown) {
-        await engine.waitUntil(!engine.mouseDown);
-        if (engine.hovering(button))
+Engine.setLoop('main', () => {
+    if (Engine.mouseDown) {
+        await Engine.waitUntil(!Engine.mouseDown);
+        if (Engine.hovering(button))
             console.log('Clicked!');
     }
 });
@@ -279,10 +279,10 @@ Usage:
 import { Engine, WireframeRenderer3D as Renderer } from 'tscratch';
 import objects from './lib/data.ts';
 
-const engine = Engine.init();
+Engine.init();
 const renderer = new Renderer({ objects });
 
-engine.setLoop('main', () => {
+Engine.setLoop('main', () => {
     renderer.eraseAll();
     renderer.registerControls();
     renderer.render();

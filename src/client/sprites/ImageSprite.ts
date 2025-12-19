@@ -1,4 +1,5 @@
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
+import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 
@@ -38,8 +39,8 @@ export default class ImageSprite extends Sprite {
         const height = 2 * Math.sqrt((w * sin)**2 + (h * cos)**2) * this.size;
 
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x - Engine.camera.x,
+            y: this.y + Engine.camera.y,
             width, height
         };
     }
@@ -62,12 +63,12 @@ export default class ImageSprite extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2;
-        const cY = -this.y + canvas.height / 2;
+        const cX = this.x + canvas.width / 2 - Engine.camera.x;
+        const cY = -this.y + canvas.height / 2 + Engine.camera.y;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0], this.pivot[1]);
-TSCMath
+
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;
         c.drawImage(

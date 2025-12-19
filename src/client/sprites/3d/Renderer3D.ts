@@ -35,42 +35,41 @@ export default abstract class Renderer3D extends Pen {
 
     // Controls
     public registerControls() {
-        const engine = Engine.init();
 
-        const dt = engine.deltaTime;
+        const dt = Engine.deltaTime;
 
         const sinY = TSCMath.sin(this.camera.dirY);
         const cosY = TSCMath.cos(this.camera.dirY);
 
-        if (engine.keyPressed('w')) {
+        if (Engine.keyPressed('w')) {
             this.camera.x += this.SPEED * sinY * dt;
             this.camera.z += this.SPEED * cosY * dt;
         }
-        if (engine.keyPressed('a')) {
+        if (Engine.keyPressed('a')) {
             this.camera.x -= this.SPEED * cosY * dt;
             this.camera.z += this.SPEED * sinY * dt;
         }
-        if (engine.keyPressed('s')) {
+        if (Engine.keyPressed('s')) {
             this.camera.x -= this.SPEED * sinY * dt;
             this.camera.z -= this.SPEED * cosY * dt;
         }
-        if (engine.keyPressed('d')) {
+        if (Engine.keyPressed('d')) {
             this.camera.x += this.SPEED * cosY * dt;
             this.camera.z -= this.SPEED * sinY * dt;
         }
 
-        if (engine.keyPressed('e'))
+        if (Engine.keyPressed('e'))
             this.camera.y += this.SPEED * dt;
-        if (engine.keyPressed('q'))
+        if (Engine.keyPressed('q'))
             this.camera.y -= this.SPEED * dt;
 
-        if (engine.keyPressed('up'))
+        if (Engine.keyPressed('up'))
             this.camera.dirX += this.SENSITIVITY * dt;
-        if (engine.keyPressed('down'))
+        if (Engine.keyPressed('down'))
             this.camera.dirX -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('left'))
+        if (Engine.keyPressed('left'))
             this.camera.dirY -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('right'))
+        if (Engine.keyPressed('right'))
             this.camera.dirY += this.SENSITIVITY * dt;
 
         const maxPitch = 89;

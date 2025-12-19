@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.0] - 19.12.2025
+
+### Added
+
+- `Camera`, `Camera3D` for offsetting
+
+### Changed
+
+- `Engine` is now a static class, use `Engine.init()` once at the beginning, then use static properties & methods (critical)
+- Math methods moved to a static class `TSCMath`
+
 ## [0.7.4] - 15.12.2025
 
 ### Added

@@ -1,3 +1,4 @@
+import Camera from './Camera.ts';
 import { canvas, ctx, penCanvas } from './canvas.ts';
 import Sprite from './Sprite.ts';
 import TSCMath from './TSCMath.ts';
@@ -11,158 +12,186 @@ type SceneMap = Map<string, {
 
 export default class Engine {
 
-    private static instance: Engine;
+    private static loopRunning = false;
+    private static gameLoop: GameLoop | null = null;
 
-    private loopRunning: boolean = false;
-    private gameLoop: GameLoop | null = null;
+    public static maxFPS = 30;
+    public static deltaTime = 1 / Engine.maxFPS;
+    private static lastFrame = performance.now();
+    private static refreshScheduled = false;
+    private static animationFrameId: number | null = null;
 
-    public maxFPS: number = 30;
-    public deltaTime: number = 1 / this.maxFPS;
-    private lastFrame: number = performance.now();
-    private refreshScheduled: boolean = false;
-    private animationFrameId: number | null = null;
+    private static sounds: HTMLAudioElement[] = [];
 
-    private sounds: HTMLAudioElement[] = [];
+    public static camera = new Camera();
 
-    public mouseX: number = 0;
-    public mouseY: number = 0;
+    public static mouseX = 0;
+    public static mouseY = 0;
 
-    public mouseDown: boolean = false;
-    public mouseClicked: boolean = false;
+    public static mouseDown = false;
+    public static mouseClicked = false;
 
-    private keysPressed: Set<string> = new Set<string>();
+    private static keysPressed: Set<string> = new Set<string>();
 
-    private currentScene: string = 'main';
-    public sceneMap: SceneMap = new Map();
+    private static currentScene = 'main';
+    public static sceneMap: SceneMap = new Map();
 
-    private variableMap: Map<string, unknown> = new Map();
+    private static variableMap: Map<string, unknown> = new Map();
 
     // Singleton initialization
 
     public static init() {
-        if (!this.instance)
-            this.instance = new Engine();
 
-        return this.instance;
+        void Engine.setMaxFPS(Engine.maxFPS);
+        Engine.sceneMap.set('main', { loop: null, sprites: [] });
+        Engine.sceneMap.set('*', { loop: null, sprites: [] });
+
+        // Events
+
+        // Mouse
+        addEventListener('mousemove', e => {
+            Engine.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
+            Engine.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
+        });
+        addEventListener('mousedown', () => {
+            Engine.mouseDown = true;
+        });
+        addEventListener('mouseup', () => {
+            Engine.mouseDown = false;
+        });
+        addEventListener('click', () => {
+            Engine.mouseClicked = true;
+            setTimeout(() => Engine.mouseClicked = false, 0);
+        });
+
+        // Keys
+        addEventListener('keydown', e => {
+            if (e.repeat) return;
+            Engine.keysPressed.add(e.key);
+        });
+
+        addEventListener('keyup', e => {
+            Engine.keysPressed.delete(e.key);
+        });
     }
 
     // Change the scene
 
-    public setScene(scene: string) {
-        if (!this.sceneMap.get(scene))
-            this.sceneMap.set(scene, { sprites: [], loop: null });
+    public static setScene(scene: string) {
+        if (!Engine.sceneMap.get(scene))
+            Engine.sceneMap.set(scene, { sprites: [], loop: null });
 
-        this.loopRunning = false;
-        this.currentScene = scene;
-        this.gameLoop = this.sceneMap.get(scene)!.loop;
-        this.setMaxFPS(this.maxFPS); // Update the interval function
+        Engine.loopRunning = false;
+        Engine.currentScene = scene;
+        Engine.gameLoop = Engine.sceneMap.get(scene)!.loop;
+        Engine.setMaxFPS(Engine.maxFPS); // Update the interval function
     }
 
     // Loops
 
-    public setLoop(scene: string, loop: GameLoop) {
-        if (!this.sceneMap.get(scene)) {
-            this.sceneMap.set(scene, { sprites: [], loop });
-            if (scene === this.currentScene)
-                this.setScene(scene);
+    public static setLoop(scene: string, loop: GameLoop) {
+        if (!Engine.sceneMap.get(scene)) {
+            Engine.sceneMap.set(scene, { sprites: [], loop });
+            if (scene === Engine.currentScene)
+                Engine.setScene(scene);
             return;
         }
 
-        this.sceneMap.get(scene)!.loop = loop;
-        if (scene === this.currentScene)
-            this.setScene(scene);
+        Engine.sceneMap.get(scene)!.loop = loop;
+        if (scene === Engine.currentScene)
+            Engine.setScene(scene);
     }
 
-    public pauseLoop() {
-        this.loopRunning = false;
-        if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
-            this.animationFrameId = null;
+    public static pauseLoop() {
+        Engine.loopRunning = false;
+        if (Engine.animationFrameId !== null) {
+            cancelAnimationFrame(Engine.animationFrameId);
+            Engine.animationFrameId = null;
         }
     }
 
-    public resumeLoop() {
-        this.loopRunning = true;
-        void this.setMaxFPS(this.maxFPS);
+    public static resumeLoop() {
+        Engine.loopRunning = true;
+        void Engine.setMaxFPS(Engine.maxFPS);
     }
 
     // Internal
 
-    public addSprite(sprite: Sprite) {
+    public static addSprite(sprite: Sprite) {
         const { scene, layer } = sprite;
 
-        if (!this.sceneMap.get(scene)) {
-            this.sceneMap.set(scene, { sprites: [sprite], loop: null });
+        if (!Engine.sceneMap.get(scene)) {
+            Engine.sceneMap.set(scene, { sprites: [sprite], loop: null });
             return;
         }
 
-        let targetIndex = this.sceneMap.get(scene)!.sprites.findIndex(s => s.layer > layer);
+        let targetIndex = Engine.sceneMap.get(scene)!.sprites.findIndex(s => s.layer > layer);
         if (targetIndex === -1) {
-            this.sceneMap.get(scene)!.sprites.push(sprite);
+            Engine.sceneMap.get(scene)!.sprites.push(sprite);
             return;
         }
 
-        this.sceneMap.get(scene)!.sprites.splice(targetIndex, 0, sprite);
-        this.refresh();
+        Engine.sceneMap.get(scene)!.sprites.splice(targetIndex, 0, sprite);
+        Engine.refresh();
     }
 
-    public removeSprite(sprite: Sprite) {
+    public static removeSprite(sprite: Sprite) {
         const { scene } = sprite;
 
-        if (!this.sceneMap.get(scene)) return;
+        if (!Engine.sceneMap.get(scene)) return;
 
-        this.sceneMap.get(scene)!.sprites = this.sceneMap.get(scene)!.sprites.filter(s => s !== sprite);
-        this.refresh();
+        Engine.sceneMap.get(scene)!.sprites = Engine.sceneMap.get(scene)!.sprites.filter(s => s !== sprite);
+        Engine.refresh();
     }
 
-    public async setMaxFPS(maxFPS: number) {
-        this.maxFPS = maxFPS;
+    public static async setMaxFPS(maxFPS: number) {
+        Engine.maxFPS = maxFPS;
 
-        let loop = this.gameLoop;
+        let loop = Engine.gameLoop;
         if (!loop) return;
 
         // Cancel existing animation frame if any
-        if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
-            this.animationFrameId = null;
+        if (Engine.animationFrameId !== null) {
+            cancelAnimationFrame(Engine.animationFrameId);
+            Engine.animationFrameId = null;
         }
 
-        this.loopRunning = true;
+        Engine.loopRunning = true;
         const frameInterval = 1000 / maxFPS;
         let accumulator = 0;
 
         const tick = async (currentTime: number) => {
-            if (!this.loopRunning) return;
+            if (!Engine.loopRunning) return;
 
-            const deltaTime = currentTime - this.lastFrame;
-            this.lastFrame = currentTime;
+            const deltaTime = currentTime - Engine.lastFrame;
+            Engine.lastFrame = currentTime;
             accumulator += deltaTime;
 
             // Fixed timestep: only run loop when enough time has passed
             if (accumulator >= frameInterval) {
-                this.deltaTime = accumulator / 1000;
+                Engine.deltaTime = accumulator / 1000;
                 accumulator = accumulator % frameInterval;
 
                 if (loop) await loop();
             }
 
-            this.animationFrameId = requestAnimationFrame(tick);
+            Engine.animationFrameId = requestAnimationFrame(tick);
         };
 
-        this.lastFrame = performance.now();
-        this.animationFrameId = requestAnimationFrame(tick);
+        Engine.lastFrame = performance.now();
+        Engine.animationFrameId = requestAnimationFrame(tick);
     }
 
-    public refresh() {
-        if (this.refreshScheduled) return;
-        this.refreshScheduled = true;
+    public static refresh() {
+        if (Engine.refreshScheduled) return;
+        Engine.refreshScheduled = true;
 
         requestAnimationFrame(() => {
-            this.refreshScheduled = false;
+            Engine.refreshScheduled = false;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const sprites = [
-                ...this.sceneMap.get(this.currentScene)!.sprites,
-                ...this.sceneMap.get('*')!.sprites
+                ...Engine.sceneMap.get(Engine.currentScene)!.sprites,
+                ...Engine.sceneMap.get('*')!.sprites
             ];
             sprites.forEach(sprite => {
                 if (!sprite.hidden)
@@ -173,15 +202,15 @@ export default class Engine {
 
     // Wait functions
 
-    public async wait(ms: number): Promise<void> {
+    public static async wait(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    public async waitUntil(conditionGetter: () => boolean): Promise<void> {
+    public static async waitUntil(conditionGetter: () => boolean): Promise<void> {
         return new Promise(resolve => {
             const check = () => {
                 if (conditionGetter()) resolve();
-                else setTimeout(check, 1000 / this.maxFPS);
+                else setTimeout(check, 1000 / Engine.maxFPS);
             }
             check();
         });
@@ -189,18 +218,18 @@ export default class Engine {
 
     // Global variables
 
-    public setVariable<T = any>(key: string, value: T) {
-        this.variableMap.set(key, value);
+    public static setVariable<T = any>(key: string, value: T) {
+        Engine.variableMap.set(key, value);
     }
 
-    public getVariable<T = unknown>(key: string) {
-        return this.variableMap.get(key) as T;
+    public static getVariable<T = unknown>(key: string) {
+        return Engine.variableMap.get(key) as T;
     }
 
     // Events
 
-    public hovering(sprite: Sprite) {
-        const { mouseX, mouseY } = this;
+    public static hovering(sprite: Sprite) {
+        const { mouseX, mouseY } = Engine;
 
         const canvasMouseX = mouseX + canvas.width / 2;
         const canvasMouseY = canvas.height / 2 - mouseY;
@@ -217,79 +246,43 @@ export default class Engine {
         return ctx.isPointInPath(sprite.getCachedPath(), rotatedX, rotatedY);
     }
 
-    public keyPressed(key: string) {
+    public static keyPressed(key: string) {
         switch (key) {
-            case 'any': return this.keysPressed.size > 0;
+            case 'any': return Engine.keysPressed.size > 0;
 
-            case 'up': return this.keysPressed.has('ArrowUp');
-            case 'down': return this.keysPressed.has('ArrowDown');
-            case 'left': return this.keysPressed.has('ArrowLeft');
-            case 'right': return this.keysPressed.has('ArrowRight');
+            case 'up': return Engine.keysPressed.has('ArrowUp');
+            case 'down': return Engine.keysPressed.has('ArrowDown');
+            case 'left': return Engine.keysPressed.has('ArrowLeft');
+            case 'right': return Engine.keysPressed.has('ArrowRight');
 
-            case 'space': return this.keysPressed.has(' ');
+            case 'space': return Engine.keysPressed.has(' ');
 
-            default: return this.keysPressed.has(key);
+            default: return Engine.keysPressed.has(key);
         }
     }
 
     // Sound
 
-    public playSound(src: string) {
+    public static playSound(src: string) {
         const audio = new Audio(src);
-        this.sounds.push(audio);
+        Engine.sounds.push(audio);
 
         audio.play();
 
         return audio;
     }
 
-    public stopSound(sound: HTMLAudioElement) {
+    public static stopSound(sound: HTMLAudioElement) {
         sound.pause();
         sound.currentTime = 0;
-        this.sounds = this.sounds.filter(s => s !== sound);
+        Engine.sounds = Engine.sounds.filter(s => s !== sound);
     }
 
-    public stopAllSounds() {
-        this.sounds.forEach(sound => {
+    public static stopAllSounds() {
+        Engine.sounds.forEach(sound => {
             sound.pause();
             sound.currentTime = 0;
         });
-        this.sounds = [];
-    }
-
-    // Private constructor
-
-    private constructor() {
-        void this.setMaxFPS(30);
-        this.sceneMap.set('main', { loop: null, sprites: [] });
-        this.sceneMap.set('*', { loop: null, sprites: [] });
-
-        // Events
-
-        // Mouse
-        penCanvas.addEventListener('mousemove', e => {
-            this.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
-            this.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
-        });
-        penCanvas.addEventListener('mousedown', () => {
-            this.mouseDown = true;
-        });
-        penCanvas.addEventListener('mouseup', () => {
-            this.mouseDown = false;
-        });
-        penCanvas.addEventListener('click', () => {
-            this.mouseClicked = true;
-            setTimeout(() => this.mouseClicked = false, 0);
-        });
-
-        // Keys
-        addEventListener('keydown', e => {
-            if (e.repeat) return;
-            this.keysPressed.add(e.key);
-        });
-
-        addEventListener('keyup', e => {
-            this.keysPressed.delete(e.key);
-        });
+        Engine.sounds = [];
     }
 }

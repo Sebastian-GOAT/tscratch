@@ -17,8 +17,6 @@ export default class RigidCircle extends Circle implements RigidBodyOptions {
 
     public update() {
 
-        const engine = Engine.init();
-
         this.vY += this.gravity;
         this.vY *= this.drag;
         this.vX *= this.drag;
@@ -26,8 +24,8 @@ export default class RigidCircle extends Circle implements RigidBodyOptions {
         const x = this.x + this.vX;
         const y = this.y + this.vY;
 
-        const localCircles = engine.sceneMap.get(this.scene)!.sprites.filter(s => s.discriminant === 'circle');
-        const globalCircles = engine.sceneMap.get('*')!.sprites.filter(s => s.discriminant === 'circle');
+        const localCircles = Engine.sceneMap.get(this.scene)!.sprites.filter(s => s.discriminant === 'circle');
+        const globalCircles = Engine.sceneMap.get('*')!.sprites.filter(s => s.discriminant === 'circle');
         const circles = [...localCircles, ...globalCircles] as Circle[];
 
         const steps = Math.ceil(this.distanceTo(x, y) / (2 * this.radius));
