@@ -1,115 +1,25 @@
-import { canvas } from '../../canvas.ts';
-import Pen, { type PenOptions } from '../Pen.ts';
-import Engine from '../../Engine.ts';
-import type Object3D from './Object3D.ts';
-import type { Vec2, Vec3 } from '../../types/Vectors.ts';
+import type { Vec3 } from '../../types/Vectors.ts';
 import TSCMath from '../../TSCMath.ts';
+import Renderer3D from './Renderer3D.ts';
 
-export interface WireframeRenderer3DOptions extends PenOptions {
-    objects: Object3D[];
-}
-
-export default class WireframeRenderer3D extends Pen {
-
-    public FOV = 60;
-    public ASPECT = canvas.width / canvas.height;
-    public Z_NEAR = 0.01;
-
-    public SPEED = 2;
-    public SENSITIVITY = 225;
-
-    public camX = 0;
-    public camY = 0;
-    public camZ = 0;
-    public camDirX = 0;
-    public camDirY = 0;
-    public camDirZ = 0;
-
-    public objects: Object3D[];
-
-    constructor(options: WireframeRenderer3DOptions) {
-        super(options);
-        this.objects = options.objects;
-    }
-
-    // Controls
-    public registerControls() {
-        const engine = Engine.init();
-
-        const dt = engine.deltaTime;
-
-        const sinY = TSCMath.sin(this.camDirY);
-        const cosY = TSCMath.cos(this.camDirY);
-
-        if (engine.keyPressed('w')) {
-            this.camX += this.SPEED * sinY * dt;
-            this.camZ += this.SPEED * cosY * dt;
-        }
-        if (engine.keyPressed('a')) {
-            this.camX -= this.SPEED * cosY * dt;
-            this.camZ += this.SPEED * sinY * dt;
-        }
-        if (engine.keyPressed('s')) {
-            this.camX -= this.SPEED * sinY * dt;
-            this.camZ -= this.SPEED * cosY * dt;
-        }
-        if (engine.keyPressed('d')) {
-            this.camX += this.SPEED * cosY * dt;
-            this.camZ -= this.SPEED * sinY * dt;
-        }
-
-        if (engine.keyPressed('e'))
-            this.camY += this.SPEED * dt;
-        if (engine.keyPressed('q'))
-            this.camY -= this.SPEED * dt;
-
-        if (engine.keyPressed('up'))
-            this.camDirX += this.SENSITIVITY * dt;
-        if (engine.keyPressed('down'))
-            this.camDirX -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('left'))
-            this.camDirY -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('right'))
-            this.camDirY += this.SENSITIVITY * dt;
-
-        const maxPitch = 89;
-        this.camDirX = Math.max(-maxPitch, Math.min(maxPitch, this.camDirX));
-    }
-
-    // Perspective projection
-    private project(vertices: Vec3[]): Vec2[] {
-
-        const f = 1 / TSCMath.tan(this.FOV / 2);
-
-        return vertices.map(v => {
-            const x = v[0];
-            const y = v[1];
-            const z = v[2] < this.Z_NEAR ? this.Z_NEAR : v[2];
-
-            // Perspective divide for x and y
-            const xp = canvas.width / 2 * (x * f) / (z * this.ASPECT);
-            const yp = canvas.height / 2 * (y * f) / z;
-
-            return [xp, yp];
-        });
-    }
+export default class WireframeRenderer3D extends Renderer3D {
 
     // Render (run every frame)
     public render() {
-        const sinX = TSCMath.sin(this.camDirX);
-        const cosX = TSCMath.cos(this.camDirX);
-        const sinY = TSCMath.sin(this.camDirY);
-        const cosY = TSCMath.cos(this.camDirY);
-        const sinZ = TSCMath.sin(this.camDirZ);
-        const cosZ = TSCMath.cos(this.camDirZ);
+        const sinX = TSCMath.sin(this.camera.dirX);
+        const cosX = TSCMath.cos(this.camera.dirX);
+        const sinY = TSCMath.sin(this.camera.dirY);
+        const cosY = TSCMath.cos(this.camera.dirY);
+        const sinZ = TSCMath.sin(this.camera.dirZ);
+        const cosZ = TSCMath.cos(this.camera.dirZ);
 
         for (const obj of this.objects) {
 
             const projected = this.project(
                 obj.vertices.map(v => {
-                    let x = v[0] * obj.scale + obj.x - this.camX;
-                    let y = v[1] * obj.scale + obj.y - this.camY;
-                    let z = v[2] * obj.scale + obj.z - this.camZ;
+                    let x = v[0] * obj.size + obj.x - this.camera.x;
+                    let y = v[1] * obj.size + obj.y - this.camera.y;
+                    let z = v[2] * obj.size + obj.z - this.camera.z;
 
                     // Y (yaw)
                     let x1 = x * cosY - z * sinY;

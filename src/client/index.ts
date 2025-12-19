@@ -24,8 +24,10 @@ import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
 import RigidCircle, { type RigidCircleOptions } from './sprites/physics/RigidCircle.ts';
 
 // 3D
-import WireframeRenderer3D, { type WireframeRenderer3DOptions } from './sprites/3d/WireframeRenderer3D.ts';
-import SolidRenderer3D, { type SolidRenderer3DOptions } from './sprites/3d/SolidRenderer3D.ts';
+import Camera3D, { type Camera3DOptions } from './sprites/3d/Camera3D.ts';
+import Renderer3D, { type Renderer3DOptions } from './sprites/3d/Renderer3D.ts';
+import WireframeRenderer3D from './sprites/3d/WireframeRenderer3D.ts';
+import SolidRenderer3D from './sprites/3d/SolidRenderer3D.ts';
 import Object3D, { type Object3DOptions } from './sprites/3d/Object3D.ts';
 
 import Tetrahedron from './sprites/3d/models/Tetrahedron.ts';
@@ -67,6 +69,8 @@ const TScratch = {
     RigidCircle,
 
     // 3D
+    Camera3D,
+    Renderer3D, // For custom renderer implementations
     WireframeRenderer3D,
     SolidRenderer3D,
     Object3D,
@@ -116,6 +120,8 @@ export {
     RigidCircle,
 
     // 3D
+    Camera3D,
+    Renderer3D, // For custom renderer implementations
     WireframeRenderer3D,
     SolidRenderer3D,
     Object3D,
@@ -146,8 +152,8 @@ export {
 
     type RigidBodyOptions,
     type RigidCircleOptions,
-    type WireframeRenderer3DOptions,
-    type SolidRenderer3DOptions,
+    type Camera3DOptions,
+    type Renderer3DOptions,
     type Object3DOptions,
 
     type CuboidOptions,

@@ -9,13 +9,13 @@ export interface Object3DOptions {
     y?: number;
     z?: number;
 
-    rotX?: number;
-    rotY?: number;
-    rotZ?: number;
+    dirX?: number;
+    dirY?: number;
+    dirZ?: number;
 
     color?: string;
 
-    scale?: number;
+    size?: number;
 }
 
 export default class Object3D {
@@ -24,13 +24,13 @@ export default class Object3D {
     public y: number;
     public z: number;
 
-    public rotX: number;
-    public rotY: number;
-    public rotZ: number;
+    public dirX: number;
+    public dirY: number;
+    public dirZ: number;
 
     public color: string;
 
-    public scale: number;
+    public size: number;
 
     public vertices: Vec3[];
     public faces: [number, number, ...number[]][];
@@ -43,13 +43,13 @@ export default class Object3D {
         this.y = options.y ?? 0;
         this.z = options.z ?? 2;
 
-        this.rotX = options.rotX ?? 0;
-        this.rotY = options.rotY ?? 0;
-        this.rotZ = options.rotZ ?? 0;
+        this.dirX = options.dirX ?? 0;
+        this.dirY = options.dirY ?? 0;
+        this.dirZ = options.dirZ ?? 0;
 
         this.color = options.color ?? 'black';
 
-        this.scale = options.scale ?? 1;
+        this.size = options.size ?? 1;
     }
 
     public rotateX(deg: number) {
@@ -89,20 +89,20 @@ export default class Object3D {
     }
 
     public pointX(deg: number) {
-        const delta = deg - this.rotX;
-        this.rotX = deg;
+        const delta = deg - this.dirX;
+        this.dirX = deg;
         this.rotateX(delta);
     }
 
     public pointY(deg: number) {
-        const delta = deg - this.rotY;
-        this.rotY = deg;
+        const delta = deg - this.dirY;
+        this.dirY = deg;
         this.rotateY(delta);
     }
 
     public pointZ(deg: number) {
-        const delta = deg - this.rotZ;
-        this.rotZ = deg;
+        const delta = deg - this.dirZ;
+        this.dirZ = deg;
         this.rotateZ(delta);
     }
 

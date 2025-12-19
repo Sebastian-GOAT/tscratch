@@ -1,117 +1,27 @@
-import Engine from '../../Engine.ts';
 import TSCMath from '../../TSCMath.ts';
-import { canvas } from '../../canvas.ts';
-import Pen, { type PenOptions } from '../Pen.ts';
 import CustomPolygon from '../CustomPolygon.ts';
-import type Object3D from './Object3D.ts';
-import type { Vec2, Vec3 } from '../../types/Vectors.ts';
-
-export interface SolidRenderer3DOptions extends PenOptions {
-    objects: Object3D[];
-}
+import type { Vec3 } from '../../types/Vectors.ts';
+import Renderer3D from './Renderer3D.ts';
 
 type FaceDepth = {
     face: number[];
     depth: number;
 };
 
-export default class SolidRenderer3D extends Pen {
-
-    public FOV = 60;
-    public ASPECT = canvas.width / canvas.height;
-    public Z_NEAR = 0.01;
-
-    public SPEED = 2;
-    public SENSITIVITY = 225;
+export default class SolidRenderer3D extends Renderer3D {
 
     public AMBIENT_LIGHT_INTENSITY = 0.25;
     public DIRECTED_LIGHT_INTENSITY = 0.75;
     public DIRECTED_LIGHT_DIR: Vec3 = [0, 1, 0];
 
-    public camX = 0;
-    public camY = 0;
-    public camZ = 0;
-    public camDirX = 0;
-    public camDirY = 0;
-    public camDirZ = 0;
-
-    public objects: Object3D[];
-
-    constructor(options: SolidRenderer3DOptions) {
-        super(options);
-        this.objects = options.objects;
-    }
-
-    // Controls
-    public registerControls() {
-        const engine = Engine.init();
-
-        const dt = engine.deltaTime;
-
-        const sinY = TSCMath.sin(this.camDirY);
-        const cosY = TSCMath.cos(this.camDirY);
-
-        if (engine.keyPressed('w')) {
-            this.camX += this.SPEED * sinY * dt;
-            this.camZ += this.SPEED * cosY * dt;
-        }
-        if (engine.keyPressed('a')) {
-            this.camX -= this.SPEED * cosY * dt;
-            this.camZ += this.SPEED * sinY * dt;
-        }
-        if (engine.keyPressed('s')) {
-            this.camX -= this.SPEED * sinY * dt;
-            this.camZ -= this.SPEED * cosY * dt;
-        }
-        if (engine.keyPressed('d')) {
-            this.camX += this.SPEED * cosY * dt;
-            this.camZ -= this.SPEED * sinY * dt;
-        }
-
-        if (engine.keyPressed('e'))
-            this.camY += this.SPEED * dt;
-        if (engine.keyPressed('q'))
-            this.camY -= this.SPEED * dt;
-
-        if (engine.keyPressed('up'))
-            this.camDirX += this.SENSITIVITY * dt;
-        if (engine.keyPressed('down'))
-            this.camDirX -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('left'))
-            this.camDirY -= this.SENSITIVITY * dt;
-        if (engine.keyPressed('right'))
-            this.camDirY += this.SENSITIVITY * dt;
-
-        const maxPitch = 89;
-        this.camDirX = Math.max(-maxPitch, Math.min(maxPitch, this.camDirX));
-    }
-
-    // Perspective projection
-    private project(vertices: Vec3[]): Vec2[] {
-
-        const f = 1 / TSCMath.tan(this.FOV / 2);
-
-        return vertices.map(v => {
-            const x = v[0];
-            const y = v[1];
-            const z = v[2] < this.Z_NEAR ? this.Z_NEAR : v[2];
-
-            // Perspective divide for x and y
-            const xp = canvas.width / 2 * (x * f) / (z * this.ASPECT);
-            const yp = canvas.height / 2 * (y * f) / z;
-
-            return [xp, yp];
-        });
-    }
-
     // Render (run every frame)
     public render() {
-        const sinX = TSCMath.sin(this.camDirX);
-        const cosX = TSCMath.cos(this.camDirX);
-        const sinY = TSCMath.sin(this.camDirY);
-        const cosY = TSCMath.cos(this.camDirY);
-        const sinZ = TSCMath.sin(this.camDirZ);
-        const cosZ = TSCMath.cos(this.camDirZ);
+        const sinX = TSCMath.sin(this.camera.dirX);
+        const cosX = TSCMath.cos(this.camera.dirX);
+        const sinY = TSCMath.sin(this.camera.dirY);
+        const cosY = TSCMath.cos(this.camera.dirY);
+        const sinZ = TSCMath.sin(this.camera.dirZ);
+        const cosZ = TSCMath.cos(this.camera.dirZ);
 
         // Calculate the lighting normal relative to the cameras rotation
         let lx = this.DIRECTED_LIGHT_DIR[0];
@@ -134,13 +44,13 @@ export default class SolidRenderer3D extends Pen {
 
         for (const obj of this.objects) {
 
-            const { h, s, l } = this.stringToHSL(obj.color || 'black');
+            const { h, s, l } = SolidRenderer3D.stringToHSL(obj.color || 'black');
 
             // Camera relative vertices
             const cameraVerts: Vec3[] = obj.vertices.map(v => {
-                let x = v[0] * obj.scale + obj.x - this.camX;
-                let y = v[1] * obj.scale + obj.y - this.camY;
-                let z = v[2] * obj.scale + obj.z - this.camZ;
+                let x = v[0] * obj.size + obj.x - this.camera.x;
+                let y = v[1] * obj.size + obj.y - this.camera.y;
+                let z = v[2] * obj.size + obj.z - this.camera.z;
 
                 // yaw (Y)
                 const x1 = x * cosY - z * sinY;
@@ -200,7 +110,8 @@ export default class SolidRenderer3D extends Pen {
         }
     }
 
-    public stringToHSL(color: string) {
+    // String -> HSL conversion helper
+    public static stringToHSL(color: string) {
 
         // String to RGB
         const el = document.createElement('div');
