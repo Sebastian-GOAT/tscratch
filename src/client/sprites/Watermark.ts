@@ -1,4 +1,4 @@
-import { canvas } from '../canvas.ts';
+import { canvas } from '@main/canvas.ts';
 import Text, { type TextOptions } from './Text.ts';
 
 export default class Watermark extends Text {

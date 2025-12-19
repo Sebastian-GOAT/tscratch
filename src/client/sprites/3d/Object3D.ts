@@ -1,5 +1,5 @@
-import TSCMath from '../../TSCMath.ts';
-import type { Vec3 } from '../../types/Vectors.ts';
+import TSCMath from '@main/TSCMath.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 export interface Object3DOptions {
     vertices: Vec3[];

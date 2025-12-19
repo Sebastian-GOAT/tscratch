@@ -1,9 +1,9 @@
-import Engine from '../../Engine.ts';
-import TSCMath from '../../TSCMath.ts';
-import { canvas } from '../../canvas.ts';
-import Pen, { type PenOptions } from '../Pen.ts';
+import Engine from '@main/Engine.ts';
+import TSCMath from '@main/TSCMath.ts';
+import { canvas } from '@main/canvas.ts';
+import Pen, { type PenOptions } from '@sprites/Pen.ts';
 import type Object3D from './Object3D.ts';
-import type { Vec2, Vec3 } from '../../types/Vectors.ts';
+import type { Vec2, Vec3 } from '@ctypes/Vectors.ts';
 import type Camera3D from './Camera3D.ts';
 
 export interface Renderer3DOptions extends PenOptions {

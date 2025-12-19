@@ -1,5 +1,5 @@
 import Engine from './Engine.ts';
-import type { Vec2 } from './types/Vectors.ts';
+import type { Vec2 } from '@ctypes/Vectors.ts';
 
 export interface BoundingBox {
     x: number;

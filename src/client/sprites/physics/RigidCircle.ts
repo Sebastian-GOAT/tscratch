@@ -1,6 +1,6 @@
-import { canvas } from '../../canvas.ts';
-import Engine from '../../Engine.ts';
-import Circle, { type CircleOptions } from '../Circle.ts';
+import { canvas } from '@main/canvas.ts';
+import Engine from '@main/Engine.ts';
+import Circle, { type CircleOptions } from '@sprites/Circle.ts';
 import type { RigidBodyOptions } from './RigidBodyOptions.ts';
 
 export interface RigidCircleOptions extends CircleOptions, Partial<RigidBodyOptions> {}

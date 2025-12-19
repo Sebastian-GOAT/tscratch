@@ -1,7 +1,7 @@
-import { canvas, penCtx } from '../canvas.ts';
-import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
-import TSCMath from '../TSCMath.ts';
-import Engine from '../Engine.ts';
+import { canvas, penCtx } from '@main/canvas.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
+import TSCMath from '@main/TSCMath.ts';
+import Engine from '@main/Engine.ts';
 
 export interface PenOptions extends SpriteOptions {
     drawing?: boolean;

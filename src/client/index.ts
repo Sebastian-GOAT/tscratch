@@ -1,51 +1,53 @@
 // Main
-import Engine from './Engine.ts';
-import Sprite, { type SpriteOptions } from './Sprite.ts';
-import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from './canvas.ts';
-import TSCMath from './TSCMath.ts';
+import Engine from '@main/Engine.ts';
+import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
+import Camera, { type CameraOptions } from '@main/Camera.ts';
+import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from '@main/canvas.ts';
+import TSCMath from '@main/TSCMath.ts';
 
 // Multiplayer
-import Multiplayer from './Multiplayer.ts';
+import Multiplayer from '@main/Multiplayer.ts';
 
 // Sprites
-import Rectangle, { type RectangleOptions } from './sprites/Rectangle.ts';
-import Square, { type SquareOptions } from './sprites/Square.ts';
-import Oval, { type OvalOptions } from './sprites/Oval.ts';
-import Circle, { type CircleOptions } from './sprites/Circle.ts';
-import Arc, { type ArcOptions } from './sprites/Arc.ts';
-import RegularPolygon, { type RegularPolygonOptions } from './sprites/RegularPolygon.ts';
-import CustomPolygon, { type CustomPolygonOptions } from './sprites/CustomPolygon.ts';
-import Pen, { type PenOptions } from './sprites/Pen.ts';
-import Text, { type TextOptions } from './sprites/Text.ts';
-import Button, { type ButtonOptions } from './sprites/Button.ts';
-import Watermark from './sprites/Watermark.ts';
-import ImageSprite, { type ImageSpriteOptions } from './sprites/ImageSprite.ts';
+import Rectangle, { type RectangleOptions } from '@sprites/Rectangle.ts';
+import Square, { type SquareOptions } from '@sprites/Square.ts';
+import Oval, { type OvalOptions } from '@sprites/Oval.ts';
+import Circle, { type CircleOptions } from '@sprites/Circle.ts';
+import Arc, { type ArcOptions } from '@sprites/Arc.ts';
+import RegularPolygon, { type RegularPolygonOptions } from '@sprites/RegularPolygon.ts';
+import CustomPolygon, { type CustomPolygonOptions } from '@sprites/CustomPolygon.ts';
+import Pen, { type PenOptions } from '@sprites/Pen.ts';
+import Text, { type TextOptions } from '@sprites/Text.ts';
+import Button, { type ButtonOptions } from '@sprites/Button.ts';
+import Watermark from '@sprites/Watermark.ts';
+import ImageSprite, { type ImageSpriteOptions } from '@sprites/ImageSprite.ts';
 
-import RigidCircle, { type RigidCircleOptions } from './sprites/physics/RigidCircle.ts';
+import RigidCircle, { type RigidCircleOptions } from '@sprites/physics/RigidCircle.ts';
 
 // 3D
-import Camera3D, { type Camera3DOptions } from './sprites/3d/Camera3D.ts';
-import Renderer3D, { type Renderer3DOptions } from './sprites/3d/Renderer3D.ts';
-import WireframeRenderer3D from './sprites/3d/WireframeRenderer3D.ts';
-import SolidRenderer3D from './sprites/3d/SolidRenderer3D.ts';
-import Object3D, { type Object3DOptions } from './sprites/3d/Object3D.ts';
+import Camera3D, { type Camera3DOptions } from '@sprites/3d/Camera3D.ts';
+import Renderer3D, { type Renderer3DOptions } from '@sprites/3d/Renderer3D.ts';
+import WireframeRenderer3D from '@sprites/3d/WireframeRenderer3D.ts';
+import SolidRenderer3D from '@sprites/3d/SolidRenderer3D.ts';
+import Object3D, { type Object3DOptions } from '@sprites/3d/Object3D.ts';
 
-import Tetrahedron from './sprites/3d/models/Tetrahedron.ts';
-import Cube from './sprites/3d/models/Cube.ts';
-import Octahedron from './sprites/3d/models/Octahedron.ts';
-import Icosahedron from './sprites/3d/models/Icosahedron.ts';
-import Icosphere from './sprites/3d/models/Icosphere.ts';
-import Monkey from './sprites/3d/models/Monkey.ts';
-import Cuboid, { type CuboidOptions } from './sprites/3d/models/Cuboid.ts';
+import Tetrahedron from '@sprites/3d/models/Tetrahedron.ts';
+import Cube from '@sprites/3d/models/Cube.ts';
+import Octahedron from '@sprites/3d/models/Octahedron.ts';
+import Icosahedron from '@sprites/3d/models/Icosahedron.ts';
+import Icosphere from '@sprites/3d/models/Icosphere.ts';
+import Monkey from '@sprites/3d/models/Monkey.ts';
+import Cuboid, { type CuboidOptions } from '@sprites/3d/models/Cuboid.ts';
 
 // Types
-import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
-import type { Mat2, Mat3, Mat4 } from './types/Matricies.ts';
-import { type RigidBodyOptions } from './sprites/physics/RigidBodyOptions.ts';
+import type { Vec2, Vec3, Vec4 } from '@ctypes/Vectors.ts';
+import type { Mat2, Mat3, Mat4 } from '@ctypes/Matricies.ts';
+import { type RigidBodyOptions } from '@sprites/physics/RigidBodyOptions.ts';
 
 const TScratch = {
     // Main
     Engine,
+    Camera,
     Sprite,
     TSCMath,
 
@@ -98,6 +100,7 @@ export {
     // Main
     Engine,
     Sprite,
+    Camera,
     TSCMath,
 
     // Multiplayer
@@ -136,6 +139,7 @@ export {
     Cuboid,
 
     // Options
+    type CameraOptions,
     type SpriteOptions,
     type RectangleOptions,
     type SquareOptions,

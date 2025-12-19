@@ -1,6 +1,6 @@
-import TSCMath from '../../TSCMath.ts';
-import CustomPolygon from '../CustomPolygon.ts';
-import type { Vec3 } from '../../types/Vectors.ts';
+import TSCMath from '@main/TSCMath.ts';
+import CustomPolygon from '@sprites/CustomPolygon.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 import Renderer3D from './Renderer3D.ts';
 
 type FaceDepth = {

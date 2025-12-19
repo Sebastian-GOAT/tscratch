@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../../types/Vectors.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 const monkeyVertices: Vec3[] = [
     [0.4375,0.164062,0.765625],

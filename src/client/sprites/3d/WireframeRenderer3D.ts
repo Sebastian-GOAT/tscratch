@@ -1,5 +1,5 @@
-import type { Vec3 } from '../../types/Vectors.ts';
-import TSCMath from '../../TSCMath.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
+import TSCMath from '@main/TSCMath.ts';
 import Renderer3D from './Renderer3D.ts';
 
 export default class WireframeRenderer3D extends Renderer3D {

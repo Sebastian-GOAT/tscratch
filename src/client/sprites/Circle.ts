@@ -1,6 +1,5 @@
-import Engine from '../Engine.ts';
-import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
-import { canvas, ctx, penCtx } from '../canvas.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
+import { canvas, ctx, penCtx } from '@main/canvas.ts';
 
 export interface CircleOptions extends SpriteOptions {
     radius?: number;

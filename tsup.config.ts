@@ -7,5 +7,15 @@ export default defineConfig({
     sourcemap: true,
     clean: true,
     minify: true,
-    target: 'esnext'
+    target: 'esnext',
+    esbuildOptions(options) {
+        options.alias = {
+            // Server
+            '@server': './src/server',
+            // Client
+            '@main': './src/client/main',
+            '@sprites': './src/client/sprites',
+            '@ctypes': './src/client/types'
+        };
+    }
 });

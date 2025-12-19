@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../types/Vectors.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 export const octahedronVerticesVertices: Vec3[] = [
     [ 1,  0,  0],

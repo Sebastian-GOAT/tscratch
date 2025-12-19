@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../../types/Vectors.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 const phi = (1 + Math.sqrt(5)) / 2;
 const a = 0.5 / phi;

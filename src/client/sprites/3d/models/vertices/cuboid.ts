@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../../types/Vectors.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 export default function getCuboidVertices(width: number, height: number, length: number): Vec3[] {
 

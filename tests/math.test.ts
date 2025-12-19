@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import Engine from '../src/client/Engine.ts';
+import TSCMath from '@main/TSCMath.ts';
 
-const engine = Engine.init();
 const testRange = 12;
 
 describe('Math', () => {
@@ -12,8 +11,8 @@ describe('Math', () => {
             const rad = deg * Math.PI / 180;
 
             // Tests
-            expect(engine.toRadians(deg)).toBeCloseTo(rad, 5);
-            expect(engine.toDegrees(rad)).toBeCloseTo(deg, 5);
+            expect(TSCMath.toRadians(deg)).toBeCloseTo(rad, 5);
+            expect(TSCMath.toDegrees(rad)).toBeCloseTo(deg, 5);
         }
     });
 
@@ -22,9 +21,9 @@ describe('Math', () => {
             const angle = i * testRange;
 
             // Tests
-            expect(engine.sin(angle)).toBeCloseTo(Math.sin(angle * Math.PI / 180));
-            expect(engine.cos(angle)).toBeCloseTo(Math.cos(angle * Math.PI / 180));
-            expect(engine.tan(angle)).toBeCloseTo(Math.tan(angle * Math.PI / 180));
+            expect(TSCMath.sin(angle)).toBeCloseTo(Math.sin(angle * Math.PI / 180));
+            expect(TSCMath.cos(angle)).toBeCloseTo(Math.cos(angle * Math.PI / 180));
+            expect(TSCMath.tan(angle)).toBeCloseTo(Math.tan(angle * Math.PI / 180));
         }
     });
 
@@ -33,8 +32,8 @@ describe('Math', () => {
             const value = i * testRange / 50 - 1; // [-1, 1]
 
             // Tests
-            expect(engine.asin(value)).toBeCloseTo(Math.asin(value) * 180 / Math.PI, 5);
-            expect(engine.acos(value)).toBeCloseTo(Math.acos(value) * 180 / Math.PI, 5);
+            expect(TSCMath.asin(value)).toBeCloseTo(Math.asin(value) * 180 / Math.PI, 5);
+            expect(TSCMath.acos(value)).toBeCloseTo(Math.acos(value) * 180 / Math.PI, 5);
         }
     });
 

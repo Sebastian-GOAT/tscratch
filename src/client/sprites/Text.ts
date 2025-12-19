@@ -1,6 +1,6 @@
-import { canvas, ctx, penCtx } from '../canvas.ts';
-import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
-import TSCMath from '../TSCMath.ts';
+import { canvas, ctx, penCtx } from '@main/canvas.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
+import TSCMath from '@main/TSCMath.ts';
 
 export interface TextOptions extends SpriteOptions {
     content?: string | number;

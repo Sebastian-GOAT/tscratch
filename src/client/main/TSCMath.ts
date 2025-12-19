@@ -1,8 +1,11 @@
-import type { Vec2, Vec3, Vec4 } from './types/Vectors.ts';
+import type { Vec2, Vec3, Vec4 } from '@ctypes/Vectors.ts';
 
 type Vec = Vec2 | Vec3 | Vec4;
 
+// Static class
 export default class TSCMath {
+
+    private constructor() {} // Staticity using a private constructor
 
     // Random integer
     public static pickRandom(min: number, max: number) {

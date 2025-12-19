@@ -1,6 +1,6 @@
-import Sprite, { type BoundingBox, type SpriteOptions } from '../Sprite.ts';
-import { ctx, canvas, penCtx } from '../canvas.ts';
-import TSCMath from '../TSCMath.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
+import { ctx, canvas, penCtx } from '@main/canvas.ts';
+import TSCMath from '@main/TSCMath.ts';
 
 export interface SquareOptions extends SpriteOptions {
     sideLength?: number;

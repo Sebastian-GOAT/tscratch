@@ -1,4 +1,4 @@
-import type { Vec3 } from '../../../../types/Vectors.ts';
+import type { Vec3 } from '@ctypes/Vectors.ts';
 
 const icosphereVertices: Vec3[] = [
     [0.000000, -1.000000, 0.000000], [0.723607, -0.447220, 0.525725], [-0.276388, -0.447220, 0.850649],
