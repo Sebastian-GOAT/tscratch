@@ -1,10 +1,10 @@
 # API Overview
 
-## Engine (static)
+## Engine (singleton)
 
 ### Initialization
 
-- `init()` - initialize the engine
+- `const engine = Engine.init()` - initialize the engine & get the instance
 - `setMaxFPS(FPS)`- sets the maximum FPS
 
 ### Scenes

@@ -51,6 +51,14 @@ export default class TSCMath {
         return a.map((n, i) => n - b[i]!) as Vec;
     }
 
+    // Vector x scalar multiplication
+    public static multiply(a: Vec2, b: Vec2): Vec2;
+    public static multiply(a: Vec3, b: Vec3): Vec3;
+    public static multiply(a: Vec4, b: Vec4): Vec4;
+    public static multiply(a: Vec, b: Vec): Vec {
+        return a.map((n, i) => n * b[i]!) as Vec;
+    }
+
     // Vector dot product
     public static dot(a: Vec2, b: Vec2): number;
     public static dot(a: Vec3, b: Vec3): number;

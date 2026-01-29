@@ -6,7 +6,7 @@
 import { Engine, Rectangle } from 'tscratch';
 
 // Initialize engine
-Engine.init();
+const engine = Engine.init();
 
 // Create a rectangle sprite
 const rect = new Rectangle({ color: 'red' });
@@ -14,7 +14,7 @@ const rect = new Rectangle({ color: 'red' });
 rect.goTo(100, 50);
 
 // Animate in the game loop
-Engine.setLoop('main', () => {
+engine.setLoop('main', () => {
   rect.move(1);
   rect.turn(-2);
 });
@@ -25,7 +25,7 @@ Engine.setLoop('main', () => {
 import { Engine, Rectangle } from 'tscratch';
 
 // Setup
-Engine.init();
+const engine = Engine.init();
 
 const redBox = new Rectangle({ scene: 'primary' });
 
@@ -38,10 +38,10 @@ blueBox.setColor('blue');
 blueBox.goTo(100, 0);
 
 // Scenes & loops
-Engine.changeScene('primary');
+engine.setScene('primary');
 
-Engine.setLoop('primary', () => redBox.changeX(1));
-Engine.setLoop('secondary', () => blueBox.changeX(-1));
+engine.setLoop('primary', () => redBox.changeX(1));
+engine.setLoop('secondary', () => blueBox.changeX(-1));
 ```
 
 The recommended way of managing multiple scenes is to seperate your code into
@@ -63,8 +63,8 @@ export default () => rect.move(1);
 import { Engine } from 'tscratch';
 import main from './scenes/main.ts';
 
-Engine.init();
+const engine = Engine.init();
 
 // No need for changeScene() here, since we're in the 'main' scene
-Engine.setLoop('main', main);
+engine.setLoop('main', main);
 ```

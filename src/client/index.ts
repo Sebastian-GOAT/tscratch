@@ -21,7 +21,7 @@ import Button, { type ButtonOptions } from '@sprites/Button.ts';
 import Watermark from '@sprites/Watermark.ts';
 import ImageSprite, { type ImageSpriteOptions } from '@sprites/ImageSprite.ts';
 
-import RigidCircle, { type RigidCircleOptions } from '@sprites/physics/RigidCircle.ts';
+import RigidRectangle, { type RigidRectangleOptions } from '@sprites/physics/RigidRectangle.ts';
 
 // 3D
 import Camera3D, { type Camera3DOptions } from '@sprites/3d/Camera3D.ts';
@@ -41,7 +41,7 @@ import Cuboid, { type CuboidOptions } from '@sprites/3d/models/Cuboid.ts';
 // Types
 import type { Vec2, Vec3, Vec4 } from '@ctypes/Vectors.ts';
 import type { Mat2, Mat3, Mat4 } from '@ctypes/Matricies.ts';
-import { type RigidBodyOptions } from '@sprites/physics/RigidBodyOptions.ts';
+import type { RigidBody, RigidBodyOptions } from '@sprites/physics/RigidBody.ts';
 
 const TScratch = {
     // Main
@@ -66,7 +66,7 @@ const TScratch = {
     Watermark,
     ImageSprite,
 
-    RigidCircle,
+    RigidRectangle,
 
     // 3D
     Camera3D,
@@ -117,7 +117,7 @@ export {
     Watermark,
     ImageSprite,
 
-    RigidCircle,
+    RigidRectangle,
 
     // 3D
     Camera3D,
@@ -150,8 +150,10 @@ export {
     type TextOptions as WatermarkOptions,
     type ImageSpriteOptions,
 
+    type RigidBody,
     type RigidBodyOptions,
-    type RigidCircleOptions,
+    type RigidRectangleOptions,
+
     type Camera3DOptions,
     type Renderer3DOptions,
     type Object3DOptions,

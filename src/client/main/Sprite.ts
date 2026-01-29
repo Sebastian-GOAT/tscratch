@@ -1,5 +1,12 @@
 import Engine from './Engine.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
+import TSCMath from './TSCMath.ts';
+
+export interface CollisionData {
+    contact: Vec2;
+    normal: Vec2;
+    displacement: number;
+}
 
 export interface BoundingBox {
     x: number;
@@ -90,10 +97,10 @@ export default abstract class Sprite {
 
     // Sensing
 
-    public touching(sprite: Sprite): boolean {
+    public touching(sprite: Sprite): CollisionData | null {
 
         // Return if hidden or if the scenes differ
-        if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return false;
+        if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
 
         // AABB (bounding boxes)
         const bBox1 = this.getBoundingBox();
@@ -103,7 +110,7 @@ export default abstract class Sprite {
             Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
             Math.abs(bBox1.y - bBox2.y) < (bBox1.height + bBox2.height) / 2;
 
-        if (!aabbOverlap) return false;
+        if (!aabbOverlap) return null;
 
         // Image data (pixel perfect)
 
@@ -126,7 +133,7 @@ export default abstract class Sprite {
         const width = xMax - xMin;
         const height = yMax - yMin;
 
-        if (width < 1 || height < 1) return false;
+        if (width < 1 || height < 1) return null;
 
         // Reuse or create offscreen canvas for collision detection
         if (!Sprite.collisionCanvas) {
@@ -167,10 +174,88 @@ export default abstract class Sprite {
         const img2 = ctx.getImageData(0, 0, width, height).data;
 
         // Check for overlapping non-transparent pixels
-        for (let i = 3; i < img1.length; i += 4) // alpha channel
-            if (img1[i]! > 0 && img2[i]! > 0) return true;
+        let sumX = 0;
+        let sumY = 0;
+        let count = 0;
+        const overlapPixels: number[] = [];
 
-        return false;
+        for (let i = 3; i < img1.length; i += 4) {
+            if (img1[i]! > 0 && img2[i]! > 0) {
+                
+                const pixelIndex = i / 4;
+                overlapPixels.push(pixelIndex);
+
+                const px = pixelIndex % width;
+                const py = Math.floor(pixelIndex / width);
+
+                sumX += px;
+                sumY += py;
+                count++;
+            }
+        }
+
+        if (count === 0) return null;
+
+        // Compute collision data
+
+        // Contact point
+        const localX = sumX / count;
+        const localY = sumY / count;
+
+        const contact: Vec2 = [
+            xMin + localX,
+            yMax - localY // undo Y flip
+        ];
+
+        // Normal
+        let nx = 0;
+        let ny = 0;
+
+        for (const pixelIndex of overlapPixels) {
+            const px = pixelIndex % width;
+            const py = Math.floor(pixelIndex / width);
+            
+            // We look at the "distance" of this overlap pixel from the center of the overlap
+            // to find the 'bias' of the collision area
+            nx += (px - localX);
+            ny += (py - localY); 
+        }
+
+        // If the pixel cloud is too uniform, fall back to center-to-contact logic
+        if (Math.abs(nx) < 0.01 && Math.abs(ny) < 0.01) {
+            nx = this.x - contact[0];
+            ny = this.y - contact[1];
+        }
+
+        const n: Vec2 = [nx, -ny]; // Note the -ny to fix coordinate flip
+        const normal: Vec2 = TSCMath.magnitude(n) > 0 ? TSCMath.normalize(n) : n;
+
+        // Ensure orientation
+        const dx = this.x - sprite.x;
+        const dy = this.y - sprite.y;
+        if (dx * normal[0] + dy * normal[1] < 0) {
+            normal[0] *= -1;
+            normal[1] *= -1;
+        }
+
+        // Penetration
+        let displacement = -Infinity;
+
+        for (const pixelIndex of overlapPixels) {
+            const px = pixelIndex % width;
+            const py = Math.floor(pixelIndex / width);
+
+            const wx = xMin + px;
+            const wy = yMax - py;
+
+            const d =
+                (wx - contact[0]) * normal[0] +
+                (wy - contact[1]) * normal[1];
+
+            displacement = Math.max(displacement, d);
+        }
+
+        return { contact, normal, displacement };
     }
 
     // Helpers
