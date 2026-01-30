@@ -94,12 +94,14 @@ export default class Rectangle extends Sprite {
     public setWidth(width: number) {
         this.width = width;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setHeight(height: number) {
         this.height = height;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

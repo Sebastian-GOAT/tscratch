@@ -128,6 +128,7 @@ export default class Button extends Sprite {
     public setContent(content: string | number) {
         this.content = content;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
@@ -145,6 +146,7 @@ export default class Button extends Sprite {
         this.fontSize = fontSize;
         this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
@@ -152,6 +154,7 @@ export default class Button extends Sprite {
         this.fontFamily = fontFamily;
         this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

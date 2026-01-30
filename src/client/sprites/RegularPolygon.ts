@@ -88,12 +88,14 @@ export default class RegularPolygon extends Sprite {
     public setSides(sides: number) {
         this.sides = sides;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

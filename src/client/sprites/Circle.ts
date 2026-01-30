@@ -82,6 +82,7 @@ export default class Circle extends Sprite {
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

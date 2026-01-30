@@ -125,6 +125,7 @@ export default class CustomPolygon extends Sprite {
     public setVertices(vertices: Vec2[]) {
         this.vertices = vertices;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

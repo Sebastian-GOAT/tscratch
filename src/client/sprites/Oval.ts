@@ -95,12 +95,14 @@ export default class Oval extends Sprite {
     public setRadX(radX: number) {
         this.radX = radX;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setRadY(radY: number) {
         this.radY = radY;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

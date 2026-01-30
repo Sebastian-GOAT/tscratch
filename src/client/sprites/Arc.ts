@@ -84,12 +84,14 @@ export default class Arc extends Sprite {
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setAngle(angle: number) {
         this.angle = angle;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

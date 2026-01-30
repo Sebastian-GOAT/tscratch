@@ -90,6 +90,7 @@ export default class Square extends Sprite {
     public setSideLength(sideLength: number) {
         this.sideLength = sideLength;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 

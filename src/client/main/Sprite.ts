@@ -41,7 +41,9 @@ export default abstract class Sprite {
     public abstract tags: Set<string>;
 
     private cachedPath: Path2D | null = null;
-    private pathDirty: boolean = true;
+    private cachedBoundingBox: BoundingBox | null = null;
+    private pathDirty = true;
+    private boundingBoxDirty = true;
 
     // Reusable collision detection canvas
     private static collisionCanvas: OffscreenCanvas | null = null;
@@ -58,9 +60,16 @@ export default abstract class Sprite {
         Engine.init().refresh();
     }
 
+    // Geometry caching
+
     protected invalidatePath() {
         this.pathDirty = true;
         this.cachedPath = null;
+    }
+
+    protected invalidateBoundingBox() {
+        this.boundingBoxDirty = true;
+        this.cachedBoundingBox = null;
     }
 
     public getCachedPath(): Path2D {
@@ -70,6 +79,16 @@ export default abstract class Sprite {
         }
         return this.cachedPath;
     }
+
+    public getCachedBoundingBox(): BoundingBox {
+        if (this.boundingBoxDirty || !this.cachedBoundingBox) {
+            this.cachedBoundingBox = this.getBoundingBox();
+            this.boundingBoxDirty = false;
+        }
+        return this.cachedBoundingBox;
+    }
+
+    // Initialization
 
     constructor(options?: SpriteOptions) {
         Object.assign(this, options);
@@ -103,8 +122,8 @@ export default abstract class Sprite {
         if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
 
         // AABB (bounding boxes)
-        const bBox1 = this.getBoundingBox();
-        const bBox2 = sprite.getBoundingBox();
+        const bBox1 = this.getCachedBoundingBox();
+        const bBox2 = sprite.getCachedBoundingBox();
 
         const aabbOverlap =
             Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
@@ -342,12 +361,14 @@ export default abstract class Sprite {
     public setSize(size: number) {
         this.size = size > 0 ? size : 0;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public changeSize(dS: number) {
         this.size = this.size + dS > 0 ? this.size + dS : 0;
         this.invalidatePath();
+        this.invalidateBoundingBox();
         this.refresh();
     }
 
