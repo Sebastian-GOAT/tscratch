@@ -1,5 +1,4 @@
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 

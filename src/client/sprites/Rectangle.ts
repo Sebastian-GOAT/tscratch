@@ -1,7 +1,6 @@
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, canvas, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
-import Engine from '@main/Engine.ts';
 
 export interface RectangleOptions extends SpriteOptions {
     width?: number;

@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
 

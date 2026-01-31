@@ -2,6 +2,7 @@ import TSCMath from '@main/TSCMath.ts';
 import CustomPolygon from '@sprites/CustomPolygon.ts';
 import type { Vec3 } from '@ctypes/Vectors.ts';
 import Renderer3D from './Renderer3D.ts';
+import Pen from '@sprites/Pen.ts';
 
 type FaceDepth = {
     face: number[];
@@ -105,7 +106,7 @@ export default class SolidRenderer3D extends Renderer3D {
 
                 // Draw the polygon
                 const vertices = face.map(vIndex => projected[vIndex]!);
-                this.drawSprite(new CustomPolygon({ vertices, color }));
+                Pen.drawSprite(CustomPolygon, { vertices, color });
             }
         }
     }

@@ -2,7 +2,6 @@ import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
 import TSCMath from '@main/TSCMath.ts';
-import Engine from '@main/Engine.ts';
 
 export interface CustomPolygonOptions extends SpriteOptions {
     vertices?: Vec2[];

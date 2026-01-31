@@ -1,5 +1,4 @@
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 
@@ -35,8 +34,8 @@ export default class ImageSprite extends Sprite {
         const cos = TSCMath.cos(this.dir);
         const sin = TSCMath.sin(this.dir);
 
-        const width  = 2 * Math.sqrt((w * cos)**2 + (h * sin)**2) * this.size;
-        const height = 2 * Math.sqrt((w * sin)**2 + (h * cos)**2) * this.size;
+        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
+        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
         return {
             x: this.x,
@@ -109,24 +108,13 @@ export default class ImageSprite extends Sprite {
             ? costumeNumber
             : 0;
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = () => {
-            createImageBitmap(this.img).then(bitmap => {
-                this.imgBitmap = bitmap;
-            });
-            this.refresh()
-        };
+        this.loadImageBitmap();
     }
 
     public nextCostume() {
         this.costumeNumber = (this.costumeNumber + 1) % this.costumes.length;
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = () => {
-            this.imgBitmap = null;
-            createImageBitmap(this.img).then(bitmap => {
-                this.imgBitmap = bitmap;
-            });
-            this.refresh()
-        };
+        this.loadImageBitmap();
     }
 
     public previousCostume() {
@@ -134,13 +122,7 @@ export default class ImageSprite extends Sprite {
         if (this.costumeNumber < 0) this.costumeNumber = this.costumes.length - 1;
 
         this.img.src = this.costumes[this.costumeNumber]!;
-        this.img.onload = () => {
-            this.imgBitmap = null;
-            createImageBitmap(this.img).then(bitmap => {
-                this.imgBitmap = bitmap;
-            });
-            this.refresh()
-        };
+        this.loadImageBitmap();
     }
 
     public setWidth(width: number) {
@@ -157,8 +139,18 @@ export default class ImageSprite extends Sprite {
         this.refresh();
     }
 
-    // Constructor
+    // Bitmap loading
+    private loadImageBitmap() {
+        this.img.onload = () => {
+            this.imgBitmap = null;
+            createImageBitmap(this.img).then(bitmap => {
+                this.imgBitmap = bitmap;
+            });
+            this.refresh();
+        };
+    }
 
+    // Constructor
     constructor(options?: ImageSpriteOptions) {
         super(options);
 

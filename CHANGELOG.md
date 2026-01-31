@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
-## [0.8.4] - xxxxxxxxxx.yyyyyyyyy.2026
+## [0.8.4] - 31.1.2026
 
 ### Changed
 
 - `Pen.drawSprite(spriteConstructor, options)` is now static and type-safe
+
+### Fixed
+
+- `ImageSprite` AABB calculation is now tighter and more efficient
 
 ## [0.8.2] - 19.12.2025
 
