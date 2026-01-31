@@ -71,7 +71,13 @@ export default class Pen extends Sprite {
         );
     }
 
-    public drawSprite(sprite: Sprite) {
+    // Type-safe pen layer sprite drawing method
+    public static drawSprite<
+        SpriteClass extends new (options?: SpriteOptions) => Sprite
+    >(
+        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0]
+    ) {
+        const sprite = new spriteClass(options ?? {});
         sprite.draw(true);
         Engine.init().removeSprite(sprite);
     }

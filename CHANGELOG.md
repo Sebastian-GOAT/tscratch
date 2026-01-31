@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.4] - xxxxxxxxxx.yyyyyyyyy.2026
+
+### Changed
+
+- `Pen.drawSprite(spriteConstructor, options)` is now static and type-safe
+
 ## [0.8.2] - 19.12.2025
 
-## Changed
+### Changed
 
 - `Engine` is back to a singleton class due to unexpected behaivior
 
-## Removed
+### Removed
 
 - `Camera`
 

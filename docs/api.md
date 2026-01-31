@@ -263,7 +263,7 @@ Draws an image centered on `(x, y)`.
 - `down()` - starts drawing
 - `up()` - stops drawing
 - `dot()` - draws a single dot
-- `drawSprite(sprite)` - draws a sprite to the pen layer, doesn't get tracked by `Engine`
+- `static drawSprite(spriteClass, options)` - draws a sprite to the pen layer, doesn't get tracked by `Engine`
 
 Movement methods, such as `move()`, can draw a line based on if `drawing` is true.
 
