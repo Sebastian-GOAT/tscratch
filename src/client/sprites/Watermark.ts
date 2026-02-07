@@ -18,6 +18,6 @@ export default class Watermark extends Text {
         this.align = options?.align ?? 'left',
         this.baseline = options?.baseline ?? 'top'
 
-        this.draw();
+        this.invalidatePath();
     }
 }

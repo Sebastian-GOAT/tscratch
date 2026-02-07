@@ -20,12 +20,18 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
     public angularVelocity: number;
     public inertia: number;
 
+    public addObstacles(...obstacles: RigidBody[]) {
+        this.obstacles.push(...obstacles);
+    }
+
     public update(stepFactor = 1): void {
 
         if (this.isStatic) return;
         
         // 1. Apply Basic Forces
         this.velocity[1] += this.gravity * stepFactor;
+        this.velocity[0] *= this.drag;
+        this.velocity[1] *= this.drag;
 
         // 2. Integration (Movement)
         this.changeX(this.velocity[0] * stepFactor);
@@ -89,11 +95,13 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
                     const r1n = r1[0] * normal[1] - r1[1] * normal[0];
                     const r2n = r2[0] * normal[1] - r2[1] * normal[0];
                     
-                    // If target is static, it has 0 inverse mass (doesn't move).
-                    const massTerm = target.isStatic ? 1 : 2; 
-                    const targetInertiaTerm = target.isStatic ? 0 : (r2n * r2n / target.inertia);
+                    // Proper inverse mass calculation
+                    const invMass1 = 1;
+                    const invMass2 = target.isStatic ? 0 : 1;
+                    const r1nSq = r1n * r1n;
+                    const r2nSq = r2n * r2n;
                     
-                    const invMassSum = massTerm + (r1n * r1n / this.inertia) + targetInertiaTerm;
+                    const invMassSum = invMass1 + invMass2 + (r1nSq / this.inertia) + (target.isStatic ? 0 : r2nSq / target.inertia);
                     
                     const j = -(1 + this.bounceLoss) * velAlongNormal / invMassSum;
                     const impulse: Vec2 = [normal[0] * j, normal[1] * j];
@@ -104,9 +112,10 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
                     
                     const r1t = r1[0] * tangent[1] - r1[1] * tangent[0];
                     const r2t = r2[0] * tangent[1] - r2[1] * tangent[0];
-                    const targetInertiaTermT = target.isStatic ? 0 : (r2t * r2t / target.inertia);
+                    const r1tSq = r1t * r1t;
+                    const r2tSq = r2t * r2t;
                     
-                    const invMassSumT = massTerm + (r1t * r1t / this.inertia) + targetInertiaTermT;
+                    const invMassSumT = invMass1 + invMass2 + (r1tSq / this.inertia) + (target.isStatic ? 0 : r2tSq / target.inertia);
                     
                     const jt = -velAlongTangent * friction / invMassSumT;
                     const fImpulse: Vec2 = [tangent[0] * jt, tangent[1] * jt];
@@ -128,6 +137,11 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
                 }
             }
         }
+
+        // 4. Apply Drag (velocity dampening)
+        this.velocity[0] *= this.drag;
+        this.velocity[1] *= this.drag;
+        this.angularVelocity *= this.drag;
     }
 
     constructor(options?: RigidRectangleOptions) {
@@ -143,5 +157,7 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
         this.velocity = options?.velocity ?? [0, 0];
         this.angularVelocity = options?.angularVelocity ?? 0;
         this.inertia = options?.inertia ?? 700;
+
+        this.invalidatePath();
     }
 }

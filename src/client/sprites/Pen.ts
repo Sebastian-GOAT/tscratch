@@ -19,9 +19,10 @@ export default class Pen extends Sprite {
     public color: string;
 
     public getBoundingBox(): BoundingBox {
+        const off = this.getDrawOffset();
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x + off[0],
+            y: this.y + off[1],
             width: this.penSize * this.size * 2,
             height: this.penSize * this.size * 2
         };

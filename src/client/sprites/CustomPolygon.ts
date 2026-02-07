@@ -60,9 +60,10 @@ export default class CustomPolygon extends Sprite {
         const x = minX + width / 2;
         const y = minY + height / 2;
 
+        const off = this.getDrawOffset();
         return {
-            x: x * this.size,
-            y: y * this.size,
+            x: x * this.size + off[0],
+            y: y * this.size + off[1],
             width: width * this.size,
             height: height * this.size
         };
@@ -93,7 +94,7 @@ export default class CustomPolygon extends Sprite {
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
-        c.translate(-this.pivot[0], this.pivot[1]);
+        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
         const path = this.getCachedPath();
 
@@ -124,7 +125,6 @@ export default class CustomPolygon extends Sprite {
     public setVertices(vertices: Vec2[]) {
         this.vertices = vertices;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 

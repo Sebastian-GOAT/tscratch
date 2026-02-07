@@ -28,9 +28,10 @@ export default class Square extends Sprite {
 
         const size  = 2 * (Math.abs(s * cos) + Math.abs(s * sin)) * this.size;
 
+        const off = this.getDrawOffset();
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x + off[0],
+            y: this.y + off[1],
             width: size,
             height: size
         };
@@ -58,7 +59,7 @@ export default class Square extends Sprite {
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
-        c.translate(-this.pivot[0], this.pivot[1]);
+        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
         const path = this.getCachedPath();
 
@@ -89,7 +90,6 @@ export default class Square extends Sprite {
     public setSideLength(sideLength: number) {
         this.sideLength = sideLength;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 

@@ -37,9 +37,10 @@ export default class ImageSprite extends Sprite {
         const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
         const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
+        const off = this.getDrawOffset();
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x + off[0],
+            y: this.y + off[1],
             width, height
         };
     }
@@ -66,7 +67,7 @@ export default class ImageSprite extends Sprite {
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(this.toRadians(this.dir));
-        c.translate(-this.pivot[0], this.pivot[1]);
+        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;
@@ -128,14 +129,12 @@ export default class ImageSprite extends Sprite {
     public setWidth(width: number) {
         this.width = width;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setHeight(height: number) {
         this.height = height;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 

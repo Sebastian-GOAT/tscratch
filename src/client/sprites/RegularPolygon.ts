@@ -22,9 +22,10 @@ export default class RegularPolygon extends Sprite {
     public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
+        const off = this.getDrawOffset();
         return {
-            x: this.x,
-            y: this.y,
+            x: this.x + off[0],
+            y: this.y + off[1],
             width: this.radius * 2 * this.size,
             height: this.radius * 2 * this.size
         };
@@ -55,7 +56,7 @@ export default class RegularPolygon extends Sprite {
         const cY = -this.y + canvas.height / 2;
         c.translate(cX, cY);
         c.rotate(TSCMath.toRadians(this.dir));
-        c.translate(-this.pivot[0], this.pivot[1]);
+        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
         const path = this.getCachedPath();
 
@@ -87,14 +88,12 @@ export default class RegularPolygon extends Sprite {
     public setSides(sides: number) {
         this.sides = sides;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public setRadius(radius: number) {
         this.radius = radius;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 

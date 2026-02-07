@@ -41,9 +41,7 @@ export default abstract class Sprite {
     public abstract tags: Set<string>;
 
     private cachedPath: Path2D | null = null;
-    private cachedBoundingBox: BoundingBox | null = null;
     private pathDirty = true;
-    private boundingBoxDirty = true;
 
     // Reusable collision detection canvas
     private static collisionCanvas: OffscreenCanvas | null = null;
@@ -67,10 +65,7 @@ export default abstract class Sprite {
         this.cachedPath = null;
     }
 
-    protected invalidateBoundingBox() {
-        this.boundingBoxDirty = true;
-        this.cachedBoundingBox = null;
-    }
+
 
     public getCachedPath(): Path2D {
         if (this.pathDirty || !this.cachedPath) {
@@ -80,13 +75,7 @@ export default abstract class Sprite {
         return this.cachedPath;
     }
 
-    public getCachedBoundingBox(): BoundingBox {
-        if (this.boundingBoxDirty || !this.cachedBoundingBox) {
-            this.cachedBoundingBox = this.getBoundingBox();
-            this.boundingBoxDirty = false;
-        }
-        return this.cachedBoundingBox;
-    }
+
 
     // Initialization
 
@@ -122,8 +111,8 @@ export default abstract class Sprite {
         if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
 
         // AABB (bounding boxes)
-        const bBox1 = this.getCachedBoundingBox();
-        const bBox2 = sprite.getCachedBoundingBox();
+        const bBox1 = this.getBoundingBox();
+        const bBox2 = sprite.getBoundingBox();
 
         const aabbOverlap =
             Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
@@ -166,16 +155,17 @@ export default abstract class Sprite {
         if (Sprite.collisionCanvas.height < height) Sprite.collisionCanvas.height = height;
         ctx.clearRect(0, 0, width, height);
 
-        // Helper to draw a sprite into collision canvas
+        // Helper to draw a sprite into collision canvas - must match draw() transform exactly:
+        // translate to (x,y), rotate, then translate(-pivot). Use position, not bBox center.
         const drawSprite = (sprite: Sprite, color: string) => {
             ctx.save();
 
-            // Translate to intersection box coordinates (centered)
             const dx = sprite.x - xMin;
             const dy = yMax - sprite.y; // flip Y to match draw()
 
             ctx.translate(dx, dy);
             ctx.rotate(sprite.toRadians(sprite.dir));
+            ctx.translate(-sprite.pivot[0] * sprite.size, sprite.pivot[1] * sprite.size);
 
             ctx.fillStyle = color;
             ctx.fill(sprite.getCachedPath());
@@ -361,14 +351,12 @@ export default abstract class Sprite {
     public setSize(size: number) {
         this.size = size > 0 ? size : 0;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 
     public changeSize(dS: number) {
         this.size = this.size + dS > 0 ? this.size + dS : 0;
         this.invalidatePath();
-        this.invalidateBoundingBox();
         this.refresh();
     }
 
@@ -380,5 +368,18 @@ export default abstract class Sprite {
     public changeLayer(dL: number) {
         this.layer += dL;
         this.refresh();
+    }
+
+    // Helpers
+
+    protected getDrawOffset(): [number, number] {
+        const [x, y] = this.pivot;
+        const sin = TSCMath.sin(this.dir);
+        const cos = TSCMath.cos(this.dir);
+
+        const rx = -x * cos - y * sin;
+        const ry = -x * sin + y * cos;
+
+        return [rx * this.size, ry * this.size];
     }
 }
