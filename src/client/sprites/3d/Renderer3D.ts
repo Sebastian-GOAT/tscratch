@@ -95,4 +95,34 @@ export default abstract class Renderer3D extends Pen {
             return [xp, yp];
         });
     }
+
+    protected getRelativeVertices(obj: Object3D): Vec3[] {
+
+        const sinX = TSCMath.sin(this.camera.dirX);
+        const cosX = TSCMath.cos(this.camera.dirX);
+        const sinY = TSCMath.sin(this.camera.dirY);
+        const cosY = TSCMath.cos(this.camera.dirY);
+        const sinZ = TSCMath.sin(this.camera.dirZ);
+        const cosZ = TSCMath.cos(this.camera.dirZ);
+
+        return obj.vertices.map(v => {
+            let x = v[0] * obj.size + obj.x - this.camera.x;
+            let y = v[1] * obj.size + obj.y - this.camera.y;
+            let z = v[2] * obj.size + obj.z - this.camera.z;
+
+            // yaw (Y)
+            const x1 = x * cosY - z * sinY;
+            const z1 = x * sinY + z * cosY;
+
+            // pitch (X)
+            const y2 = y * cosX - z1 * sinX;
+            const z2 = y * sinX + z1 * cosX;
+
+            // roll (Z)
+            const x3 = x1 * cosZ - y2 * sinZ;
+            const y3 = x1 * sinZ + y2 * cosZ;
+
+            return [x3, y3, z2];
+        });
+    }
 }

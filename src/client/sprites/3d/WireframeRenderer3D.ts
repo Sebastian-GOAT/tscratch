@@ -15,27 +15,7 @@ export default class WireframeRenderer3D extends Renderer3D {
 
         for (const obj of this.objects) {
 
-            const projected = this.project(
-                obj.vertices.map(v => {
-                    let x = v[0] * obj.size + obj.x - this.camera.x;
-                    let y = v[1] * obj.size + obj.y - this.camera.y;
-                    let z = v[2] * obj.size + obj.z - this.camera.z;
-
-                    // Y (yaw)
-                    let x1 = x * cosY - z * sinY;
-                    let z1 = x * sinY + z * cosY;
-
-                    // X (pitch)
-                    let y2 = y * cosX - z1 * sinX;
-                    let z2 = y * sinX + z1 * cosX;
-
-                    // Z (roll)
-                    let x3 = x1 * cosZ - y2 * sinZ;
-                    let y3 = x1 * sinZ + y2 * cosZ;
-
-                    return [x3, y3, z2] as Vec3;
-                })
-            );
+            const projected = this.project(this.getRelativeVertices(obj));
 
             this.color = obj.color || 'black';
     

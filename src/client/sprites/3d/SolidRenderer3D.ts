@@ -48,37 +48,19 @@ export default class SolidRenderer3D extends Renderer3D {
             const { h, s, l } = SolidRenderer3D.stringToHSL(obj.color || 'black');
 
             // Camera relative vertices
-            const cameraVerts: Vec3[] = obj.vertices.map(v => {
-                let x = v[0] * obj.size + obj.x - this.camera.x;
-                let y = v[1] * obj.size + obj.y - this.camera.y;
-                let z = v[2] * obj.size + obj.z - this.camera.z;
-
-                // yaw (Y)
-                const x1 = x * cosY - z * sinY;
-                const z1 = x * sinY + z * cosY;
-
-                // pitch (X)
-                const y2 = y * cosX - z1 * sinX;
-                const z2 = y * sinX + z1 * cosX;
-
-                // roll (Z)
-                const x3 = x1 * cosZ - y2 * sinZ;
-                const y3 = x1 * sinZ + y2 * cosZ;
-
-                return [x3, y3, z2];
-            });
+            const relativeVerts = this.getRelativeVertices(obj);
 
             // Face depth calculation
             const faces: FaceDepth[] = obj.faces.map(face => {
                 let z = 0;
-                for (const i of face) z += cameraVerts[i]![2];
+                for (const i of face) z += relativeVerts[i]![2];
                 return { face, depth: z / face.length };
             });
 
             // Painter's algorithm (face sorting)
             faces.sort((a, b) => b.depth - a.depth);
 
-            const projected = this.project(cameraVerts);
+            const projected = this.project(relativeVerts);
 
             // Render faces
             for (const { face } of faces) {
@@ -86,8 +68,8 @@ export default class SolidRenderer3D extends Renderer3D {
                 // Calculate face normal using Newell's method (works for polygons with any number of vertices)
                 let nx = 0, ny = 0, nz = 0;
                 for (let i = 0; i < face.length; i++) {
-                    const v1 = cameraVerts[face[i]!]!;
-                    const v2 = cameraVerts[face[(i + 1) % face.length]!]!;
+                    const v1 = relativeVerts[face[i]!]!;
+                    const v2 = relativeVerts[face[(i + 1) % face.length]!]!;
                     nx += (v1[1] - v2[1]) * (v1[2] + v2[2]);
                     ny += (v1[2] - v2[2]) * (v1[0] + v2[0]);
                     nz += (v1[0] - v2[0]) * (v1[1] + v2[1]);

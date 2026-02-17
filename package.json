@@ -1,6 +1,6 @@
 {
   "name": "tscratch",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "A Scratch-style game engine for TypeScript.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

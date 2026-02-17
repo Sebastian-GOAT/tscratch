@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.5] - 17.2.2026
+
+### Added
+
+- `Perlin1D` & `Perlin2D` for random terrain generation
+
 ## [0.8.4] - 31.1.2026
 
 ### Changed

@@ -57,6 +57,16 @@
 - `acsc(value)` - computes the inverse of cosecant
 - `asec(value)` - computes the inverse of secant
 
+## Perlin
+
+- 2 variants - `Perlin1D`, `Perlin2D`
+- Generates Perlin noise for terrain generation
+- Use floating point numbers for different heights
+
+- `get(x)` - (1D) returns the height at the given coordinates
+- `get(x, y)` - (2D) returns the height at the given coordinates
+- `regen()` - regenerates the height map
+
 ## Sprite (abstract)
 
 ### Movement
