@@ -67,6 +67,15 @@
 - `get(x, y)` - (2D) returns the height at the given coordinates
 - `regen()` - regenerates the height map
 
+## InverseKinematics
+
+- Computes the points and angles for a multijointed inverse kinematics system
+- Specify the amount of maximum iterations, margin of error and adjustment rate (recommended 1000, 0.01, 0.25)
+
+- `computeApproximateAngles(iterations, error, adjustmentRate = 0.25)` - Computes angles internally
+- `getAngles` - Retrieves and maps joint angles to world-space directions
+- `getPoints` - Retrieves the positions of the joints, including the base and the end effector
+
 ## Sprite (abstract)
 
 ### Movement

@@ -86,13 +86,13 @@ export default class InverseKinematics {
     }
 
     // Forward kinematics
-    public forwardKinematicsPass(): Vec2 {
+    private forwardKinematicsPass(): Vec2 {
         const points = this.getPoints();
         return points[points.length - 1]!;
     }
 
     // Error vector
-    public computeError(): Vec2 {
+    private computeError(): Vec2 {
         const [x, y] = this.forwardKinematicsPass();
         return [this.target[0] - x, this.target[1] - y];
     }
@@ -189,7 +189,7 @@ export default class InverseKinematics {
     }
 
     // Update angles
-    public updateAngles(adjustmentRate: number): void {
+    private updateAngles(adjustmentRate: number): void {
 
         const delta = this.computeJointUpdate();
 

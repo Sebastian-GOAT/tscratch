@@ -234,4 +234,4 @@ The dates are in the following format: D?D.M?M.YYYY
 
 - `pointTowards(x, y)` method on Sprite (no need for `Math.atan2` now)
 
-## [0.1.0] - 28. 9. 2025 22:24:42 (initial)
+## [0.1.0] - 28.9.2025 22:24:42 (initial)
