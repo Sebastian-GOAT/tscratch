@@ -5,6 +5,7 @@ import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from '@main
 import TSCMath from '@main/TSCMath.ts';
 import Perlin1D from '@main/perlin/Perlin1.ts';
 import Perlin2D from '@main/perlin/Perlin2.ts';
+import InverseKinematics from '@main/ik/InverseKinematics.ts';
 
 // Multiplayer
 import Multiplayer from '@main/Multiplayer.ts';
@@ -52,6 +53,7 @@ const TScratch = {
     TSCMath,
     Perlin1D,
     Perlin2D,
+    InverseKinematics,
 
     // Multiplayer
     Multiplayer,
@@ -105,6 +107,7 @@ export {
     TSCMath,
     Perlin1D,
     Perlin2D,
+    InverseKinematics,
 
     // Multiplayer
     Multiplayer,

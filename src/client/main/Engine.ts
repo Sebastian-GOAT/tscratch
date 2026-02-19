@@ -1,4 +1,4 @@
-import { canvas, ctx, penCanvas } from './canvas.ts';
+import { canvas, ctx } from './canvas.ts';
 import Sprite from './Sprite.ts';
 import TSCMath from './TSCMath.ts';
 
@@ -54,17 +54,17 @@ export default class Engine {
         // Events
 
         // Mouse
-        penCanvas.addEventListener('mousemove', e => {
-            this.mouseX = e.clientX - penCanvas.offsetLeft - penCanvas.width / 2;
-            this.mouseY = -(e.clientY - penCanvas.offsetTop - penCanvas.height / 2);
+        canvas.addEventListener('mousemove', e => {
+            this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
+            this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
         });
-        penCanvas.addEventListener('mousedown', () => {
+        canvas.addEventListener('mousedown', () => {
             this.mouseDown = true;
         });
-        penCanvas.addEventListener('mouseup', () => {
+        canvas.addEventListener('mouseup', () => {
             this.mouseDown = false;
         });
-        penCanvas.addEventListener('click', () => {
+        canvas.addEventListener('click', () => {
             this.mouseClicked = true;
             setTimeout(() => this.mouseClicked = false, 0);
         });

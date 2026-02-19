@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.6] - 19.2.2026
+
+### Added
+
+- `InverseKinematics` - a class for 2D multijointed inverse kinematics computing
+
+### Changed
+
+- Pen canvas has been moved behind the main canvas
+
 ## [0.8.5] - 17.2.2026
 
 ### Added
