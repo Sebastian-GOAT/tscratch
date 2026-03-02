@@ -23,13 +23,6 @@ cd project-name
 npm install
 ```
 
-yarn:
-```bash
-yarn dlx create-tscratch-app@latest project-name
-cd project-name
-yarn install
-```
-
 Once you've created a project using `create-tscratch-app`, you get access to
 these 3 commands:
 

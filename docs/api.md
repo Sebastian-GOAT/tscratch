@@ -236,13 +236,13 @@ Draws a label aligned to your preference.
 ```ts
 import { Button } from 'tscratch';
 
-Engine.init();
+const engine = Engine.init();
 const button = new Button();
 
-Engine.setLoop('main', () => {
-    if (Engine.mouseDown) {
-        await Engine.waitUntil(!Engine.mouseDown);
-        if (Engine.hovering(button))
+engine.setLoop('main', () => {
+    if (engine.mouseDown) {
+        await engine.waitUntil(!engine.mouseDown);
+        if (engine.hovering(button))
             console.log('Clicked!');
     }
 });
@@ -295,13 +295,13 @@ Movement methods, such as `move()`, can draw a line based on if `drawing` is tru
 
 Usage:
 ```ts
-import { Engine, WireframeRenderer3D as Renderer } from 'tscratch';
+import { Engine, SolidRenderer3D as Renderer } from 'tscratch';
 import objects from './lib/data.ts';
 
-Engine.init();
+const engine = Engine.init();
 const renderer = new Renderer({ objects });
 
-Engine.setLoop('main', () => {
+engine.setLoop('main', () => {
     renderer.eraseAll();
     renderer.registerControls();
     renderer.render();
