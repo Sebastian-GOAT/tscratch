@@ -11,6 +11,7 @@ import InverseKinematics from 'src/tech/ik/InverseKinematics.ts';
 import Multiplayer from '@main/Multiplayer.ts';
 
 // Sprites
+import Line, { type LineOptions } from '@sprites/Line.ts';
 import Rectangle, { type RectangleOptions } from '@sprites/Rectangle.ts';
 import Square, { type SquareOptions } from '@sprites/Square.ts';
 import Oval, { type OvalOptions } from '@sprites/Oval.ts';
@@ -59,6 +60,7 @@ const TScratch = {
     Multiplayer,
 
     // Sprites
+    Line,
     Rectangle,
     Square,
     Oval,
@@ -113,6 +115,7 @@ export {
     Multiplayer,
 
     // Sprites
+    Line,
     Rectangle,
     Square,
     Oval,
@@ -145,6 +148,7 @@ export {
     Cuboid,
 
     // Options
+    type LineOptions,
     type SpriteOptions,
     type RectangleOptions,
     type SquareOptions,

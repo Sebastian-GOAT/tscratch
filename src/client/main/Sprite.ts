@@ -65,8 +65,6 @@ export default abstract class Sprite {
         this.cachedPath = null;
     }
 
-
-
     public getCachedPath(): Path2D {
         if (this.pathDirty || !this.cachedPath) {
             this.cachedPath = this.getPath();
@@ -74,8 +72,6 @@ export default abstract class Sprite {
         }
         return this.cachedPath;
     }
-
-
 
     // Initialization
 
@@ -368,6 +364,16 @@ export default abstract class Sprite {
     public changeLayer(dL: number) {
         this.layer += dL;
         this.refresh();
+    }
+
+    // Tag getters
+
+    public static getSpriteByTagName(tag: string) {
+        const engine = Engine.init();
+        
+        return engine
+            .sceneMap.get(engine.currentScene)!
+            .sprites.filter(s => s.tags.has(tag));
     }
 
     // Helpers

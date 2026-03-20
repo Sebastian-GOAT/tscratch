@@ -49,7 +49,12 @@
       "@sprites/*": ["src/client/sprites/*"],
       "@sprites/*.ts": ["src/client/sprites/*.ts"],
       "@ctypes/*": ["src/client/types/*"],
-      "@ctypes/*.ts": ["src/client/types/*.ts"]
+      "@ctypes/*.ts": ["src/client/types/*.ts"],
+      // Other
+      "@/*": ["src/*"],
+      "@/*.ts": ["src/*.ts"],
+      "@tech/*": ["src/tech/*"],
+      "@tech/*.ts": ["src/tech/*.ts"]
     }
   },
   "include": ["src", "tests", "tsup.config.ts"],

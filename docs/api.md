@@ -70,7 +70,7 @@
 ## InverseKinematics
 
 - Computes the points and angles for a multijointed inverse kinematics system
-- Specify the amount of maximum iterations, margin of error and adjustment rate (recommended 1000, 0.01, 0.25)
+- Specify the amount of maximum iterations, margin of error and adjustment rate (recommended 1000, 0.001, 0.25)
 
 - `computeApproximateAngles(iterations, error, adjustmentRate = 0.25)` - Computes angles internally
 - `getAngles` - Retrieves and maps joint angles to world-space directions

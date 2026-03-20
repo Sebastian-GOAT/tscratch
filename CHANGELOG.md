@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.8.7] - 20.3.2026
+
+### Added
+
+- `Line` sprite for managing straight lines
+
 ## [0.8.6] - 19.2.2026
 
 ### Added

@@ -41,7 +41,7 @@ export default class Rectangle extends Sprite {
     }
 
     public getPath(): Path2D {
-        const path = new Path2D();
+        const path = new Path2D;
 
         path.rect(
             -this.width / 2 * this.size,
@@ -80,7 +80,7 @@ export default class Rectangle extends Sprite {
         return new Rectangle(options) as this;
     }
 
-    protected getCreateOptions() {
+    protected getCreateOptions(): RectangleOptions {
         return {
             ...super.getCreateOptions(),
             width: this.width,
@@ -119,5 +119,4 @@ export default class Rectangle extends Sprite {
         
         this.draw();
     }
-
 }

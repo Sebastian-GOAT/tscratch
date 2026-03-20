@@ -32,7 +32,7 @@ export default class Engine {
 
     private keysPressed: Set<string> = new Set<string>();
 
-    private currentScene: string = 'main';
+    public currentScene: string = 'main';
     public sceneMap: SceneMap = new Map();
 
     private variableMap: Map<string, unknown> = new Map();

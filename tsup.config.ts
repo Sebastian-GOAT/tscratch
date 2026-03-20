@@ -15,7 +15,10 @@ export default defineConfig({
             // Client
             '@main': './src/client/main',
             '@sprites': './src/client/sprites',
-            '@ctypes': './src/client/types'
+            '@ctypes': './src/client/types',
+            // Other
+            '@': './src',
+            '@tech': './src/tech'
         };
     }
 });

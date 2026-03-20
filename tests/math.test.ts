@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import TSCMath from '@main/TSCMath.ts';
-
-const testRange = 12;
+import testRange from './range.ts';
 
 describe('Math', () => {
 
@@ -36,5 +35,4 @@ describe('Math', () => {
             expect(TSCMath.acos(value)).toBeCloseTo(Math.acos(value) * 180 / Math.PI, 5);
         }
     });
-
 });
