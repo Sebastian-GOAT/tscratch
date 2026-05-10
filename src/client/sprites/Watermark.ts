@@ -19,5 +19,6 @@ export default class Watermark extends Text {
         this.baseline = options?.baseline ?? 'top'
 
         this.invalidatePath();
+        this.draw();
     }
 }

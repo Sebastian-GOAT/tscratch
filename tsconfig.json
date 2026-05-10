@@ -39,6 +39,7 @@
 
     // Aliases
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       // Server
       "@server/*": ["src/server/*"],

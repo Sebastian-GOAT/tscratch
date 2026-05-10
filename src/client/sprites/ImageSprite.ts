@@ -76,9 +76,10 @@ export default class ImageSprite extends Sprite {
             0, 0,
             this.img.width,
             this.img.height,
-            -this.width / 2,
-            -this.height / 2,
-            this.width, this.height
+            -this.width / 2 * this.size,
+            -this.height / 2 * this.size,
+            this.width * this.size,
+            this.height * this.size
         );
         if (this.outlineWidth)
             c.stroke(this.getCachedPath());

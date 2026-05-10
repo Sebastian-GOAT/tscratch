@@ -23,8 +23,6 @@ export default class Text extends Sprite {
     public align: CanvasTextAlign;
     public baseline: CanvasTextBaseline;
 
-    private font: string;
-
     public getBoundingBox(): BoundingBox {
 
         const metrics = ctx.measureText(String(this.content));
@@ -50,7 +48,7 @@ export default class Text extends Sprite {
 
         ctx.save();
         
-        ctx.font = this.font;
+        ctx.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
 
         const metrics = ctx.measureText(String(this.content));
         const width = metrics.width * this.size;
@@ -74,7 +72,7 @@ export default class Text extends Sprite {
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
-        c.font = this.font;
+        c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.color;
         c.textAlign = this.align;
         c.textBaseline = this.baseline;
@@ -115,14 +113,12 @@ export default class Text extends Sprite {
 
     public setFontSize(fontSize: number) {
         this.fontSize = fontSize;
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
         this.refresh();
     }
 
     public setFontFamily(fontFamily: string) {
         this.fontFamily = fontFamily;
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
         this.refresh();
     }
@@ -148,8 +144,6 @@ export default class Text extends Sprite {
         this.fontSize = options?.fontSize ?? 16;
         this.align = options?.align ?? 'center';
         this.baseline = options?.baseline ?? 'middle';
-
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
 
         this.draw();
     }
