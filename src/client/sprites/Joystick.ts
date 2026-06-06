@@ -1,22 +1,21 @@
-import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 
-export interface CircleOptions extends SpriteOptions {
-    radius?: number;
-    color?: string;
-    outlineColor?: string;
-    outlineWidth?: number;
-};
+export interface JoystickOptions extends SpriteOptions {
+    radius: number;
+}
 
-export default class Circle extends Sprite {
+export default class Joystick extends Sprite {
 
-    public discriminant = 'circle';
-    public tags = new Set(['circle']);
+    public tags = new Set(['joystick']);
+    public discriminant = 'joystick';
 
     public radius: number;
-    public color: string;
-    public outlineColor: string;
-    public outlineWidth: number;
+    private thumbRadius: number;
+    private sizeRatio = 0.4;
+
+    public joyX = 0;
+    public joyY = 0;
 
     public getBoundingBox(): BoundingBox {
         const off = this.getDrawOffset();
@@ -53,52 +52,59 @@ export default class Circle extends Sprite {
         c.rotate(this.toRadians(this.dir));
         c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
 
+        // Base
         const path = this.getCachedPath();
 
-        c.fillStyle = this.color;
-        c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.fillStyle = 'rgba(0, 0, 0, 0.4)';
         c.fill(path);
-        if (this.outlineWidth)
-            c.stroke(path);
+
+        // Thumb
+        c.translate(
+            this.joyX * (this.radius - this.thumbRadius - 4) * this.size,
+            -this.joyY * (this.radius - this.thumbRadius - 4) * this.size
+        );
+
+        const thumb = new Path2D();
+        thumb.ellipse(
+            0, 0,
+            this.thumbRadius * this.size,
+            this.thumbRadius * this.size,
+            0, 0,
+            Math.PI * 2
+        );
+        
+        c.fillStyle = 'white';
+        c.fill(thumb);
 
         c.restore();
     }
 
-    public create(options?: CircleOptions): this {
-        return new Circle(options) as this;
+    protected create(options?: JoystickOptions): this {
+        return new Joystick(options) as this;
     }
 
     protected getCreateOptions() {
         return {
             ...super.getCreateOptions(),
-            radius: this.radius,
-            color: this.color,
-            outlineColor: this.outlineColor,
-            outlineWidth: this.outlineWidth
+            radius: this.radius
         };
     }
 
     public setRadius(radius: number) {
         this.radius = radius;
+        this.thumbRadius = radius * this.sizeRatio;
         this.invalidatePath();
         this.refresh();
     }
 
-    public setColor(color: string) {
-        this.color = color;
-        this.refresh();
-    }
-
-    constructor(options?: CircleOptions) {
+    constructor(options?: JoystickOptions) {
         super(options);
 
-        this.radius = options?.radius ?? 25;
-        this.color = options?.color ?? 'black';
-        this.outlineColor = options?.outlineColor ?? 'black';
-        this.outlineWidth = options?.outlineWidth ?? 0;
+        this.radius = options?.radius ?? 60;
+        this.thumbRadius = this.radius * this.sizeRatio;
+        this.x = -canvas.width / 2 + this.radius + 15;
+        this.y = -canvas.height / 2 + this.radius + 15;
         
         this.draw();
     }
-
 }

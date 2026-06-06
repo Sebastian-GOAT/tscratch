@@ -28,6 +28,8 @@ import ImageSprite, { type ImageSpriteOptions } from '@sprites/ImageSprite.ts';
 
 import RigidRectangle, { type RigidRectangleOptions } from '@sprites/physics/RigidRectangle.ts';
 
+import Joystick, { type JoystickOptions } from '@sprites/Joystick.ts';
+
 // 3D
 import Camera3D, { type Camera3DOptions } from '@sprites/3d/Camera3D.ts';
 import Renderer3D, { type Renderer3DOptions } from '@sprites/3d/Renderer3D.ts';
@@ -77,6 +79,8 @@ const TScratch = {
     ImageSprite,
 
     RigidRectangle,
+
+    Joystick,
 
     // 3D
     Camera3D,
@@ -134,6 +138,8 @@ export {
 
     RigidRectangle,
 
+    Joystick,
+
     // 3D
     Camera3D,
     Renderer3D, // For custom renderer implementations
@@ -169,6 +175,8 @@ export {
     type RigidBody,
     type RigidBodyOptions,
     type RigidRectangleOptions,
+
+    type JoystickOptions,
 
     type Camera3DOptions,
     type Renderer3DOptions,

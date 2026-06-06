@@ -1,3 +1,4 @@
+import type Joystick from '@sprites/Joystick.ts';
 import { canvas, ctx } from './canvas.ts';
 import Sprite from './Sprite.ts';
 import TSCMath from './TSCMath.ts';
@@ -30,6 +31,7 @@ export default class Engine {
     public mouseDown = false;
 
     private primaryPointerId: number | null = null;
+    private activeJoystick: Joystick | null = null;
     private keysPressed = new Set<string>();
 
     public currentScene = 'main';
@@ -58,17 +60,27 @@ export default class Engine {
             if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
             this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
             this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
+
+            this.updateJoysticks();
         });
         canvas.addEventListener('pointerdown', e => {
             if (this.primaryPointerId === null) {
                 this.primaryPointerId = e.pointerId;
                 this.mouseDown = true;
+
+                this.updateJoysticks();
             }
         });
         canvas.addEventListener('pointerup', e => {
             if (e.pointerId === this.primaryPointerId) {
                 this.primaryPointerId = null;
                 this.mouseDown = false;
+                if (this.activeJoystick) {
+                    this.activeJoystick.joyX = 0;
+                    this.activeJoystick.joyY = 0;
+                    this.activeJoystick = null;
+                    this.refresh();
+                }
             }
         });
 
@@ -81,6 +93,61 @@ export default class Engine {
         addEventListener('keyup', e => {
             this.keysPressed.delete(e.key);
         });
+    }
+
+    // Joysticks
+
+    private updateJoysticks() {
+
+        const joysticks = [
+            ...this.sceneMap.get('*')!.sprites,
+            ...this.sceneMap.get('main')!.sprites
+        ].filter(s => s.discriminant === 'joystick') as Joystick[];
+
+        const updateJoystick = (joystick: Joystick) => {
+            const localX = this.mouseX - joystick.x;
+            const localY = this.mouseY - joystick.y;
+            const angle = -TSCMath.toRadians(joystick.dir);
+            const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
+            const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
+
+            const maxRadius = joystick.radius * joystick.size;
+            const distance = Math.hypot(rotatedX, rotatedY);
+            const normalizedX = distance > 0 ? rotatedX / distance : 0;
+            const normalizedY = distance > 0 ? rotatedY / distance : 0;
+
+            if (distance <= maxRadius) {
+                joystick.joyX = rotatedX / maxRadius;
+                joystick.joyY = rotatedY / maxRadius;
+            } else {
+                joystick.joyX = normalizedX;
+                joystick.joyY = normalizedY;
+            }
+
+            this.activeJoystick = joystick;
+            this.refresh();
+        };
+
+        if (this.activeJoystick) {
+            updateJoystick(this.activeJoystick);
+            return;
+        }
+
+        if (!this.mouseDown) return;
+
+        for (const joystick of joysticks) {
+            const localX = this.mouseX - joystick.x;
+            const localY = this.mouseY - joystick.y;
+            const angle = -TSCMath.toRadians(joystick.dir);
+            const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
+            const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
+            const maxRadius = joystick.radius * joystick.size;
+
+            if (rotatedX * rotatedX + rotatedY * rotatedY <= maxRadius * maxRadius) {
+                updateJoystick(joystick);
+                return;
+            }
+        }
     }
 
     // Change the scene
