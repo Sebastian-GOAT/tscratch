@@ -13,29 +13,29 @@ export default class Engine {
 
     private static instance: Engine;
 
-    private loopRunning: boolean = false;
+    private loopRunning = false;
     private gameLoop: GameLoop | null = null;
 
-    public maxFPS: number = 30;
-    public deltaTime: number = 1 / this.maxFPS;
+    public maxFPS = 30;
+    public deltaTime = 1 / this.maxFPS;
     private lastFrame: number = performance.now();
-    private refreshScheduled: boolean = false;
+    private refreshScheduled = false;
     private animationFrameId: number | null = null;
 
     private sounds: HTMLAudioElement[] = [];
 
-    public mouseX: number = 0;
-    public mouseY: number = 0;
+    public mouseX = 0;
+    public mouseY = 0;
 
-    public mouseDown: boolean = false;
-    public mouseClicked: boolean = false;
+    public mouseDown = false;
 
-    private keysPressed: Set<string> = new Set<string>();
+    private primaryPointerId: number | null = null;
+    private keysPressed = new Set<string>();
 
-    public currentScene: string = 'main';
+    public currentScene = 'main';
     public sceneMap: SceneMap = new Map();
 
-    private variableMap: Map<string, unknown> = new Map();
+    private variableMap = new Map<string, unknown>();
 
     // Singleton initialization
 
@@ -53,20 +53,23 @@ export default class Engine {
 
         // Events
 
-        // Mouse
-        canvas.addEventListener('mousemove', e => {
+        // Pointer
+        canvas.addEventListener('pointermove', e => {
+            if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
             this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
             this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
         });
-        canvas.addEventListener('mousedown', () => {
-            this.mouseDown = true;
+        canvas.addEventListener('pointerdown', e => {
+            if (this.primaryPointerId === null) {
+                this.primaryPointerId = e.pointerId;
+                this.mouseDown = true;
+            }
         });
-        canvas.addEventListener('mouseup', () => {
-            this.mouseDown = false;
-        });
-        canvas.addEventListener('click', () => {
-            this.mouseClicked = true;
-            setTimeout(() => this.mouseClicked = false, 0);
+        canvas.addEventListener('pointerup', e => {
+            if (e.pointerId === this.primaryPointerId) {
+                this.primaryPointerId = null;
+                this.mouseDown = false;
+            }
         });
 
         // Keys

@@ -11,11 +11,6 @@
     // "types": ["node"],
     // and npm install -D @types/node
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
@@ -38,24 +33,22 @@
     "skipLibCheck": true,
 
     // Aliases
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
       // Server
-      "@server/*": ["src/server/*"],
-      "@server/*.ts": ["src/server/*.ts"],
+      "@server/*": ["./src/server/*"],
+      "@server/*.ts": ["./src/server/*.ts"],
       // Client
-      "@main/*": ["src/client/main/*"],
-      "@main/*.ts": ["src/client/main/*.ts"],
-      "@sprites/*": ["src/client/sprites/*"],
-      "@sprites/*.ts": ["src/client/sprites/*.ts"],
-      "@ctypes/*": ["src/client/types/*"],
-      "@ctypes/*.ts": ["src/client/types/*.ts"],
+      "@main/*": ["./src/client/main/*"],
+      "@main/*.ts": ["./src/client/main/*.ts"],
+      "@sprites/*": ["./src/client/sprites/*"],
+      "@sprites/*.ts": ["./src/client/sprites/*.ts"],
+      "@ctypes/*": ["./src/client/types/*"],
+      "@ctypes/*.ts": ["./src/client/types/*.ts"],
       // Other
-      "@/*": ["src/*"],
-      "@/*.ts": ["src/*.ts"],
-      "@tech/*": ["src/tech/*"],
-      "@tech/*.ts": ["src/tech/*.ts"]
+      "@/*": ["./src/*"],
+      "@/*.ts": ["./src/*.ts"],
+      "@tech/*": ["./src/tech/*"],
+      "@tech/*.ts": ["./src/tech/*.ts"]
     }
   },
   "include": ["src", "tests", "tsup.config.ts"],

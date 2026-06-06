@@ -17,7 +17,6 @@
 - `mouseX` - the x position of the cursor
 - `mouseY` - the y position of the cursor
 - `mouseDown` - checks if the user is holding the mouse button
-- `mouseClicked` - checks if the user is has clicked the mouse button
 
 - `hovering(sprite)` - checks if the user is hovering a sprite with the mouse pointer
 
