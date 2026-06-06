@@ -58,12 +58,17 @@ export default class Engine {
         // Pointer
         canvas.addEventListener('pointermove', e => {
             if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
-            this.mouseX = e.clientX - canvas.offsetLeft - canvas.width / 2;
-            this.mouseY = -(e.clientY - canvas.offsetTop - canvas.height / 2);
+
+            const rect = canvas.getBoundingClientRect();
+
+            this.mouseX = (e.clientX - rect.left) * (canvas.width / rect.width) - canvas.width / 2;
+            this.mouseY = -((e.clientY - rect.top) * (canvas.height / rect.height) - canvas.height / 2);
 
             this.updateJoysticks();
         });
         canvas.addEventListener('pointerdown', e => {
+            canvas.setPointerCapture(e.pointerId);
+
             if (this.primaryPointerId === null) {
                 this.primaryPointerId = e.pointerId;
                 this.mouseDown = true;
@@ -72,6 +77,8 @@ export default class Engine {
             }
         });
         canvas.addEventListener('pointerup', e => {
+            canvas.releasePointerCapture(e.pointerId);
+
             if (e.pointerId === this.primaryPointerId) {
                 this.primaryPointerId = null;
                 this.mouseDown = false;
