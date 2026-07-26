@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.9.2] - 26.7.2026
+
+- `Joystick` sprite & mobile support
+- `joystick.setRGB(r, g, b)` - sets the rgb base color of the joystick
+- `engine.onKeyPress(key, callback, options)` - callback method for handling key input
+- `sprite.onPress(callback, options)` - callback method for handling mouse input
+
 ## [0.8.7] - 20.3.2026
 
 ### Added

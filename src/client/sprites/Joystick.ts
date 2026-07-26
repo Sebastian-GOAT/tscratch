@@ -1,3 +1,4 @@
+import type { Vec3 } from '@ctypes/Vectors.ts';
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 
@@ -13,6 +14,7 @@ export default class Joystick extends Sprite {
     public radius: number;
     private thumbRadius: number;
     private sizeRatio = 0.4;
+    public rgb: Vec3 = [0, 0, 0];
 
     public joyX = 0;
     public joyY = 0;
@@ -55,7 +57,7 @@ export default class Joystick extends Sprite {
         // Base
         const path = this.getCachedPath();
 
-        c.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        c.fillStyle = `rgba(${this.rgb[0]}, ${this.rgb[1]}, ${this.rgb[2]}, 0.4)`;
         c.fill(path);
 
         // Thumb
@@ -95,6 +97,12 @@ export default class Joystick extends Sprite {
         this.thumbRadius = radius * this.sizeRatio;
         this.invalidatePath();
         this.refresh();
+    }
+
+    public setRGB(r: number, g: number, b: number) {
+        this.rgb[0] = r;
+        this.rgb[1] = g;
+        this.rgb[2] = b;
     }
 
     constructor(options?: JoystickOptions) {
