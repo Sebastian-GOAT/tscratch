@@ -32,6 +32,8 @@ export default class Engine {
 
     private primaryPointerId: number | null = null;
     private activeJoystick: Joystick | null = null;
+    
+    // Inputs
     private keysPressed = new Set<string>();
     private keyCallbacks = new Map<string, Array<{ callback: () => void; allowHold: boolean }>>();
     private pressCallbacks = new Set<() => void>();
@@ -40,8 +42,6 @@ export default class Engine {
     public sceneMap: SceneMap = new Map();
 
     private variableMap = new Map<string, unknown>();
-
-    // Singleton initialization
 
     public static init() {
         if (!this.instance)
@@ -55,9 +55,7 @@ export default class Engine {
         this.sceneMap.set('main', { loop: null, sprites: [] });
         this.sceneMap.set('*', { loop: null, sprites: [] });
 
-        // Events
-
-        // Pointer
+        // Pointer Events
         canvas.addEventListener('pointermove', e => {
             if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
 
@@ -68,17 +66,17 @@ export default class Engine {
 
             this.updateJoysticks();
         });
+
         canvas.addEventListener('pointerdown', e => {
             canvas.setPointerCapture(e.pointerId);
 
             if (this.primaryPointerId === null) {
                 this.primaryPointerId = e.pointerId;
                 this.mouseDown = true;
-
                 this.updateJoysticks();
-                this.firePressCallbacks();
             }
         });
+
         canvas.addEventListener('pointerup', e => {
             canvas.releasePointerCapture(e.pointerId);
 
@@ -94,14 +92,19 @@ export default class Engine {
             }
         });
 
-        // Keys
+        // Key Events (Pure state updates, no OS repeat firing)
         addEventListener('keydown', e => {
             const key = this.normalizeKey(e.key);
             const wasPressed = this.keysPressed.has(key);
             this.keysPressed.add(key);
 
-            if (!wasPressed || e.repeat)
-                this.fireKeyCallbacks(key, e.repeat);
+            // Execute single-tap callbacks immediately on keydown if allowHold is false
+            if (!wasPressed) {
+                const callbacks = this.keyCallbacks.get(key) ?? [];
+                callbacks.forEach(({ callback, allowHold }) => {
+                    if (!allowHold) callback();
+                });
+            }
         });
 
         addEventListener('keyup', e => {
@@ -109,10 +112,65 @@ export default class Engine {
         });
     }
 
+    // Process continuous inputs on every engine frame tick
+    private processInput() {
+        // 1. Process held keys
+        for (const key of this.keysPressed) {
+            const callbacks = this.keyCallbacks.get(key) ?? [];
+            callbacks.forEach(({ callback, allowHold }) => {
+                if (allowHold) callback();
+            });
+        }
+
+        // 2. Process active mouse/pointer presses (e.g. Sprite onPress)
+        if (this.mouseDown || this.pressCallbacks.size > 0) {
+            this.pressCallbacks.forEach(callback => callback());
+        }
+    }
+
+    // Engine Frame Loop
+
+    public async setMaxFPS(maxFPS: number) {
+        this.maxFPS = maxFPS;
+
+        let loop = this.gameLoop;
+
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+
+        this.loopRunning = true;
+        const frameInterval = 1000 / maxFPS;
+        let accumulator = 0;
+
+        const tick = async (currentTime: number) => {
+            if (!this.loopRunning) return;
+
+            const deltaTime = currentTime - this.lastFrame;
+            this.lastFrame = currentTime;
+            accumulator += deltaTime;
+
+            if (accumulator >= frameInterval) {
+                this.deltaTime = accumulator / 1000;
+                accumulator = accumulator % frameInterval;
+
+                // Fire continuous input callbacks synchronized with the game frame
+                this.processInput();
+
+                if (loop) await loop();
+            }
+
+            this.animationFrameId = requestAnimationFrame(tick);
+        };
+
+        this.lastFrame = performance.now();
+        this.animationFrameId = requestAnimationFrame(tick);
+    }
+
     // Joysticks
 
     private updateJoysticks() {
-
         const joysticks = [
             ...this.sceneMap.get('*')!.sprites,
             ...this.sceneMap.get('main')!.sprites
@@ -164,7 +222,7 @@ export default class Engine {
         }
     }
 
-    // Change the scene
+    // Change scene & loop
 
     public setScene(scene: string) {
         if (!this.sceneMap.get(scene))
@@ -173,10 +231,8 @@ export default class Engine {
         this.loopRunning = false;
         this.currentScene = scene;
         this.gameLoop = this.sceneMap.get(scene)!.loop;
-        this.setMaxFPS(this.maxFPS); // Update the interval function
+        this.setMaxFPS(this.maxFPS);
     }
-
-    // Loops
 
     public setLoop(scene: string, loop: GameLoop) {
         if (!this.sceneMap.get(scene)) {
@@ -233,44 +289,6 @@ export default class Engine {
         this.refresh();
     }
 
-    public async setMaxFPS(maxFPS: number) {
-        this.maxFPS = maxFPS;
-
-        let loop = this.gameLoop;
-        if (!loop) return;
-
-        // Cancel existing animation frame if any
-        if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
-            this.animationFrameId = null;
-        }
-
-        this.loopRunning = true;
-        const frameInterval = 1000 / maxFPS;
-        let accumulator = 0;
-
-        const tick = async (currentTime: number) => {
-            if (!this.loopRunning) return;
-
-            const deltaTime = currentTime - this.lastFrame;
-            this.lastFrame = currentTime;
-            accumulator += deltaTime;
-
-            // Fixed timestep: only run loop when enough time has passed
-            if (accumulator >= frameInterval) {
-                this.deltaTime = accumulator / 1000;
-                accumulator = accumulator % frameInterval;
-
-                if (loop) await loop();
-            }
-
-            this.animationFrameId = requestAnimationFrame(tick);
-        };
-
-        this.lastFrame = performance.now();
-        this.animationFrameId = requestAnimationFrame(tick);
-    }
-
     public refresh() {
         if (this.refreshScheduled) return;
         this.refreshScheduled = true;
@@ -323,11 +341,9 @@ export default class Engine {
         const canvasMouseX = mouseX + canvas.width / 2;
         const canvasMouseY = canvas.height / 2 - mouseY;
 
-        // Mouse relative to sprite center
         const localX = canvasMouseX - (sprite.x + canvas.width / 2);
         const localY = canvasMouseY - (canvas.height / 2 - sprite.y);
 
-        // Rotate mouse point by -dir to align with the path's local coordinates
         const angle = -TSCMath.toRadians(sprite.dir);
         const rotatedX = localX * Math.cos(angle) - localY * Math.sin(angle);
         const rotatedY = localX * Math.sin(angle) + localY * Math.cos(angle);
@@ -360,18 +376,6 @@ export default class Engine {
         }
     }
 
-    private fireKeyCallbacks(key: string, repeat: boolean) {
-        const callbacks = this.keyCallbacks.get(key) ?? [];
-
-        callbacks.forEach(({ callback, allowHold }) => {
-            if (allowHold || !repeat) callback();
-        });
-    }
-
-    private firePressCallbacks() {
-        this.pressCallbacks.forEach(callback => callback());
-    }
-
     public keyPressed(key: string) {
         return this.isKeyPressed(key);
     }
@@ -384,7 +388,6 @@ export default class Engine {
         this.keyCallbacks.set(normalizedKey, callbacks);
     }
 
-    // Called from the Sprite class not by the user
     public onPress(callback: () => void) {
         this.pressCallbacks.add(callback);
     }
@@ -394,9 +397,7 @@ export default class Engine {
     public playSound(src: string) {
         const audio = new Audio(src);
         this.sounds.push(audio);
-
         audio.play();
-
         return audio;
     }
 

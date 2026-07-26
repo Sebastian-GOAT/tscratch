@@ -102,20 +102,19 @@ export default abstract class Sprite {
 
     // Sensing
 
-    public onPress(callback: () => void, options: { allowHold: boolean; } = { allowHold: true }) {
+    public onPress(callback: () => void, options: { allowHold: boolean } = { allowHold: true }) {
         const engine = Engine.init();
 
-        const handlePress = () => {
+        engine.onPress(() => {
             const hovering = engine.hovering(this);
-            const pressed = hovering && engine.mouseDown;
+            const isCurrentlyPressed = hovering && engine.mouseDown;
 
-            if (pressed && (options.allowHold || !this.previousPressed))
+            if (isCurrentlyPressed && (options.allowHold || !this.previousPressed)) {
                 callback();
+            }
 
-            this.previousPressed = pressed;
-        };
-
-        engine.onPress(handlePress);
+            this.previousPressed = isCurrentlyPressed;
+        });
     }
 
     public touching(sprite: Sprite): CollisionData | null {
