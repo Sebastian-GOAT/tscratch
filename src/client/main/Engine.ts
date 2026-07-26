@@ -33,6 +33,8 @@ export default class Engine {
     private primaryPointerId: number | null = null;
     private activeJoystick: Joystick | null = null;
     private keysPressed = new Set<string>();
+    private keyCallbacks = new Map<string, Array<{ callback: () => void; allowHold: boolean }>>();
+    private pressCallbacks = new Set<() => void>();
 
     public currentScene = 'main';
     public sceneMap: SceneMap = new Map();
@@ -74,6 +76,7 @@ export default class Engine {
                 this.mouseDown = true;
 
                 this.updateJoysticks();
+                this.firePressCallbacks();
             }
         });
         canvas.addEventListener('pointerup', e => {
@@ -93,12 +96,16 @@ export default class Engine {
 
         // Keys
         addEventListener('keydown', e => {
-            if (e.repeat) return;
-            this.keysPressed.add(e.key);
+            const key = this.normalizeKey(e.key);
+            const wasPressed = this.keysPressed.has(key);
+            this.keysPressed.add(key);
+
+            if (!wasPressed || e.repeat)
+                this.fireKeyCallbacks(key, e.repeat);
         });
 
         addEventListener('keyup', e => {
-            this.keysPressed.delete(e.key);
+            this.keysPressed.delete(this.normalizeKey(e.key));
         });
     }
 
@@ -328,19 +335,58 @@ export default class Engine {
         return ctx.isPointInPath(sprite.getCachedPath(), rotatedX, rotatedY);
     }
 
-    public keyPressed(key: string) {
+    private normalizeKey(key: string) {
         switch (key) {
-            case 'any': return this.keysPressed.size > 0;
-
-            case 'up': return this.keysPressed.has('ArrowUp');
-            case 'down': return this.keysPressed.has('ArrowDown');
-            case 'left': return this.keysPressed.has('ArrowLeft');
-            case 'right': return this.keysPressed.has('ArrowRight');
-
-            case 'space': return this.keysPressed.has(' ');
-
-            default: return this.keysPressed.has(key);
+            case 'ArrowUp': return 'up';
+            case 'ArrowDown': return 'down';
+            case 'ArrowLeft': return 'left';
+            case 'ArrowRight': return 'right';
+            case ' ': return 'space';
+            default: return key;
         }
+    }
+
+    private isKeyPressed(key: string) {
+        const normalizedKey = this.normalizeKey(key);
+
+        switch (normalizedKey) {
+            case 'any': return this.keysPressed.size > 0;
+            case 'up': return this.keysPressed.has('up');
+            case 'down': return this.keysPressed.has('down');
+            case 'left': return this.keysPressed.has('left');
+            case 'right': return this.keysPressed.has('right');
+            case 'space': return this.keysPressed.has('space');
+            default: return this.keysPressed.has(normalizedKey);
+        }
+    }
+
+    private fireKeyCallbacks(key: string, repeat: boolean) {
+        const callbacks = this.keyCallbacks.get(key) ?? [];
+
+        callbacks.forEach(({ callback, allowHold }) => {
+            if (allowHold || !repeat) callback();
+        });
+    }
+
+    private firePressCallbacks() {
+        this.pressCallbacks.forEach(callback => callback());
+    }
+
+    public keyPressed(key: string) {
+        return this.isKeyPressed(key);
+    }
+
+    public onKeyPress(key: string, callback: () => void, options: { allowHold: boolean; } = { allowHold: true }) {
+        const normalizedKey = this.normalizeKey(key);
+        const callbacks = this.keyCallbacks.get(normalizedKey) ?? [];
+
+        callbacks.push({ callback, allowHold: options.allowHold });
+        this.keyCallbacks.set(normalizedKey, callbacks);
+    }
+
+    // Called from the Sprite class not by the user
+    public onPress(callback: () => void) {
+        this.pressCallbacks.add(callback);
     }
 
     // Sound

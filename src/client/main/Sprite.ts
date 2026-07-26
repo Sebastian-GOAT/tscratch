@@ -42,6 +42,7 @@ export default abstract class Sprite {
 
     private cachedPath: Path2D | null = null;
     private pathDirty = true;
+    private previousPressed = false;
 
     // Reusable collision detection canvas
     private static collisionCanvas: OffscreenCanvas | null = null;
@@ -100,6 +101,22 @@ export default abstract class Sprite {
     }
 
     // Sensing
+
+    public onPress(callback: () => void, options: { allowHold: boolean; } = { allowHold: true }) {
+        const engine = Engine.init();
+
+        const handlePress = () => {
+            const hovering = engine.hovering(this);
+            const pressed = hovering && engine.mouseDown;
+
+            if (pressed && (options.allowHold || !this.previousPressed))
+                callback();
+
+            this.previousPressed = pressed;
+        };
+
+        engine.onPress(handlePress);
+    }
 
     public touching(sprite: Sprite): CollisionData | null {
 
