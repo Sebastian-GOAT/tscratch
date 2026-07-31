@@ -61,6 +61,10 @@ export default class Server {
     }
 
     public onLeave(callback: ClientEventHandler) {
+        // attach to already-connected clients
+        this.clients.forEach(client => client.on('disconnect', () => callback(client)));
+
+        // attach to future connections
         this.io.on('connection', client => {
             client.on('disconnect', () => callback(client));
         });

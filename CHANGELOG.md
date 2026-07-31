@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
+## [0.10.0] - x.8.2026
+
+### Added
+
+- `RoomManager` - a way to manage rooms easily
+
+### Changed
+
+- `connection.broadcast<T>(eventName, data)` -> `connection.emit<T>(eventName, data)`
+
 ## [0.9.2] - 26.7.2026
 
-- `Joystick` sprite & mobile support
+### Added
+
+- `Joystick` - sprite & mobile support
 - `joystick.setRGB(r, g, b)` - sets the rgb base color of the joystick
 - `engine.onKeyPress(key, callback, options)` - callback method for handling key input
 - `sprite.onPress(callback, options)` - callback method for handling mouse input

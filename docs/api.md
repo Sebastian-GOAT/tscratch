@@ -319,7 +319,7 @@ engine.setLoop('main', () => {
 ## Multiplayer (client)
 
 - `connect(serverURL)` - connects to the server & returns a singleton instance (serverURL defaults to 'http://localhost:3000')
-- `broadcast<T>(eventName, data: T)` - sends some data to the server under an event key
+- `emit<T>(eventName, data: T)` - sends some data to the server under an event key
 - `on<T>(eventName, (data: T) => void)` - calls a callback function once it recives an event from the server
 
 ## Server (server)

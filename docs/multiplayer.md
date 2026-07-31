@@ -1,6 +1,6 @@
 # Multiplayer
 
-TScratch includes a lightweight multiplayer system that lets projects communicate in real time using simple event-based messaging. Instead of dealing with raw sockets or complex networking logic, you can think in terms of sending and receiving named events. Both the client and server share the same mental model: **broadcast something**, or **listen for something**. This makes it easy to add collaborative features, shared game worlds, or synchronized state across multiple players.
+TScratch includes a lightweight multiplayer system that lets projects communicate in real time using simple event-based messaging. Instead of dealing with raw sockets or complex networking logic, you can think in terms of sending and receiving named events. Both the client and server share the same mental model: **emit something**, or **listen for something**. This makes it easy to add collaborative features, shared game worlds, or synchronized state across multiple players.
 
 ## Example
 
