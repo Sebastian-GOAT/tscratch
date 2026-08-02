@@ -30,7 +30,7 @@ export default class RoomManager<PlayerState> {
 
     private server: Server;
     private defaultPlayerState: PlayerState;
-    private allowedPlayerState: PlayerState;
+    private allowedPlayerState: (keyof PlayerState)[];
     private onLeaveFunc: ((client: Socket) => void) | null = null;
     private onJoinFunc: ((client: Socket) => void) | null = null;
     private onPlayerStateUpdateFunc: ((client: Socket, playerState: PlayerState) => void) | null = null;
@@ -65,11 +65,12 @@ export default class RoomManager<PlayerState> {
     // Sanitize a partial update: only return the allowed keys present in the input
     private getSanitizedPartial(partialState: Partial<PlayerState> | undefined)  {
         const sanitizedPartial: Partial<PlayerState> = {};
-        if (partialState && typeof partialState === 'object') {
-            for (const key of Object.keys(this.allowedPlayerState!) as (keyof PlayerState)[])
+
+        if (partialState && typeof partialState === 'object')
+            for (const key of this.allowedPlayerState)
                 if (key in partialState)
                     sanitizedPartial[key] = partialState[key];
-        }
+
         return sanitizedPartial;
     }
 
@@ -86,7 +87,7 @@ export default class RoomManager<PlayerState> {
     }
 
     // Handle client room requests
-    constructor(options: { server: Server; defaultPlayerState: PlayerState; allowedPlayerState: PlayerState }) {
+    constructor(options: { server: Server; defaultPlayerState: PlayerState; allowedPlayerState: (keyof PlayerState)[]; }) {
         this.server = options.server;
         this.defaultPlayerState = options.defaultPlayerState;
         this.allowedPlayerState = options.allowedPlayerState;

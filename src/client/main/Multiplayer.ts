@@ -1,20 +1,13 @@
 import { io, Socket } from 'socket.io-client';
 import { events, type Message, type ResponseStatus } from '@server/RoomManager.ts';
 
-export default class Multiplayer<PlayerState = {}> {
+export default class Multiplayer<PlayerState extends object> {
 
-    private static instance: Multiplayer;
     private socket: Socket;
     public roomClients: Map<string, PlayerState> = new Map;
     public id: string | null = null;
     public roomId: string | null = null;
-
-    public static connect(serverURL: string = 'http://localhost:3000') {
-        if (!this.instance)
-            this.instance = new Multiplayer(serverURL);
-
-        return this.instance;
-    }
+    private onRoomJoinFunc: (() => void) | null = null;
 
     public disconnect() {
         this.socket.disconnect();
@@ -58,6 +51,10 @@ export default class Multiplayer<PlayerState = {}> {
         });
     }
 
+    public onRoomJoin(callback: () => void) {
+        this.onRoomJoinFunc = callback;
+    }
+
     // Player state getter
     public getPlayerState() {
         if (!this.id) throw new Error('The multiplayer connection has not been initialized');
@@ -65,7 +62,7 @@ export default class Multiplayer<PlayerState = {}> {
         return this.roomClients.get(this.id) ?? {} as PlayerState;
     }
 
-    private constructor(serverURL: string) {
+    constructor(serverURL: string) {
         this.socket = io(serverURL);
         this.socket.on('connect', () => this.id = this.socket.id ?? null);
         this.socket.on('disconnect', () => {
@@ -82,6 +79,9 @@ export default class Multiplayer<PlayerState = {}> {
 
             this.roomId = data.id;
             this.roomClients.set(this.id, data.playerState);
+
+            // Run the custom onRoomJoin function
+            if (this.onRoomJoinFunc) this.onRoomJoinFunc();
         });
 
         // Join
@@ -94,11 +94,16 @@ export default class Multiplayer<PlayerState = {}> {
                 this.roomClients.set(clientId, playerState);
 
             this.roomId = data.id;
+
+            // Run the custom onRoomJoin function
+            if (this.onRoomJoinFunc) this.onRoomJoinFunc();
         });
 
         // Other player joins
         this.on<{ id: string; playerState: PlayerState }>(events.room_join_notification, data => {
             this.roomClients.set(data.id, data.playerState);
+
+            if (this.onRoomJoinFunc) this.onRoomJoinFunc();
         });
 
         // Other player disconnects
