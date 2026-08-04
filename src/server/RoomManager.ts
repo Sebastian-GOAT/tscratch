@@ -7,6 +7,7 @@ export const events = {
     room_join_request: '@tscratch/room_join_request',
     room_join_response: '@tscratch/room_join_response',
     room_join_notification: '@tscratch/room_join_notification',
+    room_disconnect_request: '@tscratch/room_disconnect_request',
     room_disconnect_notification: '@tscratch/room_disconnect_notification',
     room_state_update_request: '@tscratch/room_state_update_request',
     room_state_update_notification: '@tscratch/room_state_update_notification'
@@ -84,6 +85,33 @@ export default class RoomManager<PlayerState> {
             ...this.defaultPlayerState,
             ...sanitizedPartialState
         };
+    }
+
+    // Handles a disconnect
+    private disconnectRequest(client: Socket) {
+
+        // Find the room entry (room id + room) that contains this client
+        const entry = Array.from(this.rooms.entries()).find(([id, room]) => room.clients.has(client.id));
+        if (!entry) return;
+
+        const [roomId, room] = entry;
+
+        // Remove the client from the room
+        room.clients.delete(client.id);
+
+        // If the room is empty, remove it entirely
+        if (room.clients.size === 0) {
+            this.rooms.delete(roomId);
+            return;
+        }
+
+        // Notify remaining clients in the room that this client disconnected
+        const otherRoomClients = this.getRoomClientsExcluding(room, client.id);
+
+        this.server.broadcast<{ id: string }>(events.room_disconnect_notification, { id: client.id }, otherRoomClients);
+
+        // Run the custom onLeave function
+        if (this.onLeaveFunc) this.onLeaveFunc(client);
     }
 
     // Handle client room requests
@@ -180,29 +208,11 @@ export default class RoomManager<PlayerState> {
 
         // Handle disconnects
         this.server.onLeave(client => {
-            
-            // Find the room entry (room id + room) that contains this client
-            const entry = Array.from(this.rooms.entries()).find(([id, room]) => room.clients.has(client.id));
-            if (!entry) return;
+            this.disconnectRequest(client);
+        });
 
-            const [roomId, room] = entry;
-
-            // Remove the client from the room
-            room.clients.delete(client.id);
-
-            // If the room is empty, remove it entirely
-            if (room.clients.size === 0) {
-                this.rooms.delete(roomId);
-                return;
-            }
-
-            // Notify remaining clients in the room that this client disconnected
-            const otherRoomClients = this.getRoomClientsExcluding(room, client.id);
-
-            this.server.broadcast<{ id: string }>(events.room_disconnect_notification, { id: client.id }, otherRoomClients);
-
-            // Run the custom onLeave function
-            if (this.onLeaveFunc) this.onLeaveFunc(client);
+        this.server.on(events.room_disconnect_request, (_, client) => {
+            this.disconnectRequest(client);
         });
 
         // Handle player state updates

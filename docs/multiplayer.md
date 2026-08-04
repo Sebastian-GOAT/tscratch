@@ -9,7 +9,7 @@ TScratch includes a lightweight multiplayer system that lets projects communicat
 ```ts
 import { Multiplayer } from 'tscratch';
 
-const connection = Multiplayer.connect('http://localhost:8080'); // Assuming the server runs on localhost:8080
+const connection = new Multiplayer('http://localhost:8080'); // Assuming the server runs on localhost:8080
 
 connection.on('welcome', data => {
     console.log(`The server says: ${data}`);

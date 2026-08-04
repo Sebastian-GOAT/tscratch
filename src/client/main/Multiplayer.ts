@@ -8,6 +8,7 @@ export default class Multiplayer<PlayerState extends object> {
     public id: string | null = null;
     public roomId: string | null = null;
     private onRoomJoinFunc: (() => void) | null = null;
+    private onRoomLeaveFunc: (() => void) | null = null;
 
     public disconnect() {
         this.socket.disconnect();
@@ -40,8 +41,14 @@ export default class Multiplayer<PlayerState extends object> {
         });
     }
 
+    public leaveRoom() {
+        if (!this.roomId) throw new Error('The multiplayer connection has not been initialized');
+
+        this.emit(events.room_disconnect_request, null);
+    }
+
     public updatePlayerState(playerState: Partial<PlayerState>) {
-        if (!this.id) throw new Error('The multiplayer connection has not been initialized');
+        if (!this.roomId || !this.id) throw new Error('The multiplayer connection has not been initialized');
 
         const existing = this.roomClients.get(this.id) ?? {} as PlayerState;
         this.roomClients.set(this.id, { ...existing, ...playerState });
@@ -55,9 +62,13 @@ export default class Multiplayer<PlayerState extends object> {
         this.onRoomJoinFunc = callback;
     }
 
+    public onRoomLeave(callback: () => void) {
+        this.onRoomLeaveFunc = callback;
+    }
+
     // Player state getter
-    public getPlayerState() {
-        if (!this.id) throw new Error('The multiplayer connection has not been initialized');
+    public getRoomPlayerState() {
+        if (!this.id || !this.roomId) throw new Error('The multiplayer connection has not been initialized');
 
         return this.roomClients.get(this.id) ?? {} as PlayerState;
     }
@@ -102,8 +113,14 @@ export default class Multiplayer<PlayerState extends object> {
         // Other player joins
         this.on<{ id: string; playerState: PlayerState }>(events.room_join_notification, data => {
             this.roomClients.set(data.id, data.playerState);
+        });
 
-            if (this.onRoomJoinFunc) this.onRoomJoinFunc();
+        // Disconnect
+        this.socket.on('disconnect', () => {
+            this.roomId = null;
+            this.roomClients.clear();
+
+            if (this.onRoomLeaveFunc) this.onRoomLeaveFunc();
         });
 
         // Other player disconnects
