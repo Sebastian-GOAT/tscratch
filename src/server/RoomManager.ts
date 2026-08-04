@@ -32,6 +32,7 @@ export default class RoomManager<PlayerState> {
     private server: Server;
     private defaultPlayerState: PlayerState;
     private allowedPlayerState: (keyof PlayerState)[];
+    private blacklist: Map<string, string | null> = new Map;
     private onLeaveFunc: ((client: Socket) => void) | null = null;
     private onJoinFunc: ((client: Socket) => void) | null = null;
     private onPlayerStateUpdateFunc: ((client: Socket, playerState: PlayerState) => void) | null = null;
@@ -114,6 +115,24 @@ export default class RoomManager<PlayerState> {
         if (this.onLeaveFunc) this.onLeaveFunc(client);
     }
 
+    // Kick
+    public kick(clientId: string) {
+
+        const room = Array
+            .from(this.rooms.values())
+            .find(room => room.clients.has(clientId));
+
+        if (!room) return;
+
+        room.clients.delete(clientId);
+    }
+
+    // Ban
+    public ban(clientId: string, { roomId }: { roomId: string }) {
+        this.kick(clientId);
+        this.blacklist.set(clientId, roomId ?? null);
+    }
+
     // Handle client room requests
     constructor(options: { server: Server; defaultPlayerState: PlayerState; allowedPlayerState: (keyof PlayerState)[]; }) {
         this.server = options.server;
@@ -157,6 +176,13 @@ export default class RoomManager<PlayerState> {
 
         // Handle join requests
         this.server.on<{ password: string | null; id: string; customPlayerState: PlayerState }>(events.room_join_request, (data, client) => {
+
+            // Check blacklist
+            const bannedPlayerRoom = this.blacklist.get(client.id);
+            if (bannedPlayerRoom !== undefined) {
+                if (!bannedPlayerRoom) return; // Banned everywhere
+                if (bannedPlayerRoom === data.id) return;
+            }
 
             // Find the room
             const room = this.rooms.get(data.id);

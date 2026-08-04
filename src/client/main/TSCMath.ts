@@ -1,6 +1,8 @@
+import type { Mat2, Mat3, Mat4 } from '@ctypes/Matricies.ts';
 import type { Vec2, Vec3, Vec4 } from '@ctypes/Vectors.ts';
 
 type Vec = Vec2 | Vec3 | Vec4;
+type Mat = Mat2 | Mat3 | Mat4;
 
 // Static class
 export default class TSCMath {
@@ -74,6 +76,27 @@ export default class TSCMath {
             a[2] * b[0] - a[0] * b[2],
             a[0] * b[1] - a[1] * b[0],
         ];
+    }
+
+    // --- Matricies ---
+
+    public multiply(vec: Vec2, mat: Mat2): Vec2
+    public multiply(vec: Vec3, mat: Mat3): Vec3
+    public multiply(vec: Vec4, mat: Mat4): Vec4
+    public multiply(vec: Vec, mat: Mat): Vec {
+
+        const size = vec.length;
+        const result = new Array(size) as number[];
+    
+        for (let row = 0; row < size; row++) {
+            let sum = 0;
+            for (let col = 0; col < size; col++)
+                sum += mat[row]![col]! * vec[col]!;
+
+            result[row] = sum;
+        }
+    
+        return result as Vec;
     }
 
     // --- Angles ---
