@@ -77,7 +77,7 @@ export default class RoomManager<PlayerState> {
     }
 
     // Sanitize custom state against allowed keys
-    private getSanitizedPlayerState(customPlayerState: PlayerState) {
+    private getSanitizedPlayerState(customPlayerState: Partial<PlayerState>) {
 
         const sanitizedPartialState = this.getSanitizedPartial(customPlayerState);
 
@@ -175,7 +175,7 @@ export default class RoomManager<PlayerState> {
         });
 
         // Handle join requests
-        this.server.on<{ password: string | null; id: string; customPlayerState: PlayerState }>(events.room_join_request, (data, client) => {
+        this.server.on<{ password: string | null; id: string; customPlayerState: Partial<PlayerState>; }>(events.room_join_request, (data, client) => {
 
             // Check blacklist
             const bannedPlayerRoom = this.blacklist.get(client.id);

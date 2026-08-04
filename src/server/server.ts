@@ -18,10 +18,10 @@ export default class Server {
     constructor(options: ServerOptions) {
         this.port = options.port;
         this.corsOrigin = options.corsOrigin ?? '*';
-        this.io = new SocketIOServer(this.port, { cors: { origin: this.corsOrigin }});
+
+        this.io = new SocketIOServer(this.port, { cors: { origin: this.corsOrigin } });
 
         this.io.on('connection', (client: Client) => {
-
             this.clients.add(client);
             client.on('disconnect', () => this.clients.delete(client));
         });

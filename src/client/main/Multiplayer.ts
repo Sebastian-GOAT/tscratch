@@ -26,15 +26,15 @@ export default class Multiplayer<PlayerState extends object> {
 
     // Rooms
 
-    public createRoom(playerState: PlayerState, password?: string) {
-        this.emit<{ password: string | null; customPlayerState: PlayerState; }>(events.room_creation_request, {
+    public createRoom(playerState: Partial<PlayerState>, password?: string) {
+        this.emit<{ password: string | null; customPlayerState: Partial<PlayerState>; }>(events.room_creation_request, {
             password: password ?? null,
             customPlayerState: playerState
         });
     }
 
-    public joinRoom(id: string, playerState: PlayerState, password?: string) {
-        this.emit<{ password: string | null; id: string; customPlayerState: PlayerState }>(events.room_join_request, {
+    public joinRoom(id: string, playerState: Partial<PlayerState>, password?: string) {
+        this.emit<{ password: string | null; id: string; customPlayerState: Partial<PlayerState> }>(events.room_join_request, {
             customPlayerState: playerState,
             password: password ?? null,
             id
