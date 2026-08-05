@@ -94,6 +94,6 @@ export default class Line extends Sprite {
         this.length = options?.length ?? 50;
         this.width = options?.width ?? 4;
 
-        this.draw();
+        if (!this.hidden) this.draw();
     }
 }

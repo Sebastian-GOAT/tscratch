@@ -113,6 +113,6 @@ export default class Joystick extends Sprite {
         this.x = -canvas.width / 2 + this.radius + 15;
         this.y = -canvas.height / 2 + this.radius + 15;
         
-        this.draw();
+        if (!this.hidden) this.draw();
     }
 }

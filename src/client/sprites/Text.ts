@@ -145,6 +145,6 @@ export default class Text extends Sprite {
         this.align = options?.align ?? 'center';
         this.baseline = options?.baseline ?? 'middle';
 
-        this.draw();
+        if (!this.hidden) this.draw();
     }
 }

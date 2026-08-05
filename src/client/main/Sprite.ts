@@ -109,9 +109,8 @@ export default abstract class Sprite {
             const hovering = engine.hovering(this);
             const isCurrentlyPressed = hovering && engine.mouseDown;
 
-            if (isCurrentlyPressed && (options.allowHold || !this.previousPressed)) {
+            if (!this.hidden && isCurrentlyPressed && (options.allowHold || !this.previousPressed))
                 callback();
-            }
 
             this.previousPressed = isCurrentlyPressed;
         });

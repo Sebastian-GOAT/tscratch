@@ -33,6 +33,7 @@ export default class RoomManager<PlayerState> {
     private defaultPlayerState: PlayerState;
     private allowedPlayerState: (keyof PlayerState)[];
     private blacklist: Map<string, string | null> = new Map;
+    private canJoin: Map<string, boolean> = new Map;
     private onLeaveFunc: ((client: Socket) => void) | null = null;
     private onJoinFunc: ((client: Socket) => void) | null = null;
     private onPlayerStateUpdateFunc: ((client: Socket, playerState: PlayerState) => void) | null = null;
@@ -115,6 +116,42 @@ export default class RoomManager<PlayerState> {
         if (this.onLeaveFunc) this.onLeaveFunc(client);
     }
 
+    // Update player state
+    public updatePlayerState(clientId: string, state: Partial<PlayerState>, except = false) {
+
+            // Find the room the client is in
+            const entry = Array.from(this.rooms.entries()).find(([id, room]) => room.clients.has(clientId));
+            if (!entry) return;
+
+            const [roomId, room] = entry;
+
+            // Merge with existing state and persist
+            const prev = room.clients.get(clientId) as PlayerState | undefined;
+            const updatedState: PlayerState = { ...(prev ?? this.defaultPlayerState), ...state };
+            room.clients.set(clientId, updatedState);
+
+            // Notify other clients in the room about the state update
+            const allRoomClients = Array.from(this.server.clients);
+            const otherRoomClients = this.getRoomClientsExcluding(room, clientId);
+            const clients = except ? otherRoomClients : allRoomClients;
+
+            this.server.broadcast<{ id: string; playerState: PlayerState }>(events.room_state_update_notification, {
+                playerState: updatedState,
+                id: clientId
+            }, clients);
+
+            return updatedState;
+    }
+
+    // Enable/disable joining
+    public enableJoining(roomId: string) {
+        this.canJoin.set(roomId, true);
+    }
+
+    public disableJoining(roomId: string) {
+        this.canJoin.set(roomId, false);
+    }
+
     // Kick
     public kick(clientId: string) {
 
@@ -158,6 +195,7 @@ export default class RoomManager<PlayerState> {
             };
 
             this.rooms.set(id, newRoom);
+            this.canJoin.set(id, true);
 
             // Send room ID, confirmation, and player state
             this.server.broadcast<{ id: string; status: ResponseStatus; playerState: PlayerState }>(
@@ -176,6 +214,9 @@ export default class RoomManager<PlayerState> {
 
         // Handle join requests
         this.server.on<{ password: string | null; id: string; customPlayerState: Partial<PlayerState>; }>(events.room_join_request, (data, client) => {
+
+            const canJoin = this.canJoin.get(data.id);
+            if (!canJoin) return;
 
             // Check blacklist
             const bannedPlayerRoom = this.blacklist.get(client.id);
@@ -247,24 +288,7 @@ export default class RoomManager<PlayerState> {
             // Sanitize input player state
             const sanitizedPartial = this.getSanitizedPartial(data.newPlayerState as Partial<PlayerState> | undefined);
 
-            // Find the room the client is in
-            const entry = Array.from(this.rooms.entries()).find(([id, room]) => room.clients.has(client.id));
-            if (!entry) return;
-
-            const [roomId, room] = entry;
-
-            // Merge with existing state and persist
-            const prev = room.clients.get(client.id) as PlayerState | undefined;
-            const updatedState: PlayerState = { ...(prev ?? this.defaultPlayerState), ...sanitizedPartial };
-            room.clients.set(client.id, updatedState);
-
-            // Notify other clients in the room about the state update
-            const otherRoomClients = this.getRoomClientsExcluding(room, client.id);
-
-            this.server.broadcast<{ id: string; playerState: PlayerState }>(events.room_state_update_notification, {
-                playerState: updatedState,
-                id: client.id
-            }, otherRoomClients);
+            const updatedState = this.updatePlayerState(client.id, sanitizedPartial, true)!;
 
             // Run the custom onPlayerStateUpdate function
             if (this.onPlayerStateUpdateFunc) this.onPlayerStateUpdateFunc(client, updatedState);

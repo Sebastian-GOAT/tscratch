@@ -159,5 +159,6 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
         this.inertia = options?.inertia ?? 700;
 
         this.invalidatePath();
+        if (!this.hidden) this.draw();
     }
 }

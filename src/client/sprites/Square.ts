@@ -100,11 +100,12 @@ export default class Square extends Sprite {
 
     constructor(options?: SquareOptions) {
         super(options);
+        
         this.sideLength = options?.sideLength ?? 50;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
-        this.draw();
-    }
 
+        if (!this.hidden) this.draw();
+    }
 }

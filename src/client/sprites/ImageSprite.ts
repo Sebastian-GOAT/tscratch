@@ -174,7 +174,7 @@ export default class ImageSprite extends Sprite {
             createImageBitmap(this.img).then(bitmap => {
                 this.imgBitmap = bitmap;
             });
-            this.draw();
+            if (!this.hidden) this.draw();
         };
     }
 }
