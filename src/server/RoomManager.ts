@@ -165,7 +165,7 @@ export default class RoomManager<PlayerState> {
     }
 
     // Ban
-    public ban(clientId: string, { roomId }: { roomId: string }) {
+    public ban(clientId: string, roomId?: string) {
         this.kick(clientId);
         this.blacklist.set(clientId, roomId ?? null);
     }

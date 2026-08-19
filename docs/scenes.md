@@ -1,15 +1,20 @@
 # Scenes
 
-TScratch supports scenes with the `scene` property. In every sprite you create,
-you can specify, in which scene you want it to render. TScratch will default it
-to 'main' if not specified.
+TScratch supports scene-based rendering to help organize larger projects. Each
+sprite may belong to a named `scene` (default: `main`). Only sprites assigned
+to the active scene are rendered and updated.
 
-After that, you can switch between scenes by using `engine.setScene(scene)`.
-TScratch will then render only the sprites, that belong in that specific scene.
+API highlights
 
-You can also specify 1 loop per scene using `engine.setLoop(scene, callback)`.
-Keep in mind that there is only 1 loop running at a time, which is the one
-in the current scene.
+- `engine.setScene(scene)` — change the active scene.
+- `engine.setLoop(scene, callback)` — register a loop callback for a scene.
 
-If you're working on the main scene, you dont't have to initially switch scenes,
-it is handled automaticly.
+Behavior notes
+
+- Only one scene is active at a time; the engine runs the loop associated with
+	the active scene.
+- By default, sprites are placed in the `main` scene; you do not need to call
+	`setScene('main')` unless you switch to another scene first.
+
+Organize each scene in its own module and register scene loops from your entry
+point to keep scene logic clear and testable.

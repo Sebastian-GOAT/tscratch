@@ -1,15 +1,17 @@
 # About
 
-A **Scratch-inspired 2D game engine** for **TypeScript**.
-Type-safe, lightweight, and fun — bring the simplicity of Scratch into real code.
+TScratch is a Scratch-inspired 2D game engine for TypeScript. It provides
+type-safe, lightweight primitives and a familiar, block-like API so learners
+can transition from visual programming (Scratch) to code with minimal friction.
 
-This is a new open source project. It is maintained by me, a 15 year old student.
-If anyone has suggestions, feedback, or improvement ideas, feel free to contact me
-at `sebastianrucabado0@gmail.com`, or open a pull request here on Github.
+This project is open source and actively maintained by Sebastian — a 15 year
+old student. Suggestions, bug reports, and contributions are welcome via GitHub
+or by email at sebastianrucabado0@gmail.com.
 
-It's main purpose is to introduce real programming for kids. In most schools,
-children code on the [Scratch](https://scratch.mit.edu) platform, where they drag
-blocks, such as `move (10) steps`, `point in direction (80°)` etc. TScratch provides
-a high abstraction on top of the HTML canvas with a Scratch-like API, so that the
-children can smoothly transition from dragging blocks, into coding in real
-programming languages.
+Goals:
+- Provide a gentle introduction to real programming for kids and beginners.
+- Offer a high-level, Scratch-like API layered on top of the HTML Canvas.
+- Keep the runtime small, predictable, and easy to extend for classroom use.
+
+If you teach with Scratch and want to bridge students into TypeScript, TScratch
+is designed to make that path straightforward and enjoyable.

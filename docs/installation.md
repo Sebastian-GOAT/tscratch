@@ -1,50 +1,48 @@
-# Instalation
+yarn:
+or create a whole setup with Vite & TypeScript already integrated (recommended):
+yarn:
+# Installation
 
-## Quick Start
+Quick install
 
-You can install the package using:
+Using npm:
 
-npm:
 ```bash
 npm install tscratch
 ```
 
-yarn:
+Using yarn:
+
 ```bash
 yarn add tscratch
 ```
 
-or create a whole setup with Vite & TypeScript already integrated (recommended):
+Create a starter project (recommended)
 
-npm:
+Create a Vite + TypeScript starter using the official helper:
+
 ```bash
-npx create-tscratch-app@latest project-name
-cd project-name
+npx create-tscratch-app@latest my-project
+cd my-project
 npm install
 ```
 
-Once you've created a project using `create-tscratch-app`, you get access to
-these 3 commands:
+Common commands (from the starter):
 
-npm:
-1. `npm run dev`     => Starts the development server on port `5173`
-2. `npm run build`   => Builds the production bundle inside `dist/`
-2. `npm run preview` => Shows a preview of the project from `dist/`
+```bash
+npm run dev     # start local dev server (default port 5173)
+npm run build   # produce production bundle in dist/
+npm run preview # serve the production build locally
+```
 
-yarn:
-1. `yarn dev`     => Starts the development server on port `5173`
-2. `yarn build`   => Builds the production bundle inside `dist/`
-2. `yarn preview` => Shows a preview of the project from `dist/`
+Deployment
 
-## Deployment
+Deploying a TScratch-based project to platforms like Vercel is straightforward:
 
-You can deploy TScratch projects very easily on platforms like Vercel. To
-deploy a project, you can follow these few steps:
+1. Push the project to a GitHub repository.
+2. Create a new project on Vercel and import the repo.
+3. Configure the build command (typically `npm run build`) and the publish
+	directory (`dist`).
+4. Deploy.
 
-1. Push your source code to a Github repository
-2. Create a new project on Vercel
-3. Import your Github repository
-4. Click deploy
-
-Your project is then live on a public domain, which you can share with
-your friends or anyone.
+Your project will be available on a public URL after deployment.

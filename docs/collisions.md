@@ -1,17 +1,18 @@
 # Collisions
 
-Sprites have a `touching(sprite)` method, which can detect pixel perfect
-collisions. This method uses the following optimizations:
+TScratch provides pixel-accurate collision detection via `sprite.touching(other)`.
+The implementation includes performance optimizations to keep collision checks
+fast for typical classroom projects:
 
-- Tight Axis-Aligned Bounding Boxes using trigonometric functions
-- 1 per-sprite collision canvas
-- The collision canvas is the minimum size needed (only the collision box)
-- `willReadFrequently` flag on the collision canvas rendering context to minimize GPU-CPU data transfer
+- Tight axis-aligned bounding boxes (AABB) computed with trigonometry.
+- A per-sprite collision canvas sized to the minimal collision rectangle.
+- The canvas context uses `willReadFrequently` to reduce GPU↔CPU transfer costs.
 
-TScratch also has methods for mouse interactions! You can use the
-`engine.isHovering(sprite)` method to check, if the user is hovering a
-specific sprite. By combining this with `engine.mouseDown`, you can
-create click events. You can also make your own custom events using
-`engine.mouseX` and `engine.mouseY`.
+Mouse interaction helpers are available on the engine:
 
-Remember that `touching(sprite)` doesn't work with pivots yet.
+- `engine.hovering(sprite)` — whether the cursor is over a sprite.
+- `engine.mouseDown`, `engine.mouseX`, `engine.mouseY` — build custom click or
+	drag interactions.
+
+Note: collision checks currently do not support rotated pivots — keep sprites
+unpivoted for accurate `touching()` results.

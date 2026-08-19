@@ -1,334 +1,108 @@
 # API Overview
 
+This document summarizes the public API surface of TScratch. It is intended as a
+concise reference — see the source for full typings and examples.
+
 ## Engine (singleton)
 
-### Initialization
+Initialization
 
-- `const engine = Engine.init()` - initialize the engine & get the instance
-- `setMaxFPS(FPS)`- sets the maximum FPS
+- `const engine = Engine.init()` — initialize the engine and retrieve the
+    singleton instance.
+- `engine.setMaxFPS(fps)` — cap the update/render rate.
 
-### Scenes
+Scenes
 
-- `setLoop(scene, callback)` - game loop logic
-- `setScene(scene)` - changes the scene, renders only the targeted sprites
+- `engine.setLoop(scene, callback)` — register the frame callback for a scene.
+- `engine.setScene(scene)` — switch the active scene; only sprites in the active
+    scene are rendered.
 
-### Mouse Events
+Input
 
-- `mouseX` - the x position of the cursor
-- `mouseY` - the y position of the cursor
-- `mouseDown` - checks if the user is holding the mouse button
+- `engine.mouseX`, `engine.mouseY` — cursor position in stage coordinates.
+- `engine.mouseDown` — whether a mouse button is currently pressed.
+- `engine.hovering(sprite)` — whether the cursor is over `sprite`.
+- `engine.keyPressed(key)` — whether `key` is currently pressed.
 
-- `hovering(sprite)` - checks if the user is hovering a sprite with the mouse pointer
+Sound
 
-### Keyboard Events
+- `engine.playSound(src)` — play an audio source.
+- `engine.stopAllSounds()` — stop all currently playing sounds.
 
-- `keyPressed(key)` - checks if the user pressed a key
+Timing / Utilities
 
-### Sound
+- `engine.deltaTime` — seconds elapsed since last frame (useful for frame-
+    rate independent movement).
+- `await engine.wait(ms)` — delay for `ms` milliseconds.
+- `await engine.waitUntil(() => condition)` — pause until `condition()` returns
+    true.
 
-- `playSound(src)` - plays a sound
-- `stopAllSounds()` - stops all sounds
+## TSCMath (static utilities)
 
-### Time
+- `TSCMath.toRadians(deg)`, `TSCMath.toDegrees(rad)` — angle conversions.
+- `TSCMath.pickRandom(min, max)` — integer random in range.
+- Vector helpers: `dotProduct(...)` and basic trig helpers (`sin`, `cos`,
+    `tan`, `asin`, `acos`, etc.).
 
-- `deltaTime` - the time passed from the last frame (in seconds)
+## Perlin noise
 
-- `async wait(ms)` - wait some time in milliseconds
-- `async waitUntil(() => condition)` - wait until a condition becomes true (pass a getter)
+- `Perlin1D` and `Perlin2D` — generators for procedural noise.
+- `get(x)` / `get(x, y)` — sample noise value.
+- `regen()` — regenerate the underlying noise map.
 
-## TSCMath (static)
+## Inverse Kinematics
 
-- `toRadians(rad)` - converts degrees to radians
-- `toDegrees(deg)` - converts radians to degrees
+- Utilities to compute joint positions and angles for multi-segment chains.
+- `computeApproximateAngles(iterations, error, adjustmentRate?)` — run a solver.
+- `getAngles()` and `getPoints()` — read computed values.
 
-- `pickRandom(min, max)` picks a random integer
-- `dotProduct(vectors)` - computes the dot product between 2 vectors (Vec2 | Vec3 | Vec4)
+## Sprites (common properties)
 
-- `sin(deg)` - computes the sine of an angle
-- `cos(deg)` - computes the cosine of an angle
-- `tan(deg)` - computes the tangent of an angle
-- `csc(deg)` - computes the cosecant of an angle
-- `sec(deg)` - computes the secant of an angle
-- `cot(deg)` - computes the cotangent of an angle
+- Position: `x`, `y` (stage coordinates).
+- Direction: `dir` (degrees).
+- `pivot` (rotation/pivot point).
+- Visibility and layering: `hidden`, `size`, `scene`, `layer`.
+- Movement: `goTo`, `setX`, `setY`, `changeX`, `changeY`, `turn`, `point`,
+    `pointTowards`.
+- Appearance: `show()`, `hide()`, `goToLayer()`, `changeLayer()`.
+- Collision: `touching(otherSprite)` (note: pivots may affect collision checks).
 
-- `asin(value)` - computes the inverse of sine
-- `acos(value)` - computes the inverse of cosine
-- `acsc(value)` - computes the inverse of cosecant
-- `asec(value)` - computes the inverse of secant
+## Built-in sprite types
 
-## Perlin
+- Rectangle / Square / Circle / Oval / Arc / RegularPolygon / CustomPolygon
+    — shapes with simple property APIs (`width`, `height`, `radius`, `vertices`,
+    `color`, `outlineWidth`, `outlineColor`, etc.) and corresponding setters.
+- `Text` — render textual labels.
+- `Button` — interactive rectangle-based button (combines rectangle + click
+    helpers).
+- `Image` — draw images by `src`, with width/height and outline options.
+- `Pen` — drawing API (`down()`, `up()`, `dot()`, and `drawSprite(...)`).
 
-- 2 variants - `Perlin1D`, `Perlin2D`
-- Generates Perlin noise for terrain generation
-- Use floating point numbers for different heights
+## 3D renderers
 
-- `get(x)` - (1D) returns the height at the given coordinates
-- `get(x, y)` - (2D) returns the height at the given coordinates
-- `regen()` - regenerates the height map
+- `WireframeRenderer3D` / `SolidRenderer3D` — helpers for simple 3D object
+    rendering; include control registration and per-frame `render()`.
 
-## InverseKinematics
+## Canvas helpers
 
-- Computes the points and angles for a multijointed inverse kinematics system
-- Specify the amount of maximum iterations, margin of error and adjustment rate (recommended 1000, 0.001, 0.25)
-
-- `computeApproximateAngles(iterations, error, adjustmentRate = 0.25)` - Computes angles internally
-- `getAngles` - Retrieves and maps joint angles to world-space directions
-- `getPoints` - Retrieves the positions of the joints, including the base and the end effector
-
-## Sprite (abstract)
-
-### Movement
-
-- `x` - the x position (-left, +right, 0 center)
-- `y` - the y position (-bottom, +top, 0 center)
-- `dir` - the x position (-counterclockwise, +clockwise, 0 top)
-- `pivot` - the pivot point of the sprite (rotation, position) (doesn't work with `touching(sprite)`)
-
-- `goTo(x, y)` - move to coordinates
-- `setX(x)` - set the x position
-- `setY(y)` - set the y position
-- `changeX(dX)` - changes the x position
-- `changeY(dY)` - changes the y position
-- `setPivot(x, y)` - sets the pivot (doesn't work with `touching(sprite)`)
-- `turn(deg)` - changes the direction
-- `point(deg)` - points in some direction
-- `pointTowards(x, y)` - points towards coordinates
-- `touching(sprite)` - checks for a collision with another sprite (doesn't work with pivots)
-
-### Looks
-
-- `size` - the scale factor (default 1)
-- `scene` - the scene that it's rendered in (`*` for global rendering)
-- `hidden` - is currently hidden?
-- `layer` - the layer (z-index)
-
-- `show()` - shows the sprite
-- `hide()` - hides the sprite (prevents rendering => better preformance)
-- `goToLayer(layer)` - swithes the current layer (z-indexing)
-- `changeLayer(dL)` - moves forwards/backwards in layers (z-indexing)
-
-## Rectangle (built-in sprite)
-
-- `width` - the width
-- `height` - the height
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setWidth(width)` - set the width
-- `setHeight(height)` - set the height
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a rectangle centered on `(x, y)`.
-
-## Square (built-in sprite)
-
-- `sideLength` - the side length
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setSideLength(sideLength)` - set the side length
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a square centered on `(x, y)`.
-
-## RegularPolygon (built-in sprite)
-
-- `radius` - the radius
-- `sides` - the number of sides
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setRadius(radius)` - set the radius
-- `setSides(sides)`-  set the amount of sides
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a regular polygon centered on `(x, y)`.
-
-## CustomPolygon (built-in sprite)
-
-- `vertices` - the vertices
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setVertices(vertices)` - set the vertices
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a custom polygon centered on `(x, y)`.
-
-## Oval (built-in sprite)
-
-- `radX` - the radius X
-- `radY` - the radius Y
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setRadX(radX)` - set the radius X
-- `setRadY(radY)` - set the radius Y
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws an oval centered on `(x, y)`.
-
-## Circle (built-in sprite)
-
-- `radius` - the radius
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setRadius(radius)` - set the radius
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a circle centered on `(x, y)`.
-
-## Arc (built-in sprite)
-
-- `radius` - the radius
-- `angle` - the angle of the arc
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setRadius(radius)` - set the radius
-- `setAngle(angle)` - set angle of the arc
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws an arc centered on `(x, y)`.
-
-## Text (built-in sprite)
-
-- `content` - the text
-- `color` - the color
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-- Other properties specifying the font style.
-
-- `setContent(content)` - set the text content
-- `setColor(color)` - set the color
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws a label aligned to your preference.
-
-## Button (built-in sprite)
-
-- Combined properties from `Rectangle` & `Button`
-
-```ts
-import { Button } from 'tscratch';
-
-const engine = Engine.init();
-const button = new Button();
-
-engine.setLoop('main', () => {
-    if (engine.mouseDown) {
-        await engine.waitUntil(!engine.mouseDown);
-        if (engine.hovering(button))
-            console.log('Clicked!');
-    }
-});
-```
-
-Draws a button centered on `(x, y)`.
-
-## Watermark (built-in sprite)
-
-- Shares properties & methods with `Text`
-- Used for attributing TScratch (default) or someone other
-
-Draws a watermark on the top right of the canvas.
-
-## Image (built-in sprite)
-
-- `src` - the source
-- `width` - the width
-- `height` - the height
-- `outlineWidth` - the border thickness
-- `outlineColor` - the border color
-
-- `setSrc(src)` - set the image source
-- `setWidth(width)` - set the width
-- `setHeight(height)` - set the height
-- `setOutlineWidth(width)` - set the border thickness
-- `setOutlineColor(color)` - set the border color
-
-Draws an image centered on `(x, y)`.
-
-## Pen (built-in sprite)
-
-- `color` - the color
-- `penSize` - the size of the stroke
-- `drawing` - is currently drawing?
-
-- `down()` - starts drawing
-- `up()` - stops drawing
-- `dot()` - draws a single dot
-- `static drawSprite(spriteClass, options)` - draws a sprite to the pen layer, doesn't get tracked by `Engine`
-
-Movement methods, such as `move()`, can draw a line based on if `drawing` is true.
-
-## WireframeRenderer3D (built-in sprite)
-
-- All pen properties & methods
-
-- `registerControls()` - handles movement events (per frame, can be overriden inside a subclass)
-- `render()` - renders the objects (per frame)
-
-Usage:
-```ts
-import { Engine, SolidRenderer3D as Renderer } from 'tscratch';
-import objects from './lib/data.ts';
-
-const engine = Engine.init();
-const renderer = new Renderer({ objects });
-
-engine.setLoop('main', () => {
-    renderer.eraseAll();
-    renderer.registerControls();
-    renderer.render();
-});
-```
-
-## Canvas (not a class)
-
-- `setScale(scale)` - sets the scale of the stage
-- `setAspectRatio(ratio)` - sets the aspect ratio of the stage
-
-- `canvas` - the canvas element
-- `ctx` - the 2D drawing context
-- `penCtx` - the 2D drawing context for the pen layer
+- `setScale(scale)`, `setAspectRatio(ratio)`, plus access to the underlying
+    `canvas`, `ctx`, and `penCtx` contexts.
 
 ## Multiplayer (client)
 
-- `connect(serverURL)` - connects to the server & returns a singleton instance (serverURL defaults to 'http://localhost:3000')
-- `emit<T>(eventName, data: T)` - sends some data to the server under an event key
-- `on<T>(eventName, (data: T) => void)` - calls a callback function once it recives an event from the server
+- `const m = new Multiplayer(serverUrl)` — connect to a server.
+- `m.emit(event, data)`, `m.on(event, handler)`, `m.disconnect()` — basic
+    event-driven API.
+- Room helpers: `createRoom(state, password?)`, `joinRoom(roomId, state?)`,
+    `leaveRoom()`, `updatePlayerState(state)`, `onRoomJoin(handler)`,
+    `onRoomLeave(handler)`, `getRoomPlayerState()`.
 
-## Server (server)
+## Server / RoomManager (server)
 
-- `clients` - a set of clients (sockets)
+- `Server` exposes `onJoin`, `onLeave`, `on(event, handler)`, `broadcast(...)`,
+    and `broadcastExcept(...)`.
+- `RoomManager` maintains `rooms: Map<roomId, { password, clients }>` and
+    helpers to update player state, disable/enable joining, kick/ban clients, and
+    listen for join/leave events.
 
-- `broadcast<T>(eventName, data: T, clients?: Socket[])` - sends some data to every client under an event key (specify clients to target
-specific clients)
-- `broadcastExcept<T>(eventName, data: T, clients?: Socket[])` - sends the data to everyone except the specified clients
-- `on<T>(eventName, (data: T) => void))` - calls a callback function once it recives an event from the client
-- `onJoin<T>(callback: (client) => void)` - calls a callback function once a new client joins
-- `onLeave<T>(callback: (client) => void)` - calls a callback function once a client leaves
+For full type information and examples, consult the source files and tests.

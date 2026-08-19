@@ -33,16 +33,17 @@ export default class RegularPolygon extends Sprite {
 
     public getPath(): Path2D {
         const path = new Path2D();
-        
-        const step = (2 * Math.PI) / this.sides;
 
-        path.moveTo(this.radius * this.size, 0);
-        for (let i = 1; i < this.sides; i++)
+        path.moveTo(0, -(this.radius * this.size));
+
+        for (let k = 1; k < this.sides; k++) {
+            const theta = (2 * k * Math.PI) / this.sides - (Math.PI / 2);
             path.lineTo(
-                this.radius * Math.cos(step * i) * this.size,
-                this.radius * Math.sin(step * i) * this.size
+                this.radius * Math.cos(theta) * this.size,
+                this.radius * Math.sin(theta) * this.size
             );
-        
+        }
+
         path.closePath();
         return path;
     }
