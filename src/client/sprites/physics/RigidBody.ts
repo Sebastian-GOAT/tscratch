@@ -13,7 +13,7 @@ export interface RigidBodyOptions {
     angularVelocity: number;
     inertia: number;
 
-    update: () => void;
+    update: (stepFactor?: number) => void;
 }
 
 export interface RigidBody extends Sprite, RigidBodyOptions {}

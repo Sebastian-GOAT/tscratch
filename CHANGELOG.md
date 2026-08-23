@@ -12,6 +12,12 @@ The dates are in the following format: D?D.M?M.YYYY
 ### Changed
 
 - `RegularPolygon` is now correctly tilted
+- Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)
+
+### Fixed
+
+- Delta-time calculation finally works as expected
+- `touching()` should yield better results
 
 ## [0.10.0] - 7.8.2026
 

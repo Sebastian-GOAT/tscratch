@@ -31,8 +31,8 @@ Sound
 
 Timing / Utilities
 
-- `engine.deltaTime` — seconds elapsed since last frame (useful for frame-
-    rate independent movement).
+- `engine.getDeltaTime()` — actual seconds elapsed since the previous game
+    update (useful for frame-rate independent movement).
 - `await engine.wait(ms)` — delay for `ms` milliseconds.
 - `await engine.waitUntil(() => condition)` — pause until `condition()` returns
     true.
@@ -65,7 +65,7 @@ Timing / Utilities
 - Movement: `goTo`, `setX`, `setY`, `changeX`, `changeY`, `turn`, `point`,
     `pointTowards`.
 - Appearance: `show()`, `hide()`, `goToLayer()`, `changeLayer()`.
-- Collision: `touching(otherSprite)` (note: pivots may affect collision checks).
+- Collision: `touching(otherSprite)`
 
 ## Built-in sprite types
 

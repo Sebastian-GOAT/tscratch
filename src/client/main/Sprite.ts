@@ -116,7 +116,7 @@ export default abstract class Sprite {
         });
     }
 
-    public touching(sprite: Sprite): CollisionData | null {
+public touching(sprite: Sprite): CollisionData | null {
 
         // Return if hidden or if the scenes differ
         if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
@@ -166,8 +166,7 @@ export default abstract class Sprite {
         if (Sprite.collisionCanvas.height < height) Sprite.collisionCanvas.height = height;
         ctx.clearRect(0, 0, width, height);
 
-        // Helper to draw a sprite into collision canvas - must match draw() transform exactly:
-        // translate to (x,y), rotate, then translate(-pivot). Use position, not bBox center.
+        // Helper to draw a sprite into collision canvas
         const drawSprite = (sprite: Sprite, color: string) => {
             ctx.save();
 
@@ -197,14 +196,10 @@ export default abstract class Sprite {
         let sumX = 0;
         let sumY = 0;
         let count = 0;
-        const overlapPixels: number[] = [];
 
         for (let i = 3; i < img1.length; i += 4) {
             if (img1[i]! > 0 && img2[i]! > 0) {
-                
-                const pixelIndex = i / 4;
-                overlapPixels.push(pixelIndex);
-
+                const pixelIndex = (i - 3) / 4;
                 const px = pixelIndex % width;
                 const py = Math.floor(pixelIndex / width);
 
@@ -216,64 +211,103 @@ export default abstract class Sprite {
 
         if (count === 0) return null;
 
-        // Compute collision data
-
-        // Contact point
         const localX = sumX / count;
         const localY = sumY / count;
 
-        const contact: Vec2 = [
+        // Calculate second moments (covariance) of overlap pixel distribution to find surface alignment
+        let covXX = 0;
+        let covYY = 0;
+        let covXY = 0;
+
+        for (let i = 3; i < img1.length; i += 4) {
+            if (img1[i]! > 0 && img2[i]! > 0) {
+                const pixelIndex = (i - 3) / 4;
+                const dx = (pixelIndex % width) - localX;
+                const dy = (yMax - Math.floor(pixelIndex / width)) - (yMax - localY);
+
+                covXX += dx * dx;
+                covYY += dy * dy;
+                covXY += dx * dy;
+            }
+        }
+
+        // The normal to the surface is orthogonal to the major axis of the contact area
+        let normalX = 0;
+        let normalY = 0;
+
+        if (Math.abs(covXY) > 1e-4) {
+            const trace = covXX + covYY;
+            const det = covXX * covYY - covXY * covXY;
+            const lambda = trace / 2 - Math.sqrt(Math.max(0, (trace * trace) / 4 - det)); // Minor eigenvalue
+            normalX = covXY;
+            normalY = lambda - covXX;
+        } else {
+            // Axis-aligned case
+            if (covXX < covYY) {
+                normalX = 1;
+                normalY = 0;
+            } else {
+                normalX = 0;
+                normalY = 1;
+            }
+        }
+
+        let normal: Vec2 = [normalX, normalY];
+        let nMag = TSCMath.magnitude(normal);
+
+        if (nMag < 1e-4) {
+            const delta: Vec2 = [this.x - sprite.x, this.y - sprite.y];
+            normal = TSCMath.magnitude(delta) > 0 ? TSCMath.normalize(delta) : [0, 1];
+        } else {
+            normal = [normal[0] / nMag, normal[1] / nMag];
+            // Ensure normal points from `sprite` towards `this`
+            const centerDelta: Vec2 = [this.x - sprite.x, this.y - sprite.y];
+            if (normal[0] * centerDelta[0] + normal[1] * centerDelta[1] < 0) {
+                normal = [-normal[0], -normal[1]];
+            }
+        }
+
+        const overlapContact: Vec2 = [
             xMin + localX,
-            yMax - localY // undo Y flip
+            yMax - localY
         ];
 
-        // Normal
-        let nx = 0;
-        let ny = 0;
+        let thisMinProjection = Infinity;
+        let spriteMaxProjection = -Infinity;
+        let thisSupport: Vec2 = overlapContact;
+        let spriteSupport: Vec2 = overlapContact;
 
-        for (const pixelIndex of overlapPixels) {
-            const px = pixelIndex % width;
-            const py = Math.floor(pixelIndex / width);
-            
-            // We look at the "distance" of this overlap pixel from the center of the overlap
-            // to find the 'bias' of the collision area
-            nx += (px - localX);
-            ny += (py - localY); 
-        }
+        const updateSupports = (image: typeof img1, isThisSprite: boolean) => {
+            for (let i = 3; i < image.length; i += 4) {
+                if (image[i]! === 0) continue;
 
-        // If the pixel cloud is too uniform, fall back to center-to-contact logic
-        if (Math.abs(nx) < 0.01 && Math.abs(ny) < 0.01) {
-            nx = this.x - contact[0];
-            ny = this.y - contact[1];
-        }
+                const pixelIndex = (i - 3) / 4;
+                const point: Vec2 = [
+                    xMin + (pixelIndex % width) + 0.5,
+                    yMax - Math.floor(pixelIndex / width) - 0.5
+                ];
+                const projection = point[0] * normal[0] + point[1] * normal[1];
 
-        const n: Vec2 = [nx, -ny]; // Note the -ny to fix coordinate flip
-        const normal: Vec2 = TSCMath.magnitude(n) > 0 ? TSCMath.normalize(n) : n;
+                if (isThisSprite) {
+                    if (projection < thisMinProjection) {
+                        thisMinProjection = projection;
+                        thisSupport = point;
+                    }
+                } else if (projection > spriteMaxProjection) {
+                    spriteMaxProjection = projection;
+                    spriteSupport = point;
+                }
+            }
+        };
 
-        // Ensure orientation
-        const dx = this.x - sprite.x;
-        const dy = this.y - sprite.y;
-        if (dx * normal[0] + dy * normal[1] < 0) {
-            normal[0] *= -1;
-            normal[1] *= -1;
-        }
+        updateSupports(img1, true);
+        updateSupports(img2, false);
 
-        // Penetration
-        let displacement = -Infinity;
-
-        for (const pixelIndex of overlapPixels) {
-            const px = pixelIndex % width;
-            const py = Math.floor(pixelIndex / width);
-
-            const wx = xMin + px;
-            const wy = yMax - py;
-
-            const d =
-                (wx - contact[0]) * normal[0] +
-                (wy - contact[1]) * normal[1];
-
-            displacement = Math.max(displacement, d);
-        }
+        const displacement = Math.max(0, spriteMaxProjection - thisMinProjection);
+        const contact: Vec2 = [
+            (thisSupport[0] + spriteSupport[0]) / 2,
+            (thisSupport[1] + spriteSupport[1]) / 2
+        ];
 
         return { contact, normal, displacement };
     }
@@ -399,7 +433,7 @@ export default abstract class Sprite {
         const cos = TSCMath.cos(this.dir);
 
         const rx = -x * cos - y * sin;
-        const ry = -x * sin + y * cos;
+        const ry = x * sin - y * cos;
 
         return [rx * this.size, ry * this.size];
     }

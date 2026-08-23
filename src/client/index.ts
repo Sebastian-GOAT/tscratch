@@ -78,7 +78,7 @@ const TScratch = {
     Watermark,
     ImageSprite,
 
-    RigidRectangle,
+    // RigidRectangle,
 
     Joystick,
 
@@ -136,7 +136,7 @@ export {
     Watermark,
     ImageSprite,
 
-    RigidRectangle,
+    // RigidRectangle,
 
     Joystick,
 
@@ -174,7 +174,7 @@ export {
 
     type RigidBody,
     type RigidBodyOptions,
-    type RigidRectangleOptions,
+    // type RigidRectangleOptions,
 
     type JoystickOptions,
 

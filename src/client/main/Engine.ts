@@ -18,10 +18,12 @@ export default class Engine {
     private gameLoop: GameLoop | null = null;
 
     public maxFPS = 30;
-    public deltaTime = 1 / this.maxFPS;
+    private deltaTime = 1 / this.maxFPS;
     private lastFrame: number = performance.now();
+    private lastUpdate: number = this.lastFrame;
     private refreshScheduled = false;
     private animationFrameId: number | null = null;
+    private loopGeneration = 0;
 
     private sounds: HTMLAudioElement[] = [];
 
@@ -131,9 +133,13 @@ export default class Engine {
     // Engine Frame Loop
 
     public async setMaxFPS(maxFPS: number) {
+        if (!Number.isFinite(maxFPS) || maxFPS <= 0)
+            throw new RangeError('maxFPS must be a finite number greater than 0');
+
         this.maxFPS = maxFPS;
 
         let loop = this.gameLoop;
+        const generation = ++this.loopGeneration;
 
         if (this.animationFrameId !== null) {
             cancelAnimationFrame(this.animationFrameId);
@@ -145,14 +151,15 @@ export default class Engine {
         let accumulator = 0;
 
         const tick = async (currentTime: number) => {
-            if (!this.loopRunning) return;
+            if (!this.loopRunning || generation !== this.loopGeneration) return;
 
-            const deltaTime = currentTime - this.lastFrame;
+            const frameElapsed = currentTime - this.lastFrame;
             this.lastFrame = currentTime;
-            accumulator += deltaTime;
+            accumulator += frameElapsed;
 
             if (accumulator >= frameInterval) {
-                this.deltaTime = accumulator / 1000;
+                this.deltaTime = (currentTime - this.lastUpdate) / 1000;
+                this.lastUpdate = currentTime;
                 accumulator = accumulator % frameInterval;
 
                 // Fire continuous input callbacks synchronized with the game frame
@@ -161,11 +168,17 @@ export default class Engine {
                 if (loop) await loop();
             }
 
-            this.animationFrameId = requestAnimationFrame(tick);
+            if (this.loopRunning && generation === this.loopGeneration)
+                this.animationFrameId = requestAnimationFrame(tick);
         };
 
         this.lastFrame = performance.now();
+        this.lastUpdate = this.lastFrame;
         this.animationFrameId = requestAnimationFrame(tick);
+    }
+
+    public getDeltaTime() {
+        return this.deltaTime;
     }
 
     // Joysticks
@@ -249,6 +262,7 @@ export default class Engine {
 
     public pauseLoop() {
         this.loopRunning = false;
+        this.loopGeneration++;
         if (this.animationFrameId !== null) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;

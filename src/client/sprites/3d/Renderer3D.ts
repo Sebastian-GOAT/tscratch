@@ -38,7 +38,7 @@ export default abstract class Renderer3D extends Pen {
 
         const engine = Engine.init();
 
-        const dt = engine.deltaTime;
+        const dt = engine.getDeltaTime();
 
         const sinY = TSCMath.sin(this.camera.dirY);
         const cosY = TSCMath.cos(this.camera.dirY);

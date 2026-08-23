@@ -13,6 +13,3 @@ Mouse interaction helpers are available on the engine:
 - `engine.hovering(sprite)` — whether the cursor is over a sprite.
 - `engine.mouseDown`, `engine.mouseX`, `engine.mouseY` — build custom click or
 	drag interactions.
-
-Note: collision checks currently do not support rotated pivots — keep sprites
-unpivoted for accurate `touching()` results.
