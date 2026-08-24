@@ -33,7 +33,7 @@ Timing / Utilities
 
 - `engine.getDeltaTime()` — actual seconds elapsed since the previous game
     update (useful for frame-rate independent movement).
-- `await engine.wait(ms)` — delay for `ms` milliseconds.
+- `await engine.wait(s)` — delay for `s` seconds.
 - `await engine.waitUntil(() => condition)` — pause until `condition()` returns
     true.
 - `new Timer(startSeconds?)` — create a stopwatch, initially paused, with an
@@ -95,8 +95,8 @@ Timing / Utilities
 
 ## Canvas helpers
 
-- `setScale(scale)`, `setAspectRatio(ratio)`, plus access to the underlying
-    `canvas`, `ctx`, and `penCtx` contexts.
+- `setScale(scale)` plus access to the underlying
+    `canvas`, `penCanvas`, `ctx`, and `penCtx` contexts.
 
 ## Multiplayer (client)
 

@@ -1,7 +1,7 @@
 // Main
 import Engine from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
-import { scale, aspectRatio, setScale, setAspectRatio, canvas, ctx } from '@main/canvas.ts';
+import { setScale, canvas, ctx, penCanvas, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
@@ -101,12 +101,11 @@ const TScratch = {
     Cuboid,
 
     // Canvas
-    scale,
-    aspectRatio,
     setScale,
-    setAspectRatio,
     canvas,
-    ctx
+    penCanvas,
+    ctx,
+    penCtx
 };
 
 export default TScratch;
@@ -196,10 +195,9 @@ export {
     type Mat4,
     
     // Canvas
-    scale,
-    aspectRatio,
     setScale,
-    setAspectRatio,
     canvas,
-    ctx
+    penCanvas,
+    ctx,
+    penCtx
 };

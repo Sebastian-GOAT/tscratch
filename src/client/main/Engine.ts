@@ -323,8 +323,8 @@ export default class Engine {
 
     // Wait functions
 
-    public async wait(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    public async wait(seconds: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, seconds * 1000));
     }
 
     public async waitUntil(conditionGetter: () => boolean): Promise<void> {

@@ -17,6 +17,8 @@ The dates are in the following format: D?D.M?M.YYYY
 
 - `RegularPolygon` is now correctly tilted
 - Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)
+- Switched units in `await engine.wait(ms)` from milliseconds to seconds
+- Canvas is now 480 x 360 pixels, scaled by 1.5 by default
 
 ### Fixed
 
