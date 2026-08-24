@@ -8,7 +8,7 @@ export default class PathFinder {
     private obstacles: Sprite[];
     private target: Sprite;
     private tileSize = 50;
-    private checking = new Square({ sideLength: this.tileSize, color: 'transparent' });
+    private checking = new Square({ sideLength: this.tileSize, color: 'rgba(255, 255, 255, 0.01)' });
     private maxNodes = (Math.floor(canvas.width / this.tileSize) + 1) * (Math.floor(canvas.height / this.tileSize) + 1);
 
     // Main BFS method
@@ -20,6 +20,7 @@ export default class PathFinder {
         const parents = new Map<string, string | null>();
 
         const startKey = `${startX},${startY}`;
+
         visited.add(startKey);
         parents.set(startKey, null);
 
@@ -27,31 +28,40 @@ export default class PathFinder {
 
         while (queue.length > 0 && i <= this.maxNodes) {
 
-            // Current node
             const node = queue.shift()!;
             const [x, y] = node;
             const nodeKey = `${x},${y}`;
 
             this.checking.goTo(x, y);
-            if (this.isColliding()) continue;
-            if (this.checking.touching(this.target)) return this.buildPath(nodeKey, parents);
 
-            // Neighbors
+            // Can't walk through an obstacle
+            if (this.isColliding()) continue;
+
+            // Reached the target
+            if (this.checking.touching(this.target))
+                return this.buildPath(nodeKey, parents);
 
             const size = this.tileSize;
-            const n1: Vec2 = [x, y + size];
-            const n2: Vec2 = [x + size, y];
-            const n3: Vec2 = [x, y - size];
-            const n4: Vec2 = [x - size, y];
 
-            for (const neighbor of [n1, n2, n3, n4]) {
+            const neighbors: Vec2[] = [
+                [x, y + size],
+                [x + size, y],
+                [x, y - size],
+                [x - size, y]
+            ];
 
-                const key = `${neighbor[0]},${neighbor[1]}`;
-                if (!this.isInBounds(neighbor[0], neighbor[1]) || visited.has(key)) continue;
+            for (const neighbor of neighbors) {
+
+                const [nx, ny] = neighbor;
+                const key = `${nx},${ny}`;
+
+                if (!this.isInBounds(nx, ny) || visited.has(key))
+                    continue;
 
                 visited.add(key);
                 parents.set(key, nodeKey);
                 queue.push(neighbor);
+
                 i++;
             }
         }
@@ -74,7 +84,12 @@ export default class PathFinder {
     }
 
     private isInBounds(x: number, y: number) {
-        return x >= 0 && y >= 0 && x <= canvas.width && y <= canvas.height;
+        return (
+            x >= -canvas.width / 2 &&
+            x <= canvas.width / 2 &&
+            y >= -canvas.height / 2 &&
+            y <= canvas.height / 2
+        );
     }
 
     private isColliding() {
@@ -88,6 +103,8 @@ export default class PathFinder {
 
     public setTileSize(tileSize: number) {
         this.tileSize = tileSize;
+        this.checking.setSideLength(tileSize);
+        this.maxNodes = (Math.floor(canvas.width / tileSize) + 1) * (Math.floor(canvas.height / tileSize) + 1);
     }
     public setObstacles(obstacles: Sprite[]) {
         this.obstacles = obstacles;

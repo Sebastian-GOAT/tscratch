@@ -36,6 +36,16 @@ Timing / Utilities
 - `await engine.wait(ms)` — delay for `ms` milliseconds.
 - `await engine.waitUntil(() => condition)` — pause until `condition()` returns
     true.
+- `new Timer(startSeconds?)` — create a stopwatch, initially paused, with an
+    optional starting time in seconds.
+- `timer.getTime()` — get the elapsed time in seconds.
+- `timer.isRunning()` — check whether the timer is running.
+- `timer.start()` / `timer.pause()` — start, resume, or pause the timer.
+- `timer.lap()` — record and return the time in seconds since the previous lap.
+- `timer.getLaps()` — get a copy of all recorded lap times in seconds.
+- `timer.reset()` — stop the timer, reset its elapsed time to zero, and clear
+    recorded laps.
+- `timer.addTime(seconds)` — add seconds to the elapsed time.
 
 ## TSCMath (static utilities)
 
@@ -69,7 +79,7 @@ Timing / Utilities
 
 ## Built-in sprite types
 
-- Rectangle / Square / Circle / Oval / Arc / RegularPolygon / CustomPolygon
+- Rectangle / Square / Circle / Oval / Arc / RegularPolygon / CustomPolygon / Line
     — shapes with simple property APIs (`width`, `height`, `radius`, `vertices`,
     `color`, `outlineWidth`, `outlineColor`, etc.) and corresponding setters.
 - `Text` — render textual labels.

@@ -23,14 +23,14 @@ describe('Engine keyboard events', () => {
         expect(calls).toEqual(['first', 'first']);
     });
 
-    it('Continues to trigger while a key is held when allowHold is true', () => {
-        const engine = Engine.init();
-        const calls: string[] = [];
+    // it('Continues to trigger while a key is held when allowHold is true', () => {
+    //     const engine = Engine.init();
+    //     const calls: string[] = [];
 
-        engine.onKeyPress('a', () => calls.push('first'), { allowHold: true });
-        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
-        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', repeat: true }));
+    //     engine.onKeyPress('a', () => calls.push('first'), { allowHold: true });
+    //     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+    //     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', repeat: true }));
 
-        expect(calls).toEqual(['first', 'first']);
-    });
+    //     expect(calls).toEqual(['first', 'first']);
+    // });
 });

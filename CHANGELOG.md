@@ -9,6 +9,10 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ## [0.10.1] - xx.xx.2026 (Not released)
 
+### Added
+
+- `Timer` class - acts as a stopwatch
+
 ### Changed
 
 - `RegularPolygon` is now correctly tilted

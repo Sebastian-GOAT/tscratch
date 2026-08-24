@@ -1,6 +1,6 @@
 import TSCMath from '@main/TSCMath.ts';
 import CustomPolygon from '@sprites/CustomPolygon.ts';
-import type { Vec3 } from '@ctypes/Vectors.ts';
+import type { Vec2, Vec3 } from '@ctypes/Vectors.ts';
 import Renderer3D from './Renderer3D.ts';
 import Pen from '@sprites/Pen.ts';
 
@@ -24,7 +24,7 @@ export default class SolidRenderer3D extends Renderer3D {
         const sinZ = TSCMath.sin(this.camera.dirZ);
         const cosZ = TSCMath.cos(this.camera.dirZ);
 
-        // Calculate the lighting normal relative to the cameras rotation
+        // Calculate the lighting normal relative to the camera's rotation
         let lx = this.DIRECTED_LIGHT_DIR[0];
         let ly = this.DIRECTED_LIGHT_DIR[1];
         let lz = this.DIRECTED_LIGHT_DIR[2];
@@ -43,53 +43,67 @@ export default class SolidRenderer3D extends Renderer3D {
 
         const lightDir = TSCMath.normalize([lx3, ly3, lz2]);
 
+        // Define a type to hold face render data across objects
+        interface RenderableFace {
+            face: number[];
+            depth: number;
+            relativeVerts: Vec3[];
+            projected: Vec2[]; // Adjust type based on your project() return type
+            hsl: { h: number; s: number; l: number };
+        }
+
+        const allFaces: RenderableFace[] = [];
+
+        // Step 1: Collect faces from ALL objects
         for (const obj of this.objects) {
-
-            const { h, s, l } = SolidRenderer3D.stringToHSL(obj.color || 'black');
-
-            // Camera relative vertices
+            const hsl = SolidRenderer3D.stringToHSL(obj.color || 'black');
             const relativeVerts = this.getRelativeVertices(obj);
-
-            // Face depth calculation
-            const faces: FaceDepth[] = obj.faces.map(face => {
-                let z = 0;
-                for (const i of face) z += relativeVerts[i]![2];
-                return { face, depth: z / face.length };
-            });
-
-            // Painter's algorithm (face sorting)
-            faces.sort((a, b) => b.depth - a.depth);
-
             const projected = this.project(relativeVerts);
 
-            // Render faces
-            for (const { face } of faces) {
-
-                // Calculate face normal using Newell's method (works for polygons with any number of vertices)
-                let nx = 0, ny = 0, nz = 0;
-                for (let i = 0; i < face.length; i++) {
-                    const v1 = relativeVerts[face[i]!]!;
-                    const v2 = relativeVerts[face[(i + 1) % face.length]!]!;
-                    nx += (v1[1] - v2[1]) * (v1[2] + v2[2]);
-                    ny += (v1[2] - v2[2]) * (v1[0] + v2[0]);
-                    nz += (v1[0] - v2[0]) * (v1[1] + v2[1]);
+            for (const face of obj.faces) {
+                let z = 0;
+                for (const i of face) {
+                    z += relativeVerts[i]![2];
                 }
-                const normal = TSCMath.normalize([nx, ny, nz] as Vec3);
-
-                // Calculate lighting: dot product between normal and light direction
-                const diffuse = Math.max(0, TSCMath.dot(normal, lightDir));
-                const brightness =
-                    this.AMBIENT_LIGHT_INTENSITY +
-                    diffuse * this.DIRECTED_LIGHT_INTENSITY;
-
-                // Adjust the brightness
-                const litL = Math.min(100, Math.max(5, l + brightness * 50));
-                const color = `hsl(${h}, ${s}%, ${litL}%)`;
-
-                // Draw the polygon
-                const vertices = face.map(vIndex => projected[vIndex]!);
-                Pen.drawSprite(CustomPolygon, { vertices, color });
+                
+                allFaces.push({
+                    face,
+                    depth: z / face.length,
+                    relativeVerts,
+                    projected,
+                    hsl
+                });
             }
+        }
+
+        // Step 2: Global Painter's algorithm (sort all faces furthest to nearest)
+        allFaces.sort((a, b) => b.depth - a.depth);
+
+        // Step 3: Render all sorted faces
+        for (const { face, relativeVerts, projected, hsl } of allFaces) {
+            // Calculate face normal using Newell's method
+            let nx = 0, ny = 0, nz = 0;
+            for (let i = 0; i < face.length; i++) {
+                const v1 = relativeVerts[face[i]!]!;
+                const v2 = relativeVerts[face[(i + 1) % face.length]!]!;
+                nx += (v1[1] - v2[1]) * (v1[2] + v2[2]);
+                ny += (v1[2] - v2[2]) * (v1[0] + v2[0]);
+                nz += (v1[0] - v2[0]) * (v1[1] + v2[1]);
+            }
+            const normal = TSCMath.normalize([nx, ny, nz] as Vec3);
+
+            // Calculate lighting
+            const diffuse = Math.max(0, TSCMath.dot(normal, lightDir));
+            const brightness =
+                this.AMBIENT_LIGHT_INTENSITY +
+                diffuse * this.DIRECTED_LIGHT_INTENSITY;
+
+            const litL = Math.min(100, Math.max(5, hsl.l + brightness * 50));
+            const color = `hsl(${hsl.h}, ${hsl.s}%, ${litL}%)`;
+
+            // Draw the polygon
+            const vertices = face.map(vIndex => projected[vIndex]!);
+            Pen.drawSprite(CustomPolygon, { vertices, color });
         }
     }
 

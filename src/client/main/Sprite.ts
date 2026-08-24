@@ -116,7 +116,7 @@ export default abstract class Sprite {
         });
     }
 
-public touching(sprite: Sprite): CollisionData | null {
+    public touching(sprite: Sprite): CollisionData | null {
 
         // Return if hidden or if the scenes differ
         if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;

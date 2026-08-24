@@ -7,6 +7,7 @@ import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
 import InverseKinematics from '@/tech/ik/InverseKinematics.ts';
 import PathFinder from '@/tech/pathfinder/PathFinder.ts';
+import Timer from '@/tech/timer/Timer.ts';
 
 // Multiplayer
 import Multiplayer from '@main/Multiplayer.ts';
@@ -26,7 +27,7 @@ import Button, { type ButtonOptions } from '@sprites/Button.ts';
 import Watermark from '@sprites/Watermark.ts';
 import ImageSprite, { type ImageSpriteOptions } from '@sprites/ImageSprite.ts';
 
-import RigidRectangle, { type RigidRectangleOptions } from '@sprites/physics/RigidRectangle.ts';
+// import RigidRectangle, { type RigidRectangleOptions } from '@sprites/physics/RigidRectangle.ts';
 
 import Joystick, { type JoystickOptions } from '@sprites/Joystick.ts';
 
@@ -59,6 +60,7 @@ const TScratch = {
     Perlin2D,
     InverseKinematics,
     PathFinder,
+    Timer,
 
     // Multiplayer
     Multiplayer,
@@ -117,6 +119,7 @@ export {
     Perlin2D,
     InverseKinematics,
     PathFinder,
+    Timer,
 
     // Multiplayer
     Multiplayer,
