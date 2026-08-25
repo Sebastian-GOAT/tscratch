@@ -14,186 +14,134 @@ export default class InverseKinematics {
     }
 
     // Angle getter
-    public getAngles() {
+    public getAngles(): number[] {
         let cumulative = 0;
 
         return this.angles.map(a => {
             cumulative += a;
-            return 90 - TSCMath.toDegrees(cumulative); // World space
+            return TSCMath.toDegrees(cumulative);
         });
     }
 
-    // Vertex getter
+    // Point getter
     public getPoints(): Vec2[] {
-
         let x = 0;
         let y = 0;
 
         const points: Vec2[] = [];
+        let cumulativeTheta = 0;
 
         for (let i = 0; i < this.links.length; i++) {
-
-            let theta = 0;
-
-            for (let j = 0; j <= i; j++)
-                theta += this.angles[j]!;
-
-            x += this.links[i]! * Math.cos(theta);
-            y += this.links[i]! * Math.sin(theta);
+            cumulativeTheta += this.angles[i]!;
+            x += this.links[i]! * Math.sin(cumulativeTheta);
+            y += this.links[i]! * Math.cos(cumulativeTheta);
             points.push([x, y]);
         }
 
         return points;
     }
 
-    // -------------------
-    // Calculations
-    // -------------------
-
-    // Dot product helper
-    private static dot(v1: number[], v2: number[]): number {
-        let s = 0;
-
-        for (let i = 0; i < v1.length; i++)
-            s += v1[i]! * v2[i]!;
-
-        return s;
+    // Target setter
+    public setTarget(x: number, y: number) {
+        this.target = [x, y];
     }
 
-    // Full camputation
-    public computeApproximateAngles(iterations: number, error: number, adjustmentRate = 0.25) {
+    // -------------------
+    // FABRIK Algorithm
+    // -------------------
 
-        // If the point is out of reach, the best we can do, is fully extend in that direction
-        if (TSCMath.magnitude(this.target) >= this.links.reduce((a, b) => a + b, 0)) {
+    public computeApproximateAngles(iterations: number, error: number) {
+        const totalLength = this.links.reduce((a, b) => a + b, 0);
 
-            const targetAngle = Math.atan2(this.target[1], this.target[0]);
+        // Out of reach: fully extend directly toward target in Scratch space
+        if (TSCMath.magnitude(this.target) >= totalLength) {
+            // In Scratch space, angle to (x, y) is atan2(x, y)
+            const targetAngle = Math.atan2(this.target[0], this.target[1]);
             this.angles[0] = targetAngle;
-
-            for (let i = 1; i < this.angles.length; i++)
+            for (let i = 1; i < this.angles.length; i++) {
                 this.angles[i] = 0;
-
+            }
             return;
         }
 
-        // Compute
-        this.angles = Array(this.links.length).fill(0) as typeof this.angles;
+        // Initialize positions: origin [0,0] + end points of each link
+        let workingPoints: Vec2[] = [[0, 0], ...this.getPoints()];
 
-        for (let i = 0; i < iterations; i++) {
+        for (let iteration = 0; iteration < iterations; iteration++) {
+            const endEffector = workingPoints[workingPoints.length - 1]!;
+            const distToTarget = Math.hypot(
+                this.target[0] - endEffector[0],
+                this.target[1] - endEffector[1]
+            );
 
-            this.updateAngles(adjustmentRate);
-            if (TSCMath.magnitude(this.computeError()) < error) return;
-        }
-    }
+            if (distToTarget < error) break;
 
-    // Forward kinematics
-    private forwardKinematicsPass(): Vec2 {
-        const points = this.getPoints();
-        return points[points.length - 1]!;
-    }
+            // Forward Pass: Move end effector to target
+            workingPoints[workingPoints.length - 1] = [...this.target];
 
-    // Error vector
-    private computeError(): Vec2 {
-        const [x, y] = this.forwardKinematicsPass();
-        return [this.target[0] - x, this.target[1] - y];
-    }
+            for (let i = workingPoints.length - 2; i >= 0; i--) {
+                const current = workingPoints[i]!;
+                const next = workingPoints[i + 1]!;
+                const distance = this.links[i]!;
 
-    // Jacobian
-    private computeJacobian(): [number[], number[]] {
+                const dx = current[0] - next[0];
+                const dy = current[1] - next[1];
+                const mag = Math.hypot(dx, dy);
 
-        const J: [number[], number[]] = [[], []];
-
-        for (let k = 0; k < this.angles.length; k++) {
-            let dx = 0;
-            let dy = 0;
-
-            for (let i = k; i < this.links.length; i++) {
-
-                let theta = 0;
-                for (let j = 0; j <= i; j++)
-                    theta += this.angles[j]!;
-
-                dx += -this.links[i]! * Math.sin(theta);
-                dy += this.links[i]! * Math.cos(theta);
+                if (mag > 1e-6) {
+                    workingPoints[i] = [
+                        next[0] + (dx / mag) * distance,
+                        next[1] + (dy / mag) * distance
+                    ];
+                }
             }
 
-            J[0].push(dx);
-            J[1].push(dy);
+            // Backward Pass: Root fixed at [0, 0]
+            workingPoints[0] = [0, 0];
+
+            for (let i = 0; i < workingPoints.length - 1; i++) {
+                const current = workingPoints[i]!;
+                const next = workingPoints[i + 1]!;
+                const distance = this.links[i]!;
+
+                const dx = next[0] - current[0];
+                const dy = next[1] - current[1];
+                const mag = Math.hypot(dx, dy);
+
+                if (mag > 1e-6) {
+                    workingPoints[i + 1] = [
+                        current[0] + (dx / mag) * distance,
+                        current[1] + (dy / mag) * distance
+                    ];
+                }
+            }
         }
 
-        return J;
+        // Extract Scratch joint angles from final solved positions
+        this.updateAnglesFromPoints(workingPoints);
     }
 
-    // Pseudoinverse
-    private computePseudoinverse(): Vec2[] {
+    private updateAnglesFromPoints(points: Vec2[]): void {
+        let prevWorldAngle = 0;
 
-        const J = this.computeJacobian();
+        for (let i = 0; i < this.links.length; i++) {
+            const pStart = points[i]!;
+            const pEnd = points[i + 1]!;
 
-        const transpose: Vec2[] = [];
-        for (let i = 0; i < J[0].length; i++)
-            transpose.push([J[0][i]!, J[1][i]!]);
+            const dx = pEnd[0] - pStart[0];
+            const dy = pEnd[1] - pStart[1];
 
-        const v1_a = J[0];
-        const v1_b = J[1];
+            // Scratch angle from (dx, dy): atan2(dx, dy)
+            const worldAngle = Math.atan2(dx, dy);
 
-        const v2_a: number[] = [];
-        const v2_b: number[] = [];
+            // Local angle delta relative to previous link
+            let delta = worldAngle - prevWorldAngle;
 
-        for (let i = 0; i < transpose.length; i++) {
-            v2_a.push(transpose[i]![0]);
-            v2_b.push(transpose[i]![1]);
+            // Normalize delta to [-π, π]
+            delta = Math.atan2(Math.sin(delta), Math.cos(delta));
+
+            this.angles[i] = delta;
+            prevWorldAngle = worldAngle;
         }
-
-        const product: [Vec2, Vec2] = [
-            [InverseKinematics.dot(v1_a, v2_a), InverseKinematics.dot(v1_a, v2_b)],
-            [InverseKinematics.dot(v1_b, v2_a), InverseKinematics.dot(v1_b, v2_b)]
-        ];
-
-        const lam = 0.01;
-        const a = product[0][0] + lam;
-        const b = product[0][1];
-        const c = product[1][0];
-        const d = product[1][1] + lam;
-
-        const det = a * d - b * c;
-        const mul = 1 / det;
-
-        const inverse: [Vec2, Vec2] = [
-            [d * mul, -b * mul],
-            [-c * mul, a * mul]
-        ];
-
-        const v2_a_vec = inverse[0];
-        const v2_b_vec = inverse[1];
-
-        const result: Vec2[] = [];
-        for (const v1 of transpose) {
-            result.push([
-                InverseKinematics.dot(v1, v2_a_vec),
-                InverseKinematics.dot(v1, v2_b_vec)
-            ]);
-        }
-
-        return result;
-    }
-
-    // Compute joint updates
-    private computeJointUpdate(): number[] {
-
-        const err = this.computeError();
-        const result: number[] = [];
-
-        for (const row of this.computePseudoinverse())
-            result.push(InverseKinematics.dot(err, row));
-        
-        return result;
-    }
-
-    // Update angles
-    private updateAngles(adjustmentRate: number): void {
-
-        const delta = this.computeJointUpdate();
-
-        for (let i = 0; i < this.angles.length; i++)
-            this.angles[i]! += delta[i]! * adjustmentRate;
     }
 }

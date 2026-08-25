@@ -20,6 +20,7 @@ The dates are in the following format: D?D.M?M.YYYY
 - Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)
 - Switched units in `await engine.wait(ms)` from milliseconds to seconds
 - Canvas is now 480 x 360 pixels, scaled by 1.5 by default
+- `InverseKinematics` switched from Jacobian to FABRIK calculation - faster and more predictable results
 
 ### Fixed
 
