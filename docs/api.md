@@ -7,15 +7,13 @@ concise reference — see the source for full typings and examples.
 
 Initialization
 
-- `const engine = Engine.init()` — initialize the engine and retrieve the
-    singleton instance.
+- `const engine = Engine.init()` — initialize the engine and retrieve the singleton instance.
 - `engine.setMaxFPS(fps)` — cap the update/render rate.
 
 Scenes
 
 - `engine.setLoop(scene, callback)` — register the frame callback for a scene.
-- `engine.setScene(scene)` — switch the active scene; only sprites in the active
-    scene are rendered.
+- `engine.setScene(scene)` — switch the active scene; only sprites in the active scene are rendered.
 
 Input
 
@@ -31,28 +29,23 @@ Sound
 
 Timing / Utilities
 
-- `engine.getDeltaTime()` — actual seconds elapsed since the previous game
-    update (useful for frame-rate independent movement).
+- `engine.getDeltaTime()` — actual seconds elapsed since the previous game update (useful for frame-rate independent movement).
 - `await engine.wait(s)` — delay for `s` seconds.
-- `await engine.waitUntil(() => condition)` — pause until `condition()` returns
-    true.
-- `new Timer(startSeconds?)` — create a stopwatch, initially paused, with an
-    optional starting time in seconds.
+- `await engine.waitUntil(() => condition)` — pause until `condition()` returns true.
+- `new Timer(startSeconds?)` — create a stopwatch, initially paused, with an optional starting time in seconds.
 - `timer.getTime()` — get the elapsed time in seconds.
 - `timer.isRunning()` — check whether the timer is running.
 - `timer.start()` / `timer.pause()` — start, resume, or pause the timer.
 - `timer.lap()` — record and return the time in seconds since the previous lap.
 - `timer.getLaps()` — get a copy of all recorded lap times in seconds.
-- `timer.reset()` — stop the timer, reset its elapsed time to zero, and clear
-    recorded laps.
+- `timer.reset()` — stop the timer, reset its elapsed time to zero, and clear recorded laps.
 - `timer.addTime(seconds)` — add seconds to the elapsed time.
 
 ## TSCMath (static utilities)
 
 - `TSCMath.toRadians(deg)`, `TSCMath.toDegrees(rad)` — angle conversions.
 - `TSCMath.pickRandom(min, max)` — integer random in range.
-- Vector helpers: `dotProduct(...)` and basic trig helpers (`sin`, `cos`,
-    `tan`, `asin`, `acos`, etc.).
+- Vector helpers: `dotProduct(...)` and basic trig helpers (`sin`, `cos`, `tan`, `asin`, `acos`, etc.).
 
 ## Perlin noise
 
@@ -72,10 +65,14 @@ Timing / Utilities
 - Direction: `dir` (degrees).
 - `pivot` (rotation/pivot point).
 - Visibility and layering: `hidden`, `size`, `scene`, `layer`.
-- Movement: `goTo`, `setX`, `setY`, `changeX`, `changeY`, `turn`, `point`,
-    `pointTowards`.
-- Appearance: `show()`, `hide()`, `goToLayer()`, `changeLayer()`.
-- Collision: `touching(otherSprite)`
+- Movement: `goTo`, `setX`, `setY`, `changeX`, `changeY`, `turn`, `point`, `pointTowards`.
+- Appearance: `show()`, `hide()`, `goToLayer()`, `changeLayer()` (move by a specified number of layers).
+- Collision:
+  - `touching(otherSprite, options?)` — check collision with precision mode:
+    - `precision: 'AABB'` — bounding box only (fastest).
+    - `precision: 'partial'` — pixel-perfect, boolean result (default).
+    - `precision: 'full'` — pixel-perfect, returns `{ contact, normal, displacement }`.
+  - `Sprite.touchingPairs(sprites, handler, options?)` — batch check all pairs.
 
 ## Built-in sprite types
 
@@ -83,8 +80,7 @@ Timing / Utilities
     — shapes with simple property APIs (`width`, `height`, `radius`, `vertices`,
     `color`, `outlineWidth`, `outlineColor`, etc.) and corresponding setters.
 - `Text` — render textual labels.
-- `Button` — interactive rectangle-based button (combines rectangle + click
-    helpers).
+- `Button` — interactive rectangle-based button (combines rectangle + click helpers).
 - `Image` — draw images by `src`, with width/height and outline options.
 - `Pen` — drawing API (`down()`, `up()`, `dot()`, and `drawSprite(...)`).
 
@@ -95,22 +91,19 @@ Timing / Utilities
 
 ## Canvas helpers
 
-- `setScale(scale)` plus access to the underlying
-    `canvas`, `penCanvas`, `ctx`, and `penCtx` contexts.
+- `setScale(scale)` plus access to the underlying `canvas`, `penCanvas`, `ctx`, and `penCtx` contexts.
 
 ## Multiplayer (client)
 
 - `const m = new Multiplayer(serverUrl)` — connect to a server.
-- `m.emit(event, data)`, `m.on(event, handler)`, `m.disconnect()` — basic
-    event-driven API.
+- `m.emit(event, data)`, `m.on(event, handler)`, `m.disconnect()` — basic event-driven API.
 - Room helpers: `createRoom(state, password?)`, `joinRoom(roomId, state?)`,
     `leaveRoom()`, `updatePlayerState(state)`, `onRoomJoin(handler)`,
     `onRoomLeave(handler)`, `getRoomPlayerState()`.
 
 ## Server / RoomManager (server)
 
-- `Server` exposes `onJoin`, `onLeave`, `on(event, handler)`, `broadcast(...)`,
-    and `broadcastExcept(...)`.
+- `Server` exposes `onJoin`, `onLeave`, `on(event, handler)`, `broadcast(...)`, and `broadcastExcept(...)`.
 - `RoomManager` maintains `rooms: Map<roomId, { password, clients }>` and
     helpers to update player state, disable/enable joining, kick/ban clients, and
     listen for join/leave events.

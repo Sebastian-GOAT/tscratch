@@ -12,6 +12,7 @@ The dates are in the following format: D?D.M?M.YYYY
 ### Added
 
 - `Timer` class - acts as a stopwatch
+- `Sprite.touchingPairs(sprites, handler)` - tests collisions between all pairs of specified sprites
 
 ### Changed
 

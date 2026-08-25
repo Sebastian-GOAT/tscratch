@@ -116,7 +116,16 @@ export default abstract class Sprite {
         });
     }
 
-    public touching(sprite: Sprite): CollisionData | null {
+    // AABB    - Only AABB check, return true/false
+    // partial - Pixel perfect but only return true/false
+    // full    - Pixel perfect + collision data population, return CollisionData/null
+    public touching(sprite: Sprite, options: { precision: 'AABB' | 'partial' }): boolean;
+    public touching(sprite: Sprite, options: { precision: 'full' }): CollisionData | null;
+    public touching(sprite: Sprite): boolean; // Defaults to 'partial'
+    public touching(
+        sprite: Sprite,
+        options: { precision: 'AABB' | 'full' | 'partial' } = { precision: 'partial' }
+    ): boolean | CollisionData | null {
 
         // Return if hidden or if the scenes differ
         if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
@@ -129,7 +138,8 @@ export default abstract class Sprite {
             Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
             Math.abs(bBox1.y - bBox2.y) < (bBox1.height + bBox2.height) / 2;
 
-        if (!aabbOverlap) return null;
+        if (!aabbOverlap) return options.precision === 'full' ? null : false;
+        if (options.precision === 'AABB') return true;
 
         // Image data (pixel perfect)
 
@@ -152,7 +162,7 @@ export default abstract class Sprite {
         const width = xMax - xMin;
         const height = yMax - yMin;
 
-        if (width < 1 || height < 1) return null;
+        if (width < 1 || height < 1) return options.precision === 'full' ? null : false;
 
         // Reuse or create offscreen canvas for collision detection
         if (!Sprite.collisionCanvas) {
@@ -199,6 +209,9 @@ export default abstract class Sprite {
 
         for (let i = 3; i < img1.length; i += 4) {
             if (img1[i]! > 0 && img2[i]! > 0) {
+
+                if (options.precision === 'partial') return true;
+
                 const pixelIndex = (i - 3) / 4;
                 const px = pixelIndex % width;
                 const py = Math.floor(pixelIndex / width);
@@ -209,7 +222,7 @@ export default abstract class Sprite {
             }
         }
 
-        if (count === 0) return null;
+        if (count === 0) return options.precision === 'full' ? null : false;
 
         const localX = sumX / count;
         const localY = sumY / count;
@@ -310,6 +323,25 @@ export default abstract class Sprite {
         ];
 
         return { contact, normal, displacement };
+    }
+
+    // Collision check in all pairs, T( n(n-1)/2 )
+    public static touchingPairs<T extends Sprite = Sprite>(
+        sprites: T[],
+        collisionHandler: ((sprite1: T, sprite2: T) => void),
+        options: { precision: 'AABB' | 'partial' } = { precision: 'partial' }
+    ) {
+        for (let i = 0; i < sprites.length; i++) {
+            for (let j = i + 1; j < sprites.length; j++) {
+
+                const sprite1 = sprites[i]!;
+                const sprite2 = sprites[j]!;
+
+                const touching = sprite1.touching(sprite2, { precision: options.precision });
+
+                if (touching) collisionHandler(sprite1, sprite2);
+            }
+        }
     }
 
     // Helpers

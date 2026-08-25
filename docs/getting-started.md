@@ -40,10 +40,8 @@ engine.setLoop('secondary', () => blueBox.changeX(-1));
 
 Recommendations
 
-- Organize each scene into its own module. Export the loop function from the
-  scene file and register it from your entry point.
-- Avoid putting heavy logic in a single frame; prefer small functions for clarity
-  and testability.
+- Organize each scene into its own module. Export the loop function from the scene file and register it from your entry point.
+- Avoid putting heavy logic in a single frame; prefer small functions for clarity and testability.
 
 Example file layout
 

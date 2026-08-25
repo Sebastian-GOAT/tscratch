@@ -11,8 +11,7 @@ API highlights
 
 Behavior notes
 
-- Only one scene is active at a time; the engine runs the loop associated with
-	the active scene.
+- Only one scene is active at a time; the engine runs the loop associated with the active scene.
 - By default, sprites are placed in the `main` scene; you do not need to call
 	`setScene('main')` unless you switch to another scene first.
 

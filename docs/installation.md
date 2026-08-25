@@ -1,6 +1,3 @@
-yarn:
-or create a whole setup with Vite & TypeScript already integrated (recommended):
-yarn:
 # Installation
 
 Quick install
@@ -41,8 +38,7 @@ Deploying a TScratch-based project to platforms like Vercel is straightforward:
 
 1. Push the project to a GitHub repository.
 2. Create a new project on Vercel and import the repo.
-3. Configure the build command (typically `npm run build`) and the publish
-	directory (`dist`).
+3. Configure the build command (typically `npm run build`) and the publish directory (`dist`).
 4. Deploy.
 
 Your project will be available on a public URL after deployment.
