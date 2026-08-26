@@ -1,6 +1,7 @@
 import Engine from './Engine.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
 import TSCMath from './TSCMath.ts';
+import { canvas } from './canvas.ts';
 
 export interface CollisionData {
     contact: Vec2;
@@ -362,8 +363,8 @@ export default abstract class Sprite {
 
     // Motion
     public move(steps: number) {
-        this.x += steps * Math.sin(this.toRadians(this.dir));
-        this.y += steps * Math.cos(this.toRadians(this.dir));
+        this.x += steps * TSCMath.sin(this.dir);
+        this.y += steps * TSCMath.cos(this.dir);
         this.refresh();
     }
 
@@ -458,6 +459,17 @@ export default abstract class Sprite {
     }
 
     // Helpers
+
+    protected applyDrawTransform(c: CanvasRenderingContext2D): void {
+        const camera = Engine.init().camera;
+
+        c.translate(canvas.width / 2, canvas.height / 2);
+        c.scale(camera.zoom, camera.zoom);
+        c.rotate(-this.toRadians(camera.rotation));
+        c.translate(this.x - camera.x, -(this.y - camera.y));
+        c.rotate(this.toRadians(this.dir));
+        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
+    }
 
     protected getDrawOffset(): [number, number] {
         const [x, y] = this.pivot;

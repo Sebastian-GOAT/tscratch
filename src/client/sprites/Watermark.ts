@@ -13,10 +13,11 @@ export default class Watermark extends Text {
         super(options);
 
         this.content = options?.content ?? 'Made with TScratch';
-        this.x = options?.x ?? -canvas.width / 2 + 5,
-        this.y = options?.y ?? canvas.height / 2 - 5,
-        this.align = options?.align ?? 'left',
-        this.baseline = options?.baseline ?? 'top'
+        this.x = options?.x ?? -canvas.width / 2 + 5;
+        this.y = options?.y ?? canvas.height / 2 - 5;
+        this.align = options?.align ?? 'left';
+        this.baseline = options?.baseline ?? 'top';
+        this.fontSize = options?.fontSize ?? 12;
 
         this.invalidatePath();
         if (!this.hidden) this.draw();

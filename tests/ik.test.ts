@@ -14,7 +14,7 @@ describe('Inverse Kinematics', () => {
             const ik = new InverseKinematics([L, L], target);
     
             // Compute with IK
-            ik.computeApproximateAngles(1000, 0.001);
+            ik.computeApproximateAngles(500, 0.005);
     
             const points = ik.getPoints();
             const endPoint = points[points.length - 1]!;
@@ -38,8 +38,8 @@ describe('Inverse Kinematics', () => {
             const alpha = Math.atan2(target[1], target[0]) - Math.atan2(L * Math.sin(beta), L + L * Math.cos(beta));
     
             // Set angles manually
-            ik.angles[0] = alpha;
-            ik.angles[1] = beta;
+            ik.angles[0] = Math.PI / 2 - alpha;
+            ik.angles[1] = -beta;
     
             const points = ik.getPoints();
             const endPoint = points[points.length - 1]!;

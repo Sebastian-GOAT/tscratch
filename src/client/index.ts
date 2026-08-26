@@ -1,5 +1,5 @@
 // Main
-import Engine from '@main/Engine.ts';
+import Engine, { type SoundOptions } from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
 import { setScale, canvas, ctx, penCanvas, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
@@ -159,6 +159,7 @@ export {
     Cuboid,
 
     // Options
+    type SoundOptions,
     type LineOptions,
     type SpriteOptions,
     type RectangleOptions,

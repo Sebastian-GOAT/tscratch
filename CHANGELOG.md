@@ -7,20 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 The dates are in the following format: D?D.M?M.YYYY
 
-## [0.10.1] - xx.xx.2026 (Not released)
+## [1.0.0] - xx.xx.2026 (Not released)
 
 ### Added
 
 - `Timer` class - acts as a stopwatch
 - `Sprite.touchingPairs(sprites, handler)` - tests collisions between all pairs of specified sprites
+- `engine.camera` - camera offset, rotation and zoom
+- `volume` and `loop` options on sounds
 
 ### Changed
 
+- Canvas HTML IDs renamed to `#tscratch-main-canvas` and `#tscratch-pen-canvas`
 - `RegularPolygon` is now correctly tilted
 - Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)
 - Switched units in `await engine.wait(ms)` from milliseconds to seconds
 - Canvas is now 480 x 360 pixels, scaled by 1.5 by default
 - `InverseKinematics` switched from Jacobian to FABRIK calculation - faster and more predictable results
+- Default width of a rectange is now 75 (used to be 50)
 
 ### Fixed
 

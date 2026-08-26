@@ -1,5 +1,5 @@
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
-import { canvas, ctx, penCtx } from '@main/canvas.ts';
+import { ctx, penCtx } from '@main/canvas.ts';
 
 export interface ArcOptions extends SpriteOptions {
     radius?: number;
@@ -48,11 +48,7 @@ export default class Arc extends Sprite {
 
         c.save();
 
-        const cX = this.x + canvas.width / 2;
-        const cY = -this.y + canvas.height / 2;
-        c.translate(cX, cY);
-        c.rotate(this.toRadians(this.dir));
-        c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
+        this.applyDrawTransform(c);
 
         const path = this.getCachedPath();
 

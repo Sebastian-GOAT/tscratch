@@ -9,11 +9,32 @@ Initialization
 
 - `const engine = Engine.init()` — initialize the engine and retrieve the singleton instance.
 - `engine.setMaxFPS(fps)` — cap the update/render rate.
+- `engine.maxFPS` — current update/render rate cap.
+
+Camera
+
+Access the shared 2D camera through `engine.camera`:
+
+```ts
+const engine = Engine.init();
+
+engine.camera.goTo(100, 50);
+engine.camera.setZoom(2);
+engine.camera.turn(15);
+```
+
+- Properties: `x`, `y`, `zoom`, `rotation`.
+- Position: `goTo(x, y)`, `setX(x)`, `setY(y)`, `changeX(dx)`,
+  `changeY(dy)`, `move(steps)`.
+- Rotation: `point(deg)`, `turn(deg)`.
+- Zoom: `setZoom(zoom)`, `changeZoom(zoomChange)`.
 
 Scenes
 
 - `engine.setLoop(scene, callback)` — register the frame callback for a scene.
 - `engine.setScene(scene)` — switch the active scene; only sprites in the active scene are rendered.
+- `engine.currentScene` — name of the currently active scene.
+- `engine.pauseLoop()` / `engine.resumeLoop()` — pause or resume the active scene loop.
 
 Input
 
@@ -21,10 +42,16 @@ Input
 - `engine.mouseDown` — whether a mouse button is currently pressed.
 - `engine.hovering(sprite)` — whether the cursor is over `sprite`.
 - `engine.keyPressed(key)` — whether `key` is currently pressed.
+- `engine.onKeyPress(key, callback, options?)` — register a key callback; set
+  `options.allowHold` to `false` to run only once per key press.
+- `engine.onPress(callback)` — register a callback for pointer presses.
 
 Sound
 
-- `engine.playSound(src)` — play an audio source.
+- `engine.playSound(src, options?)` — play an audio source and return its `HTMLAudioElement`.
+  `options.volume` must be between `0` and `1`; `options.loop` repeats the sound.
+  Sounds are removed from the engine when they end or fail to load.
+- `engine.stopSound(sound)` — stop and remove one sound returned by `playSound()`.
 - `engine.stopAllSounds()` — stop all currently playing sounds.
 
 Timing / Utilities
@@ -32,6 +59,12 @@ Timing / Utilities
 - `engine.getDeltaTime()` — actual seconds elapsed since the previous game update (useful for frame-rate independent movement).
 - `await engine.wait(s)` — delay for `s` seconds.
 - `await engine.waitUntil(() => condition)` — pause until `condition()` returns true.
+
+Global variables
+
+- `engine.setVariable(key, value)` — store a value by key.
+- `engine.getVariable(key)` — retrieve a stored value by key.
+
 - `new Timer(startSeconds?)` — create a stopwatch, initially paused, with an optional starting time in seconds.
 - `timer.getTime()` — get the elapsed time in seconds.
 - `timer.isRunning()` — check whether the timer is running.
@@ -73,6 +106,7 @@ Timing / Utilities
     - `precision: 'partial'` — pixel-perfect, boolean result (default).
     - `precision: 'full'` — pixel-perfect, returns `{ contact, normal, displacement }`.
   - `Sprite.touchingPairs(sprites, handler, options?)` — batch check all pairs.
+> Collision results may be unpredictable for `Text`, `Watermark` and `Button` sprites.
 
 ## Built-in sprite types
 

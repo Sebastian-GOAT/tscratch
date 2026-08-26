@@ -4,6 +4,8 @@ TScratch provides pixel-accurate collision detection via `sprite.touching(other)
 The implementation includes performance optimizations to keep collision checks
 fast for typical classroom projects:
 
+> Collision results may be unpredictable for `Text`, `Watermark` and `Button` sprites.
+
 - Tight axis-aligned bounding boxes (AABB) computed with trigonometry.
 - A per-sprite collision canvas sized to the minimal collision rectangle.
 - The canvas context uses `willReadFrequently` to reduce GPU↔CPU transfer costs.
@@ -45,7 +47,7 @@ Example:
 Sprite.touchingPairs(
     [playerSprite, enemyA, enemyB, wall],
     (a, b) => console.log(`${a.discriminant} hit ${b.discriminant}`),
-    { precision: 'AABB' } // or 'partial' (default)
+    { precision: 'AABB' } // or 'partial' (default), full is not available
 );
 ```
 
