@@ -471,7 +471,7 @@ export default abstract class Sprite {
         c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
     }
 
-    protected getDrawOffset(): [number, number] {
+    protected getDrawOffset(): Vec2 {
         const [x, y] = this.pivot;
         const sin = TSCMath.sin(this.dir);
         const cos = TSCMath.cos(this.dir);

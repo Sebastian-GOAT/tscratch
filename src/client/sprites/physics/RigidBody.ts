@@ -16,4 +16,4 @@ export interface RigidBodyOptions {
     update: (stepFactor?: number) => void;
 }
 
-export interface RigidBody extends Sprite, RigidBodyOptions {}
+export interface RigidBody extends Sprite, RigidBodyOptions {};

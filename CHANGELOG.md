@@ -30,6 +30,7 @@ The dates are in the following format: D?D.M?M.YYYY
 
 - Delta-time calculation finally works as expected
 - `touching()` should yield better results
+- Fixed collisions with the `Line` sprite
 
 ## [0.10.0] - 7.8.2026
 

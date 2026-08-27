@@ -61,7 +61,7 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
         // 3. Collision Detection & Resolution
         for (const target of this.obstacles) {
 
-            const collisionData = this.touching(target);
+            const collisionData = this.touching(target, { precision: 'full' });
 
             if (collisionData) {
 

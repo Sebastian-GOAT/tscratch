@@ -33,6 +33,7 @@ export default class Rectangle extends Sprite {
         const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
 
         const off = this.getDrawOffset();
+        
         return {
             x: this.x + off[0],
             y: this.y + off[1],

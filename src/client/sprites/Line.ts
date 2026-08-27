@@ -1,5 +1,5 @@
-import { canvas, ctx, penCtx } from '@main/canvas.ts';
-import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
+import { ctx, penCtx } from '@main/canvas.ts';
+import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 
 export interface LineOptions extends SpriteOptions {
@@ -17,12 +17,23 @@ export default class Line extends Sprite {
     public length: number;
     public width: number;
 
-    public getBoundingBox() {
+    public getBoundingBox(): BoundingBox {
+
+        const w = this.width / 2;   // half-width
+        const h = this.length / 2;  // half-height
+
+        const cos = TSCMath.cos(this.dir);
+        const sin = TSCMath.sin(this.dir);
+
+        const width  = 2 * (Math.abs(w * cos) + Math.abs(h * sin)) * this.size;
+        const height = 2 * (Math.abs(w * sin) + Math.abs(h * cos)) * this.size;
+
+        const off = this.getDrawOffset();
+
         return {
-            x: this.x,
-            y: this.y,
-            width: this.length * Math.abs(TSCMath.sin(this.dir)),
-            height: this.length * Math.abs(TSCMath.cos(this.dir))
+            x: this.x + off[0],
+            y: this.y + off[1],
+            width, height
         };
     }
 
@@ -30,9 +41,10 @@ export default class Line extends Sprite {
         const path = new Path2D;
 
         path.rect(
-            -this.width,
-            -this.length / 2,
-            this.width * 2, this.length
+            -this.width / 2 * this.size,
+            -this.length / 2 * this.size,
+            this.width * this.size,
+            this.length * this.size
         );
 
         return path;
@@ -87,8 +99,8 @@ export default class Line extends Sprite {
         super(options);
 
         this.color = options?.color ?? 'black';
-        this.length = options?.length ?? 50;
-        this.width = options?.width ?? 4;
+        this.length = options?.length ?? 75;
+        this.width = options?.width ?? 2;
 
         if (!this.hidden) this.draw();
     }
