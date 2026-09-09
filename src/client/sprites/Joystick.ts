@@ -3,7 +3,7 @@ import { canvas, ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 
 export interface JoystickOptions extends SpriteOptions {
-    radius: number;
+    radius?: number;
 }
 
 export default class Joystick extends Sprite {

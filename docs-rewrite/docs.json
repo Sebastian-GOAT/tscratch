@@ -1,0 +1,294 @@
+[
+    {
+        "type": "file",
+        "label": "About",
+        "name": "about"
+    },
+    {
+        "type": "folder",
+        "label": "Getting started",
+        "children": [
+            {
+                "type": "file",
+                "label": "Installation",
+                "name": "getting-started/installation"
+            },
+            {
+                "type": "file",
+                "label": "Project structure",
+                "name": "getting-started/structure"
+            },
+            {
+                "type": "file",
+                "label": "Deployment",
+                "name": "getting-started/deployment"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Sprites",
+        "children": [
+            {
+                "type": "file",
+                "label": "Sprite",
+                "name": "sprites/sprite"
+            },
+            {
+                "type": "folder",
+                "label": "Types",
+                "children": [
+                    {
+                        "type": "file",
+                        "label": "Square",
+                        "name": "sprites/types/square"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Rectangle",
+                        "name": "sprites/types/rectangle"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Circle",
+                        "name": "sprites/types/circle"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Oval",
+                        "name": "sprites/types/oval"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Regular polygon",
+                        "name": "sprites/types/regular-polygon"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Line",
+                        "name": "sprites/types/line"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Arc",
+                        "name": "sprites/types/arc"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Custom polygon",
+                        "name": "sprites/types/custom-polygon"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Image sprite",
+                        "name": "sprites/types/image-sprite"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Text",
+                        "name": "sprites/types/text"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Button",
+                        "name": "sprites/types/button"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Pen",
+                        "name": "sprites/types/pen"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Watermark",
+                        "name": "sprites/types/watermark"
+                    }
+                ]
+            },
+            {
+                "type": "file",
+                "label": "Groups",
+                "name": "sprites/groups"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Input",
+        "children": [
+            {
+                "type": "file",
+                "label": "Keyboard",
+                "name": "input/keyboard"
+            },
+            {
+                "type": "file",
+                "label": "Mouse",
+                "name": "input/mouse"
+            },
+            {
+                "type": "file",
+                "label": "Joystick",
+                "name": "input/joystick"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Scenes",
+        "children": [
+            {
+                "type": "file",
+                "label": "Scene management",
+                "name": "scenes/scene-management"
+            },
+            {
+                "type": "file",
+                "label": "Loops",
+                "name": "scenes/loops"
+            },
+            {
+                "type": "file",
+                "label": "Best practices",
+                "name": "scenes/best-practices"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Collisions",
+        "children": [
+            {
+                "type": "file",
+                "label": "Checking",
+                "name": "collisions/checking"
+            },
+            {
+                "type": "file",
+                "label": "Precision",
+                "name": "collisions/precision"
+            }
+        ]
+    },
+    {
+        "type": "file",
+        "label": "Sounds",
+        "name": "sounds"
+    },
+    {
+        "type": "folder",
+        "label": "Multiplayer",
+        "children": [
+            {
+                "type": "file",
+                "label": "Multiplayer",
+                "name": "multiplayer/multiplayer"
+            },
+            {
+                "type": "file",
+                "label": "Server",
+                "name": "multiplayer/server"
+            },
+            {
+                "type": "file",
+                "label": "Room manager",
+                "name": "multiplayer/rm"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Utilities",
+        "children": [
+            {
+                "type": "file",
+                "label": "Math",
+                "name": "utilities/math"
+            },
+            {
+                "type": "file",
+                "label": "Path finder",
+                "name": "utilities/path-finder"
+            },
+            {
+                "type": "folder",
+                "label": "Perlin noise",
+                "children": [
+                    {
+                        "type": "file",
+                        "label": "Perlin 1",
+                        "name": "utilities/perlin-noise/perlin1"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Perlin 2",
+                        "name": "utilities/perlin-noise/perlin2"
+                    }
+                ]
+            },
+            {
+                "type": "file",
+                "label": "IK",
+                "name": "utilities/ik"
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "3D",
+        "children": [
+            {
+                "type": "file",
+                "label": "Object",
+                "name": "3d/object"
+            },
+            {
+                "type": "file",
+                "label": "Built-in objects",
+                "name": "3d/built-in"
+            },
+            {
+                "type": "file",
+                "label": "Camera",
+                "name": "3d/camera"
+            },
+            {
+                "type": "file",
+                "label": "Renderer",
+                "name": "3d/renderer"
+            },
+            {
+                "type": "folder",
+                "label": "Renderers",
+                "children": [
+                    {
+                        "type": "file",
+                        "label": "Solid",
+                        "name": "3d/renderers/solid"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Wireframe",
+                        "name": "3d/renderers/wireframe"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "folder",
+        "label": "Showcases",
+        "children": [
+            {
+                "type": "file",
+                "label": "Showcases",
+                "name": "showcases/showcases"
+            }
+        ]
+    },
+    {
+        "type": "file",
+        "label": "License",
+        "name": "license"
+    }
+]
