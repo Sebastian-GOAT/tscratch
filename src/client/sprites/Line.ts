@@ -101,6 +101,8 @@ export default class Line extends Sprite {
         this.color = options?.color ?? 'black';
         this.length = options?.length ?? 75;
         this.width = options?.width ?? 2;
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
 
         if (!this.hidden) this.draw();
     }

@@ -106,7 +106,9 @@ export default class RegularPolygon extends Sprite {
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
-        
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
+
         if (!this.hidden) this.draw();
     }
 

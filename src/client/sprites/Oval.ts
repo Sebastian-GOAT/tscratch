@@ -108,12 +108,14 @@ export default class Oval extends Sprite {
     constructor(options?: OvalOptions) {
         super(options);
 
-        this.radX = options?.radX ?? 25;
+        this.radX = options?.radX ?? 50;
         this.radY = options?.radY ?? 25;
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
-        
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
+
         if (!this.hidden) this.draw();
     }
 }

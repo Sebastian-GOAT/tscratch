@@ -18,6 +18,8 @@ export default class Watermark extends Text {
         this.align = options?.align ?? 'left';
         this.baseline = options?.baseline ?? 'top';
         this.fontSize = options?.fontSize ?? 12;
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
 
         this.invalidatePath();
         if (!this.hidden) this.draw();

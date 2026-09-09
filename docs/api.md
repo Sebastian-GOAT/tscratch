@@ -101,12 +101,24 @@ Global variables
 - Movement: `goTo`, `setX`, `setY`, `changeX`, `changeY`, `turn`, `point`, `pointTowards`.
 - Appearance: `show()`, `hide()`, `goToLayer()`, `changeLayer()` (move by a specified number of layers).
 - Collision:
-  - `touching(otherSprite, options?)` — check collision with precision mode:
+  - `touching(otherSprite | spriteGroup, options?)` — check collision with precision mode:
     - `precision: 'AABB'` — bounding box only (fastest).
     - `precision: 'partial'` — pixel-perfect, boolean result (default).
     - `precision: 'full'` — pixel-perfect, returns `{ contact, normal, displacement }`.
   - `Sprite.touchingPairs(sprites, handler, options?)` — batch check all pairs.
 > Collision results may be unpredictable for `Text`, `Watermark` and `Button` sprites.
+
+## SpriteGroup
+
+- `new SpriteGroup(options?)` — create a grouped transform container for multiple sprites.
+- `options.sprites` — initial sprite set to include in the group.
+- `options.dir` and `options.scene` — base direction and scene filtering for the group.
+- Properties: `sprites`, `dir`, `scene`.
+- Motion: `changeX(dx)`, `changeY(dy)`, `move(steps)` — apply movement to every sprite in the group.
+- Rotation: `point(pivot, deg)`, `turn(pivot, deg)` — rotate the group around a pivot point.
+- Management: `addSprite(sprite)`, `removeSprite(sprite)` — add or remove a sprite from the group.
+
+Sprite groups are useful when you want several sprites to move or rotate together while still keeping their individual logic and properties.
 
 ## Built-in sprite types
 

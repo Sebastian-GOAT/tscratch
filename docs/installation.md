@@ -1,21 +1,5 @@
 # Installation
 
-Quick install
-
-Using npm:
-
-```bash
-npm install tscratch
-```
-
-Using yarn:
-
-```bash
-yarn add tscratch
-```
-
-Create a starter project (recommended)
-
 Create a Vite + TypeScript starter using the official helper:
 
 ```bash

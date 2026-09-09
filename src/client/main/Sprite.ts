@@ -2,6 +2,7 @@ import Engine from './Engine.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
 import TSCMath from './TSCMath.ts';
 import { canvas } from './canvas.ts';
+import SpriteGroup from './SpriteGroup.ts';
 
 export interface CollisionData {
     contact: Vec2;
@@ -25,6 +26,7 @@ export interface SpriteOptions {
     scene?: string;
     hidden?: boolean;
     layer?: number;
+    tags?: Set<string>;
 }
 
 export default abstract class Sprite {
@@ -120,16 +122,23 @@ export default abstract class Sprite {
     // AABB    - Only AABB check, return true/false
     // partial - Pixel perfect but only return true/false
     // full    - Pixel perfect + collision data population, return CollisionData/null
-    public touching(sprite: Sprite, options: { precision: 'AABB' | 'partial' }): boolean;
+    public touching(sprite: Sprite | SpriteGroup, options: { precision: 'AABB' | 'partial' }): boolean;
     public touching(sprite: Sprite, options: { precision: 'full' }): CollisionData | null;
-    public touching(sprite: Sprite): boolean; // Defaults to 'partial'
+    public touching(sprite: Sprite | SpriteGroup): boolean; // Defaults to 'partial'
     public touching(
-        sprite: Sprite,
+        sprite: Sprite | SpriteGroup,
         options: { precision: 'AABB' | 'full' | 'partial' } = { precision: 'partial' }
     ): boolean | CollisionData | null {
 
-        // Return if hidden or if the scenes differ
-        if (this.hidden || sprite.hidden || (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)) return null;
+        const isSpriteGroup = sprite instanceof SpriteGroup;
+
+        // Return if hidden, the scenes differ, or a sprite group doesn't have any sprites
+        if (this.scene !== '*' && sprite.scene !== '*' && this.scene !== sprite.scene)
+            return options.precision === 'full' ? null : false; // No collision
+        if (!isSpriteGroup && (this.hidden || sprite.hidden))
+            return options.precision === 'full' ? null : false; // No collision
+        if (isSpriteGroup && sprite.sprites.size < 1)
+            return options.precision === 'full' ? null : false; // No collision
 
         // AABB (bounding boxes)
         const bBox1 = this.getBoundingBox();
@@ -185,7 +194,7 @@ export default abstract class Sprite {
             const dy = yMax - sprite.y; // flip Y to match draw()
 
             ctx.translate(dx, dy);
-            ctx.rotate(sprite.toRadians(sprite.dir));
+            ctx.rotate(TSCMath.toRadians(sprite.dir));
             ctx.translate(-sprite.pivot[0] * sprite.size, sprite.pivot[1] * sprite.size);
 
             ctx.fillStyle = color;
@@ -200,7 +209,11 @@ export default abstract class Sprite {
 
         // Draw sprite 2 in blue
         ctx.clearRect(0, 0, width, height);
-        drawSprite(sprite, 'blue');
+        if (!isSpriteGroup) drawSprite(sprite, 'blue');
+        else {
+            for (const s of sprite.sprites) // For each sprite of the sprite group
+                drawSprite(s, 'blue');
+        }
         const img2 = ctx.getImageData(0, 0, width, height).data;
 
         // Check for overlapping non-transparent pixels
@@ -223,7 +236,8 @@ export default abstract class Sprite {
             }
         }
 
-        if (count === 0) return options.precision === 'full' ? null : false;
+        if (count === 0) return options.precision === 'full' ? null : false; // No collision
+        if (isSpriteGroup) return true; // No full checks for sprite groups
 
         const localX = sumX / count;
         const localY = sumY / count;
@@ -448,9 +462,9 @@ export default abstract class Sprite {
         this.refresh();
     }
 
-    // Tag getters
+    // Tags
 
-    public static getSpriteByTagName(tag: string) {
+    public static getSpritesByTagName(tag: string) {
         const engine = Engine.init();
         
         return engine

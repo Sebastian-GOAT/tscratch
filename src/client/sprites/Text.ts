@@ -144,6 +144,8 @@ export default class Text extends Sprite {
         this.fontSize = options?.fontSize ?? 16;
         this.align = options?.align ?? 'center';
         this.baseline = options?.baseline ?? 'middle';
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
 
         if (!this.hidden) this.draw();
     }

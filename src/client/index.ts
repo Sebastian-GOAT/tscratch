@@ -1,6 +1,7 @@
 // Main
 import Engine, { type SoundOptions } from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
+import SpriteGroup, { type SpriteGroupOptions } from '@main/SpriteGroup.ts';
 import { setScale, canvas, ctx, penCanvas, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
@@ -55,6 +56,7 @@ const TScratch = {
     // Main
     Engine,
     Sprite,
+    SpriteGroup,
     TSCMath,
     Perlin1D,
     Perlin2D,
@@ -113,6 +115,7 @@ export {
     // Main
     Engine,
     Sprite,
+    SpriteGroup,
     TSCMath,
     Perlin1D,
     Perlin2D,
@@ -162,6 +165,7 @@ export {
     type SoundOptions,
     type LineOptions,
     type SpriteOptions,
+    type SpriteGroupOptions,
     type RectangleOptions,
     type SquareOptions,
     type OvalOptions,

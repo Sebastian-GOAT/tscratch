@@ -166,5 +166,7 @@ export default class Pen extends Sprite {
         this.drawing = options?.drawing ?? false;
         this.penSize = options?.penSize ?? 5;
         this.color = options?.color ?? 'black';
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
     }
 }

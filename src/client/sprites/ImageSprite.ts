@@ -163,7 +163,9 @@ export default class ImageSprite extends Sprite {
 
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
-        
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
+
         this.img.onload = () => {
             if (!options?.width) this.width = this.img.width;
             if (!options?.height) this.height = this.img.height;

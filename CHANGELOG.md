@@ -11,10 +11,13 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Added
 
+- `SpriteGroup` class, which lets you manipulate multiple sprites at the same time + check collisions
+- Brutal optimization for checking collisions with sprite groups - from O(n) to O(1) `getImageData()` usage
 - `Timer` class - acts as a stopwatch
 - `Sprite.touchingPairs(sprites, handler)` - tests collisions between all pairs of specified sprites
 - `engine.camera` - camera offset, rotation and zoom
 - `volume` and `loop` options on sounds
+- You can now pass `tags` directly as an option on Sprite
 
 ### Changed
 
@@ -25,6 +28,7 @@ The dates are in the following format: D?D.M?M.YYYY
 - Canvas is now 480 x 360 pixels, scaled by 1.5 by default
 - `InverseKinematics` switched from Jacobian to FABRIK calculation - faster and more predictable results
 - Default width of a rectange is now 75 (used to be 50)
+- Default x radius of an oval is now 50 (used to be 25)
 
 ### Fixed
 

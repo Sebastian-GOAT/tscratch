@@ -278,6 +278,8 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
         this.velocity = options?.velocity ?? [0, 0];
         this.angularVelocity = options?.angularVelocity ?? 0;
         this.inertia = options?.inertia ?? 700;
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
 
         this.invalidatePath();
         if (!this.hidden) this.draw();

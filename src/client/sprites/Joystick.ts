@@ -108,7 +108,9 @@ export default class Joystick extends Sprite {
         this.thumbRadius = this.radius * this.sizeRatio;
         this.x = -canvas.width / 2 + this.radius + 15;
         this.y = -canvas.height / 2 + this.radius + 15;
-        
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
+
         if (!this.hidden) this.draw();
     }
 }

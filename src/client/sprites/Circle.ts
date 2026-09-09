@@ -19,7 +19,9 @@ export default class Circle extends Sprite {
     public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
+
         const off = this.getDrawOffset();
+        
         return {
             x: this.x + off[0],
             y: this.y + off[1],
@@ -93,8 +95,9 @@ export default class Circle extends Sprite {
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
-        
+        if (options?.tags)
+            this.tags = new Set([...this.tags, ...options.tags]);
+
         if (!this.hidden) this.draw();
     }
-
 }

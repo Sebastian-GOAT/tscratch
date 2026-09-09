@@ -1,6 +1,7 @@
 # Collisions
 
 TScratch provides pixel-accurate collision detection via `sprite.touching(other)`.
+You can also check with sprite groups: `sprite.touching(spriteGroup)` (note: this method only supports AABB and partial precision modes).
 The implementation includes performance optimizations to keep collision checks
 fast for typical classroom projects:
 
@@ -9,6 +10,7 @@ fast for typical classroom projects:
 - Tight axis-aligned bounding boxes (AABB) computed with trigonometry.
 - A per-sprite collision canvas sized to the minimal collision rectangle.
 - The canvas context uses `willReadFrequently` to reduce GPU↔CPU transfer costs.
+- Only two `getImageData()` calls for any number of sprites in a group
 
 ## Precision Levels
 
@@ -26,6 +28,7 @@ if (sprite1.touching(sprite2, { precision: 'AABB' })) { ... }
 
 // Pixel-perfect boolean
 if (sprite1.touching(sprite2, { precision: 'partial' })) { ... }
+if (sprite1.touching(sprite2)) { ... } // Simplified
 
 // Full collision info
 const collision = sprite1.touching(sprite2, { precision: 'full' });
