@@ -10,6 +10,15 @@ import InverseKinematics from '@/tech/ik/InverseKinematics.ts';
 import PathFinder from '@/tech/pathfinder/PathFinder.ts';
 import Timer from '@/tech/timer/Timer.ts';
 
+// Particles
+import ParticleEmitter, { type ParticleEmitterOptions } from '@/tech/particles/ParticleEmitter.ts';
+import type Particle from '@/tech/particles/Particle.ts';
+
+import ConeParticleEmitter, { type ConeParticleEmitterOptions } from '@/tech/particles/emmiters/ConeParticleEmitter.ts';
+import LineParticleEmitter, { type LineParticleEmitterOptions } from '@/tech/particles/emmiters/LineParticleEmitter.ts';
+import VortexParticleEmitter, { type VortexParticleEmitterOptions } from '@/tech/particles/emmiters/VortexParticleEmitter.ts';
+import SpiralParticleEmitter, { type SpiralParticleEmitterOptions } from '@/tech/particles/emmiters/SpiralParticleEmitter.ts';
+
 // Multiplayer
 import Multiplayer from '@main/Multiplayer.ts';
 
@@ -63,6 +72,12 @@ const TScratch = {
     InverseKinematics,
     PathFinder,
     Timer,
+
+    ParticleEmitter,
+    ConeParticleEmitter,
+    LineParticleEmitter,
+    VortexParticleEmitter,
+    SpiralParticleEmitter,
 
     // Multiplayer
     Multiplayer,
@@ -123,6 +138,12 @@ export {
     PathFinder,
     Timer,
 
+    ParticleEmitter,
+    ConeParticleEmitter,
+    LineParticleEmitter,
+    VortexParticleEmitter,
+    SpiralParticleEmitter,
+
     // Multiplayer
     Multiplayer,
 
@@ -162,6 +183,12 @@ export {
     Cuboid,
 
     // Options
+    type ParticleEmitterOptions,
+    type ConeParticleEmitterOptions,
+    type LineParticleEmitterOptions,
+    type VortexParticleEmitterOptions,
+    type SpiralParticleEmitterOptions,
+    
     type SoundOptions,
     type LineOptions,
     type SpriteOptions,
@@ -198,6 +225,8 @@ export {
     type Mat2,
     type Mat3,
     type Mat4,
+
+    type Particle,
     
     // Canvas
     setScale,

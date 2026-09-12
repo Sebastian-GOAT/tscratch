@@ -25,11 +25,13 @@ export default class Engine {
 
     public maxFPS = 30;
     private deltaTime = 1 / this.maxFPS;
+    private elapsedTime = 0;
     private lastFrame: number = performance.now();
     private lastUpdate: number = this.lastFrame;
     private refreshScheduled = false;
     private animationFrameId: number | null = null;
     private loopGeneration = 0;
+    private resetFrameTiming = false;
 
     private sounds: HTMLAudioElement[] = [];
 
@@ -121,6 +123,10 @@ export default class Engine {
         addEventListener('keyup', e => {
             this.keysPressed.delete(this.normalizeKey(e.key));
         });
+
+        document.addEventListener('visibilitychange', () => {
+            this.resetFrameTiming = true;
+        });
     }
 
     // Process continuous inputs on every engine frame tick
@@ -162,6 +168,16 @@ export default class Engine {
         const tick = async (currentTime: number) => {
             if (!this.loopRunning || generation !== this.loopGeneration) return;
 
+            if (this.resetFrameTiming) {
+                this.lastFrame = currentTime;
+                this.lastUpdate = currentTime;
+                accumulator = 0;
+                this.resetFrameTiming = false;
+
+                this.animationFrameId = requestAnimationFrame(tick);
+                return;
+            }
+
             const frameElapsed = currentTime - this.lastFrame;
             this.lastFrame = currentTime;
             accumulator += frameElapsed;
@@ -169,6 +185,7 @@ export default class Engine {
             if (accumulator >= frameInterval) {
                 this.deltaTime = (currentTime - this.lastUpdate) / 1000;
                 this.lastUpdate = currentTime;
+                this.elapsedTime += this.deltaTime * 1000;
                 accumulator = accumulator % frameInterval;
 
                 // Fire continuous input callbacks synchronized with the game frame
@@ -188,6 +205,10 @@ export default class Engine {
 
     public getDeltaTime() {
         return this.deltaTime;
+    }
+
+    public getElapsedTime() {
+        return this.elapsedTime;
     }
 
     // Joysticks

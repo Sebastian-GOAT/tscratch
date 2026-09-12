@@ -1,5 +1,6 @@
 import type { Mat2, Mat3, Mat4 } from '@ctypes/Matricies.ts';
 import type { Vec2, Vec3, Vec4 } from '@ctypes/Vectors.ts';
+import { ctx } from './canvas.ts';
 
 type Vec = Vec2 | Vec3 | Vec4;
 type Mat = Mat2 | Mat3 | Mat4;
@@ -150,5 +151,25 @@ export default class TSCMath {
 
     public static asec(val: number) {
         return TSCMath.toDegrees(Math.acos(1 / val));
+    }
+
+    // --- Colors ---
+
+    public static toRGB(color: string): { r: number; g: number; b: number } {
+        
+        ctx.fillStyle = color;
+        const computed = ctx.fillStyle; // HEX
+
+        if (computed.startsWith('#')) {
+            const hex = computed.slice(1);
+            const num = parseInt(hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex, 16);
+            return {
+                r: (num >> 16) & 255,
+                g: (num >> 8) & 255,
+                b: num & 255
+            };
+        }
+
+        return { r: 0, g: 0, b: 255 }; // Default fallback
     }
 }

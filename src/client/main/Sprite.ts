@@ -479,9 +479,9 @@ export default abstract class Sprite {
 
         c.translate(canvas.width / 2, canvas.height / 2);
         c.scale(camera.zoom, camera.zoom);
-        c.rotate(-this.toRadians(camera.rotation));
+        c.rotate(-TSCMath.toRadians(camera.rotation));
         c.translate(this.x - camera.x, -(this.y - camera.y));
-        c.rotate(this.toRadians(this.dir));
+        c.rotate(TSCMath.toRadians(this.dir));
         c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
     }
 
