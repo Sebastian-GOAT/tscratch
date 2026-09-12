@@ -9,6 +9,7 @@ interface ParticleOptions {
     vY: number;
     color: string;
     size: number;
+    modifiers: Map<string, unknown>;
 }
 
 export default class Particle {
@@ -26,7 +27,7 @@ export default class Particle {
         penCtx.save();
         this.applyDrawTransform();
 
-        const { r, g, b } = TSCMath.toRGB(this.color);
+        const { r, g, b } = TSCMath.colorToRGB(this.color);
 
         penCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         penCtx.fillRect(
@@ -52,9 +53,20 @@ export default class Particle {
         this.startTime = Engine.init().getElapsedTime();
         this.x = options.x;
         this.y = options.y;
-        this.vX = options.vX;
-        this.vY = options.vY;
         this.color = options.color;
-        this.size = options.size;
+        this.size = Math.max(
+            1,
+            options.modifiers.has('randomSize')
+                ? Math.max(
+                    options.size * (options.modifiers.get('randomSize') as number),
+                    options.size * Math.random()
+                )
+                : options.size
+        );
+
+        const percentage = this.size / options.size;
+
+        this.vX = options.vX * (options.modifiers.has('parallax') ? percentage : 1);
+        this.vY = options.vY * (options.modifiers.has('parallax') ? percentage : 1);
     }
 }

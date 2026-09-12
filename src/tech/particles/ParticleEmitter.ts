@@ -1,6 +1,7 @@
 import Engine from '@main/Engine.ts';
 import Particle from './Particle.ts';
 import { canvas, penCtx } from '@main/canvas.ts';
+import type { ParticleModifier } from './ParticleModifiers.ts';
 
 export interface ParticleEmitterOptions {
     x: number;
@@ -9,7 +10,6 @@ export interface ParticleEmitterOptions {
     interval: number;
 
     particleColor: string;
-    particleFade: number;
     particleSpeed: number;
     particleSize: number;
     particleLifetime: number;
@@ -26,9 +26,9 @@ export default abstract class ParticleEmitter {
     public particleSpeed: number;
     public particleSize: number;
     public particleLifetime: number;
-    public particleFade: number;
 
     public particles: Particle[] = [];
+    protected modifiers: Map<string, unknown> = new Map;
 
     protected lastEmitted: number;
 
@@ -55,22 +55,36 @@ export default abstract class ParticleEmitter {
 
             this.updateParticleState(particle, dt);
 
-            if (this.particleFade === 0) {
-                particle.draw();
+            // Fade out modifier
+            if (this.modifiers.has('fadeOut')) {
+
+                const duration = this.modifiers.get('fadeOut') as number;
+
+                if (duration === 0) {
+                    particle.draw();
+                    continue;
+                }
+    
+                // Draw & fade out
+                const ageInSeconds = (now - particle.startTime) * 0.001;
+                const remainingTime = this.particleLifetime - ageInSeconds;
+    
+                if (remainingTime >= duration)                             // Full
+                    particle.draw();
+                else {
+                    const alpha = Math.max(0, remainingTime / duration);   // Fade
+                    particle.draw(alpha);
+                }
+
                 continue;
             }
 
-            // Draw & fade out
-            const ageInSeconds = (now - particle.startTime) * 0.001;
-            const remainingTime = this.particleLifetime - ageInSeconds;
-
-            if (remainingTime >= this.particleFade)                             // Full
-                particle.draw();
-            else {
-                const alpha = Math.max(0, remainingTime / this.particleFade);   // Fade
-                particle.draw(alpha);
-            }
+            particle.draw();
         }
+    }
+
+    public addModifier(modifier: ParticleModifier) {
+        this.modifiers.set(modifier.name, modifier.value);
     }
 
     public static clear() {
@@ -88,6 +102,5 @@ export default abstract class ParticleEmitter {
         this.particleSpeed = options?.particleSpeed ?? 100;
         this.particleSize = options?.particleSize ?? 4;
         this.particleLifetime = options?.particleLifetime ?? 1.5;
-        this.particleFade = options?.particleFade ?? 0.3;
     }
 }

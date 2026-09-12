@@ -24,33 +24,31 @@ export default class SpiralParticleEmitter extends ParticleEmitter {
             vX: TSCMath.sin(dir) * this.particleSpeed,
             vY: TSCMath.cos(dir) * this.particleSpeed,
             color: this.particleColor,
-            size: Math.max(
-                1,
-                this.particleSize * 0.6,
-                this.particleSize * Math.random()
-            )
+            size: this.particleSize,
+            modifiers: this.modifiers
         }));
     }
 
     protected override updateParticleState(particle: Particle, dt: number) {
-const age = (performance.now() - particle.startTime) * 0.001;
 
-    // 1. Recover original emission angle (in degrees) from stored velocity
-    const baseAngleRad = Math.atan2(particle.vX, particle.vY);
-    const baseAngleDeg = baseAngleRad * (180 / Math.PI);
+        const age = (performance.now() - particle.startTime) * 0.001;
 
-    // 2. Degrees rotated over time based on speed
-    const rotationDegrees = age * this.particleSpeed;
+        // 1. Recover original emission angle (in degrees) from stored velocity
+        const baseAngleRad = Math.atan2(particle.vX, particle.vY);
+        const baseAngleDeg = baseAngleRad * (180 / Math.PI);
 
-    // 3. Spiral radius: increases by `spacing` every 360° of rotation
-    const radius = (rotationDegrees / 360) * this.spacing;
+        // 2. Degrees rotated over time based on speed
+        const rotationDegrees = age * this.particleSpeed;
 
-    // 4. Combine base angle + rotation
-    const currentAngle = baseAngleDeg + rotationDegrees;
+        // 3. Spiral radius: increases by `spacing` every 360° of rotation
+        const radius = (rotationDegrees / 360) * this.spacing;
 
-    // 5. Update position using Archimedean spiral formula
-    particle.x = this.x + TSCMath.sin(currentAngle) * radius;
-    particle.y = this.y + TSCMath.cos(currentAngle) * radius;
+        // 4. Combine base angle + rotation
+        const currentAngle = baseAngleDeg + rotationDegrees;
+
+        // 5. Update position using Archimedean spiral formula
+        particle.x = this.x + TSCMath.sin(currentAngle) * radius;
+        particle.y = this.y + TSCMath.cos(currentAngle) * radius;
     }
 
     constructor(options?: Partial<SpiralParticleEmitterOptions>) {

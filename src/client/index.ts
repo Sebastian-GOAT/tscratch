@@ -2,7 +2,7 @@
 import Engine, { type SoundOptions } from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
 import SpriteGroup, { type SpriteGroupOptions } from '@main/SpriteGroup.ts';
-import { setScale, canvas, ctx, penCanvas, penCtx } from '@main/canvas.ts';
+import { setScale, canvas, ctx, penCanvas, penCtx, setBackground } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
@@ -13,6 +13,7 @@ import Timer from '@/tech/timer/Timer.ts';
 // Particles
 import ParticleEmitter, { type ParticleEmitterOptions } from '@/tech/particles/ParticleEmitter.ts';
 import type Particle from '@/tech/particles/Particle.ts';
+import ParticleModifiers, { type ParticleModifier } from '@/tech/particles/ParticleModifiers.ts';
 
 import ConeParticleEmitter, { type ConeParticleEmitterOptions } from '@/tech/particles/emmiters/ConeParticleEmitter.ts';
 import LineParticleEmitter, { type LineParticleEmitterOptions } from '@/tech/particles/emmiters/LineParticleEmitter.ts';
@@ -74,6 +75,8 @@ const TScratch = {
     Timer,
 
     ParticleEmitter,
+    ParticleModifiers,
+
     ConeParticleEmitter,
     LineParticleEmitter,
     VortexParticleEmitter,
@@ -122,7 +125,8 @@ const TScratch = {
     canvas,
     penCanvas,
     ctx,
-    penCtx
+    penCtx,
+    setBackground
 };
 
 export default TScratch;
@@ -139,6 +143,8 @@ export {
     Timer,
 
     ParticleEmitter,
+    ParticleModifiers,
+
     ConeParticleEmitter,
     LineParticleEmitter,
     VortexParticleEmitter,
@@ -184,6 +190,8 @@ export {
 
     // Options
     type ParticleEmitterOptions,
+    type ParticleModifier,
+    
     type ConeParticleEmitterOptions,
     type LineParticleEmitterOptions,
     type VortexParticleEmitterOptions,
@@ -233,5 +241,6 @@ export {
     canvas,
     penCanvas,
     ctx,
-    penCtx
+    penCtx,
+    setBackground
 };

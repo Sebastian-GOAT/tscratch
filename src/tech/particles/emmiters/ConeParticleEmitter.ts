@@ -22,11 +22,8 @@ export default class ConeParticleEmitter extends ParticleEmitter {
             vX: TSCMath.sin(dir) * this.particleSpeed,
             vY: TSCMath.cos(dir) * this.particleSpeed,
             color: this.particleColor,
-            size: Math.max(
-                1,
-                this.particleSize * 0.6,
-                this.particleSize * Math.random()
-            )
+            size: this.particleSize,
+            modifiers: this.modifiers
         }));
     }
 

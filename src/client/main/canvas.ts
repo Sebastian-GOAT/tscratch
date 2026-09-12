@@ -24,5 +24,9 @@ export function setScale(newScale: number) {
     penCanvas.style.width = `${pixelWidth}px`;
 }
 
+export function setBackground(color: string) {
+    penCanvas.style.backgroundColor = color;
+}
+
 updateSize();
 setScale(1.5);

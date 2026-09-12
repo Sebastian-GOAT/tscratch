@@ -155,7 +155,7 @@ export default class TSCMath {
 
     // --- Colors ---
 
-    public static toRGB(color: string): { r: number; g: number; b: number } {
+    public static colorToRGB(color: string) {
         
         ctx.fillStyle = color;
         const computed = ctx.fillStyle; // HEX
@@ -170,6 +170,48 @@ export default class TSCMath {
             };
         }
 
-        return { r: 0, g: 0, b: 255 }; // Default fallback
+        return { r: 0, g: 0, b: 0 }; // Default fallback
+    }
+
+    public static RBGToHSL(r: number, g: number, b: number) {
+
+        const rNorm = r / 255;
+        const gNorm = g / 255;
+        const bNorm = b / 255;
+
+        const max = Math.max(rNorm, gNorm, bNorm);
+        const min = Math.min(rNorm, gNorm, bNorm);
+        const chroma = max - min;
+
+        const lightness = (max + min) / 2;
+
+        let hue = 0;
+        let saturation = 0;
+
+        if (chroma !== 0) {
+            saturation = lightness > 0.5 
+            ? chroma / (2 - max - min) 
+            : chroma / (max + min);
+
+            switch (max) {
+            case rNorm:
+                hue = (gNorm - bNorm) / chroma + (gNorm < bNorm ? 6 : 0);
+                break;
+            case gNorm:
+                hue = (bNorm - rNorm) / chroma + 2;
+                break;
+            case bNorm:
+                hue = (rNorm - gNorm) / chroma + 4;
+                break;
+            }
+
+            hue /= 6;
+        }
+
+        return {
+            h: Math.round(hue * 360),
+            s: Math.round(saturation * 100),
+            l: Math.round(lightness * 100),
+        };
     }
 }
