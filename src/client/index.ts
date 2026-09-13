@@ -10,6 +10,8 @@ import InverseKinematics from '@/tech/ik/InverseKinematics.ts';
 import PathFinder from '@/tech/pathfinder/PathFinder.ts';
 import Timer from '@/tech/timer/Timer.ts';
 
+import Rope, { type RopeOptions } from '@/tech/rope/Rope.ts';
+
 // Particles
 import ParticleEmitter, { type ParticleEmitterOptions } from '@/tech/particles/ParticleEmitter.ts';
 import type Particle from '@/tech/particles/Particle.ts';
@@ -82,6 +84,8 @@ const TScratch = {
     VortexParticleEmitter,
     SpiralParticleEmitter,
 
+    Rope,
+
     // Multiplayer
     Multiplayer,
 
@@ -149,6 +153,8 @@ export {
     LineParticleEmitter,
     VortexParticleEmitter,
     SpiralParticleEmitter,
+
+    Rope,
 
     // Multiplayer
     Multiplayer,
@@ -225,6 +231,8 @@ export {
     type Object3DOptions,
 
     type CuboidOptions,
+
+    type RopeOptions,
 
     // Other types
     type Vec2,

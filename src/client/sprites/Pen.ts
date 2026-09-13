@@ -58,8 +58,12 @@ export default class Pen extends Sprite {
         sprite.draw(true);
     }
 
-    public eraseAll() {
+    public static eraseAll() {
         penCtx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    public eraseAll() {
+        Pen.eraseAll();
     }
 
     public dot() {

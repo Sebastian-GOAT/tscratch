@@ -25,6 +25,7 @@ export default class SpiralParticleEmitter extends ParticleEmitter {
             vY: TSCMath.cos(dir) * this.particleSpeed,
             color: this.particleColor,
             size: this.particleSize,
+            lifetime: this.particleLifetime,
             modifiers: this.modifiers
         }));
     }
@@ -49,6 +50,9 @@ export default class SpiralParticleEmitter extends ParticleEmitter {
         // 5. Update position using Archimedean spiral formula
         particle.x = this.x + TSCMath.sin(currentAngle) * radius;
         particle.y = this.y + TSCMath.cos(currentAngle) * radius;
+        particle.dir += this.modifiers.has('turn')
+            ? this.modifiers.get('turn') as number * dt
+            : 0;
     }
 
     constructor(options?: Partial<SpiralParticleEmitterOptions>) {

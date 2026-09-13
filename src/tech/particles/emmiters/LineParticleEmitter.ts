@@ -28,6 +28,7 @@ export default class LineParticleEmitter extends ParticleEmitter {
             vY: TSCMath.cos(this.dir) * this.particleSpeed,
             color: this.particleColor,
             size: this.particleSize,
+            lifetime: this.particleLifetime,
             modifiers: this.modifiers
         }));
     }
@@ -35,6 +36,9 @@ export default class LineParticleEmitter extends ParticleEmitter {
     protected override updateParticleState(particle: Particle, dt: number) {
         particle.x += particle.vX  * dt;
         particle.y += particle.vY * dt;
+        particle.dir += this.modifiers.has('turn')
+            ? this.modifiers.get('turn') as number * dt
+            : 0;
     }
 
     constructor(options?: Partial<LineParticleEmitterOptions>) {

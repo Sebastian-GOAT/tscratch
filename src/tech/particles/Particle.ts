@@ -9,6 +9,7 @@ interface ParticleOptions {
     vY: number;
     color: string;
     size: number;
+    lifetime: number;
     modifiers: Map<string, unknown>;
 }
 
@@ -18,6 +19,7 @@ export default class Particle {
     public y: number;
     public vX: number;
     public vY: number;
+    public dir: number;
     public color: string;
     public size: number;
 
@@ -47,12 +49,13 @@ export default class Particle {
         penCtx.scale(camera.zoom, camera.zoom);
         penCtx.rotate(-TSCMath.toRadians(camera.rotation));
         penCtx.translate(this.x - camera.x, -(this.y - camera.y));
+        penCtx.rotate(TSCMath.toRadians(this.dir));
     }
 
     constructor(options: ParticleOptions) {
-        this.startTime = Engine.init().getElapsedTime();
         this.x = options.x;
         this.y = options.y;
+        this.dir = 0;
         this.color = options.color;
         this.size = Math.max(
             1,
@@ -66,7 +69,22 @@ export default class Particle {
 
         const percentage = this.size / options.size;
 
-        this.vX = options.vX * (options.modifiers.has('parallax') ? percentage : 1);
-        this.vY = options.vY * (options.modifiers.has('parallax') ? percentage : 1);
+        if (options.modifiers.has('parallax')) {
+            this.vX = options.vX * percentage;
+            this.vY = options.vY * percentage;
+        }
+        else if (options.modifiers.has('randomSpeed')) {
+            this.vX = Math.max(options.vX * (options.modifiers.get('randomSpeed') as number), options.vX * Math.random());
+            this.vY = Math.max(options.vY * (options.modifiers.get('randomSpeed') as number), options.vY * Math.random());
+        }
+        else {
+            this.vX = options.vX;
+            this.vY = options.vY;
+        }
+
+        this.startTime = Engine.init().getElapsedTime() + (options.modifiers.has('parallax')
+            ? (1 / percentage - 1) * options.lifetime * 1000
+            : 0
+        );
     }
 }
