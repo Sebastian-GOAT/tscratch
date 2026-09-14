@@ -4,13 +4,14 @@ import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
 import SpriteGroup, { type SpriteGroupOptions } from '@main/SpriteGroup.ts';
 import { setScale, canvas, ctx, penCanvas, penCtx, setBackground } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
+import Slider, { type SliderOptions } from '@main/Slider.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
 import InverseKinematics from '@/tech/ik/InverseKinematics.ts';
 import PathFinder from '@/tech/pathfinder/PathFinder.ts';
 import Timer from '@/tech/timer/Timer.ts';
 
-import Rope, { type RopeOptions } from '@/tech/rope/Rope.ts';
+import Rope, { type RopeOptions } from '@sprites/physics/Rope.ts';
 
 // Particles
 import ParticleEmitter, { type ParticleEmitterOptions } from '@/tech/particles/ParticleEmitter.ts';
@@ -70,6 +71,7 @@ const TScratch = {
     Sprite,
     SpriteGroup,
     TSCMath,
+    Slider,
     Perlin1D,
     Perlin2D,
     InverseKinematics,
@@ -140,6 +142,7 @@ export {
     Sprite,
     SpriteGroup,
     TSCMath,
+    Slider,
     Perlin1D,
     Perlin2D,
     InverseKinematics,
@@ -232,6 +235,7 @@ export {
 
     type CuboidOptions,
 
+    type SliderOptions,
     type RopeOptions,
 
     // Other types

@@ -11,6 +11,8 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Added
 
+- `Slider` - an interactive slider inspired by Scratch variables
+- `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers
 - `SpriteGroup` class, which lets you manipulate multiple sprites at the same time + check collisions
 - Brutal optimization for checking collisions with sprite groups - from O(n) to O(1) `getImageData()` usage

@@ -80,12 +80,21 @@ export default class Pen extends Sprite {
     public static drawSprite<
         SpriteClass extends new (options?: SpriteOptions) => Sprite
     >(
-        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0]
+        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0], ctx = penCtx
     ) {
         const sprite = new spriteClass(options ?? {});
-        sprite.draw(true);
+        sprite.draw(ctx === penCtx ? true : undefined);
         Engine.init().removeSprite(sprite);
     }
+
+    public drawSprite<
+        SpriteClass extends new (options?: SpriteOptions) => Sprite
+    >(
+        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0], ctx = penCtx
+    ) {
+        Pen.drawSprite(spriteClass, options, ctx);
+    }
+
 
     private drawLine(lastX: number, lastY: number) {
         penCtx.beginPath();

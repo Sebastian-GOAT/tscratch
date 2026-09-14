@@ -67,11 +67,11 @@ export default class Particle {
                 : options.size
         );
 
-        const percentage = this.size / options.size;
+        const sizePercentage = this.size / options.size;
 
         if (options.modifiers.has('parallax')) {
-            this.vX = options.vX * percentage;
-            this.vY = options.vY * percentage;
+            this.vX = options.vX * sizePercentage;
+            this.vY = options.vY * sizePercentage;
         }
         else if (options.modifiers.has('randomSpeed')) {
             this.vX = Math.max(options.vX * (options.modifiers.get('randomSpeed') as number), options.vX * Math.random());
@@ -82,9 +82,13 @@ export default class Particle {
             this.vY = options.vY;
         }
 
+        const speedPercentage = Math.sqrt((this.vX ** 2 + this.vY ** 2) / (options.vX ** 2 + options.vY ** 2));
+
         this.startTime = Engine.init().getElapsedTime() + (options.modifiers.has('parallax')
-            ? (1 / percentage - 1) * options.lifetime * 1000
-            : 0
+            ? (1 / sizePercentage - 1) * options.lifetime * 1000
+            : options.modifiers.has('randomSpeed')
+                ? (1 / speedPercentage - 1) * options.lifetime * 1000
+                : 0
         );
     }
 }

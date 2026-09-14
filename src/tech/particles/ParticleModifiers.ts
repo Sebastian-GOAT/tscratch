@@ -5,6 +5,11 @@ export interface ParticleModifier {
 
 export default class ParticleModifiers {
 
+    public static readonly incompatibleModifiers: Record<string, string[]> = {
+        'parallax': ['randomSpeed'],
+        'randomSpeed': ['parallax']
+    };
+
     public static fadeOut(duration: number): ParticleModifier {
         return { name: 'fadeOut', value: duration };
     }

@@ -1,4 +1,5 @@
 import type { Vec2 } from '@ctypes/Vectors.ts';
+import type Sprite from '@main/Sprite.ts';
 import Pen, { type PenOptions } from '@sprites/Pen.ts';
 
 export interface RopeOptions {
@@ -21,6 +22,8 @@ export default class Rope {
     public lockStart: Vec2 | null;
     public lockEnd: Vec2 | null;
     public gravity: number;
+
+    private attachedSprite: Sprite | null = null;
 
     public update() {
         const { gravity } = this;
@@ -72,6 +75,10 @@ export default class Rope {
             }
         }
 
+        // Attach the sprite
+        const last = this.points[this.points.length - 1]!;
+        this.attachedSprite?.goTo(...last);
+
         // 3. Draw the rope
         this.draw();
     }
@@ -103,6 +110,11 @@ export default class Rope {
 
         this.points[index] = [...position];
         this.prevPoints[index] = [...position];
+    }
+
+    // Attach a sprite to the end
+    public attachSprite(sprite: Sprite) {
+        this.attachedSprite = sprite;
     }
 
     // Setters

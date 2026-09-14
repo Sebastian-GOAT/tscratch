@@ -3,6 +3,7 @@ import { canvas, ctx } from './canvas.ts';
 import Sprite from './Sprite.ts';
 import TSCMath from './TSCMath.ts';
 import Camera from './Camera.ts';
+import Slider, { baseHeight as sliderBaseHeight, baseWidth as sliderBaseWidth, margin as sliderMargin } from './Slider.ts';
 
 type GameLoop = (() => void) | (() => Promise<void>);
 
@@ -55,6 +56,7 @@ export default class Engine {
     public sceneMap: SceneMap = new Map();
 
     private variableMap = new Map<string, unknown>();
+    private sliders: Slider[] = [];
 
     public static init() {
         if (!this.instance)
@@ -68,14 +70,18 @@ export default class Engine {
         this.sceneMap.set('main', { loop: null, sprites: [] });
         this.sceneMap.set('*', { loop: null, sprites: [] });
 
-        // Pointer Events
-        canvas.addEventListener('pointermove', e => {
-            if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
-
+        const updatePointerPosition = (e: PointerEvent) => {
             const rect = canvas.getBoundingClientRect();
 
             this.mouseX = (e.clientX - rect.left) * (canvas.width / rect.width) - canvas.width / 2;
             this.mouseY = -((e.clientY - rect.top) * (canvas.height / rect.height) - canvas.height / 2);
+        };
+
+        // Pointer Events
+        canvas.addEventListener('pointermove', e => {
+            if (this.primaryPointerId !== null && e.pointerId !== this.primaryPointerId) return;
+
+            updatePointerPosition(e);
 
             this.updateJoysticks();
         });
@@ -84,6 +90,7 @@ export default class Engine {
             canvas.setPointerCapture(e.pointerId);
 
             if (this.primaryPointerId === null) {
+                updatePointerPosition(e);
                 this.primaryPointerId = e.pointerId;
                 this.mouseDown = true;
                 this.updateJoysticks();
@@ -94,8 +101,11 @@ export default class Engine {
             canvas.releasePointerCapture(e.pointerId);
 
             if (e.pointerId === this.primaryPointerId) {
+
                 this.primaryPointerId = null;
                 this.mouseDown = false;
+                Slider.dragging = null;
+
                 if (this.activeJoystick) {
                     this.activeJoystick.joyX = 0;
                     this.activeJoystick.joyY = 0;
@@ -140,7 +150,7 @@ export default class Engine {
         }
 
         // 2. Process active mouse/pointer presses (e.g. Sprite onPress)
-        if (this.mouseDown || this.pressCallbacks.size > 0) {
+        if (this.mouseDown) {
             this.pressCallbacks.forEach(callback => callback());
         }
     }
@@ -333,6 +343,16 @@ export default class Engine {
         this.refresh();
     }
 
+    public addSlider(slider: Slider) {
+        this.sliders.push(slider);
+
+        slider.x = (canvas.width - sliderBaseWidth) / 2 - sliderMargin;
+        slider.y = (canvas.height - sliderBaseHeight) / 2 - sliderMargin - (this.sliders.length - 1) * (sliderBaseHeight + sliderMargin);
+
+        if (slider.label === '@tscratch/default_label')
+            slider.label = `Variable ${this.sliders.length}`;
+    }
+
     public refresh() {
         if (this.refreshScheduled) return;
         this.refreshScheduled = true;
@@ -352,6 +372,12 @@ export default class Engine {
             sprites.forEach(sprite => {
                 if (!sprite.hidden)
                     sprite.draw();
+            });
+
+            // Draw sliders
+            this.sliders.forEach(slider => {
+                if (!slider.hidden)
+                    slider.draw();
             });
         });
     }

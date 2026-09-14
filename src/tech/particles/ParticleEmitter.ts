@@ -2,6 +2,7 @@ import Engine from '@main/Engine.ts';
 import Particle from './Particle.ts';
 import { canvas, penCtx } from '@main/canvas.ts';
 import type { ParticleModifier } from './ParticleModifiers.ts';
+import ParticleModifiers from './ParticleModifiers.ts';
 
 export interface ParticleEmitterOptions {
     x: number;
@@ -83,8 +84,18 @@ export default abstract class ParticleEmitter {
         }
     }
 
-    public addModifier(modifier: ParticleModifier) {
+    public setModifier(modifier: ParticleModifier) {
         this.modifiers.set(modifier.name, modifier.value);
+
+        // Some modifiers don't work together, therefore we remove the others it collides with
+        const conflicts = ParticleModifiers.incompatibleModifiers[modifier.name];
+        if (conflicts)
+            for (const conflictName of conflicts)
+                this.modifiers.delete(conflictName);
+    }
+
+    public removeModifier(modifier: ParticleModifier) {
+        this.modifiers.delete(modifier.name);
     }
 
     public static clear() {
