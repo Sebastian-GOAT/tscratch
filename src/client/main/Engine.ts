@@ -368,6 +368,18 @@ export default class Engine {
                 ...this.sceneMap.get('*')!.sprites
             ];
 
+            // Lock the camera
+            sprites.forEach(sprite => {
+
+                const { camera } = this;
+                const { lockings } = camera;
+    
+                if (lockings.x === sprite) camera.x = lockings.x.x;
+                if (lockings.y === sprite) camera.y = lockings.y.y;
+                if (lockings.dir === sprite) camera.dir = lockings.dir.dir;
+                if (lockings.zoom === sprite) camera.zoom = 1 / lockings.zoom.size;
+            });
+
             // Draw sprites
             sprites.forEach(sprite => {
                 if (!sprite.hidden)

@@ -47,7 +47,7 @@ export default class Particle {
 
         penCtx.translate(canvas.width / 2, canvas.height / 2);
         penCtx.scale(camera.zoom, camera.zoom);
-        penCtx.rotate(-TSCMath.toRadians(camera.rotation));
+        penCtx.rotate(-TSCMath.toRadians(camera.dir));
         penCtx.translate(this.x - camera.x, -(this.y - camera.y));
         penCtx.rotate(TSCMath.toRadians(this.dir));
     }

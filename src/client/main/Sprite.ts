@@ -521,12 +521,19 @@ export default abstract class Sprite {
     // Helpers
 
     protected applyDrawTransform(c: CanvasRenderingContext2D): void {
-        const camera = Engine.init().camera;
+        const { camera } = Engine.init();
+        const isFixed = camera.fixedSprites.has(this);
 
         c.translate(canvas.width / 2, canvas.height / 2);
-        c.scale(camera.zoom, camera.zoom);
-        c.rotate(-TSCMath.toRadians(camera.rotation));
-        c.translate(this.x - camera.x, -(this.y - camera.y));
+
+        if (!isFixed) {
+            c.scale(camera.zoom, camera.zoom);
+            c.rotate(-TSCMath.toRadians(camera.dir));
+            c.translate(this.x - camera.x, -(this.y - camera.y));
+        }
+        else
+            c.translate(this.x, -this.y);
+
         c.rotate(TSCMath.toRadians(this.dir));
         c.translate(-this.pivot[0] * this.size, this.pivot[1] * this.size);
     }
