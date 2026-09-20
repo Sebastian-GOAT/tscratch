@@ -20,37 +20,6 @@ export default class SpriteGroup {
         return sprite.touching(this, options);
     }
 
-    public getBoundingBox(): BoundingBox {
-
-        if (this.sprites.size < 1) return { x: 0, y: 0, width: 0, height: 0 }
-
-        let minX = Infinity;
-        let minY = Infinity;
-        let maxX = -Infinity;
-        let maxY = -Infinity;
-
-        for (const sprite of this.sprites) {
-            const AABB = sprite.getBoundingBox();
-            
-            const left = AABB.x - AABB.width / 2;
-            const bottom = AABB.y - AABB.height / 2
-            const right = AABB.x + AABB.width / 2;
-            const top = AABB.y + AABB.height / 2;
-
-            if (left < minX) minX = left;
-            if (bottom < minY) minY = bottom;
-            if (right > maxX) maxX = right;
-            if (top > maxY) maxY = top;
-        }
-
-        return {
-            x: (minX + maxX) / 2,
-            y: (minY + maxY) / 2,
-            width: maxX - minX,
-            height: maxY - minY
-        };
-    }
-
     // Motion
     public changeX(dx: number) {
         for (const sprite of this.sprites)

@@ -15,7 +15,7 @@ The dates are in the following format: D?D.M?M.YYYY
 - `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers
 - `SpriteGroup` class, which lets you manipulate multiple sprites at the same time + check collisions
-- Brutal optimization for checking collisions with sprite groups - from O(n) to O(1) `getImageData()` usage
+- Optimization for checking collisions with sprite groups - from O(n) to O(1) `getImageData()` usage
 - `Timer` class - acts as a stopwatch
 - `Sprite.touchingPairs(sprites, handler)` - tests collisions between all pairs of specified sprites
 - `engine.camera` - camera offset, rotation and zoom

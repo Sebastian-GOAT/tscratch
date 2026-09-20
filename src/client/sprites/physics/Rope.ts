@@ -23,11 +23,11 @@ export default class Rope {
     public lockEnd: Vec2 | null;
     public gravity: number;
 
-    private attachedSprite: Sprite | null = null;
+    public attachedSprite: Sprite | null = null;
 
     public update() {
         const { gravity } = this;
-        const iterations = 1.5 * this.points.length;
+        const iterations = 10 * this.points.length;
 
         // 1. Apply gravity and calculate velocity using your exact array indexing
         for (let i = 0; i < this.points.length; i++) {
@@ -115,6 +115,10 @@ export default class Rope {
     // Attach a sprite to the end
     public attachSprite(sprite: Sprite) {
         this.attachedSprite = sprite;
+    }
+
+    public deattachSprite() {
+        this.attachedSprite = null;
     }
 
     // Setters

@@ -4,17 +4,17 @@ import ParticleEmitter, { type ParticleEmitterOptions } from '../ParticleEmitter
 
 export interface ConeParticleEmitterOptions extends ParticleEmitterOptions {
     dir: number;
-    angle: number;
+    range: number;
 }
 
 export default class ConeParticleEmitter extends ParticleEmitter {
 
     public dir: number;
-    public angle: number;
+    public range: number;
 
     protected override emit() {
 
-        const dir = this.dir + (Math.random() - 0.5) * this.angle;
+        const dir = this.dir + (Math.random() - 0.5) * this.range;
 
         this.particles.push(new Particle({
             x: this.x,
@@ -42,6 +42,6 @@ export default class ConeParticleEmitter extends ParticleEmitter {
         this.particleLifetime = options?.particleLifetime ?? 0.6;
 
         this.dir = options?.dir ?? 0;
-        this.angle = options?.angle ?? 25;
+        this.range = options?.range ?? 25;
     }
 }

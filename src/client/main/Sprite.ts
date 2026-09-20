@@ -142,32 +142,78 @@ export default abstract class Sprite {
 
         // AABB (bounding boxes)
         const bBox1 = this.getBoundingBox();
-        const bBox2 = sprite.getBoundingBox();
 
-        const aabbOverlap =
-            Math.abs(bBox1.x - bBox2.x) < (bBox1.width + bBox2.width) / 2 &&
-            Math.abs(bBox1.y - bBox2.y) < (bBox1.height + bBox2.height) / 2;
+        // For a group, keep only the sprites whose individual AABBs overlap.
+        const candidates: { sprite: Sprite; bBox: BoundingBox; }[] = [];
 
-        if (!aabbOverlap) return options.precision === 'full' ? null : false;
-        if (options.precision === 'AABB') return true;
+        if (isSpriteGroup) {
 
-        // Image data (pixel perfect)
+            for (const s of sprite.sprites) {
+                const bBox2 = s.getBoundingBox();
 
-        // Compute intersection bounding box
+                const overlap =
+                    Math.abs(bBox1.x - bBox2.x) <
+                        (bBox1.width + bBox2.width) / 2 &&
+                    Math.abs(bBox1.y - bBox2.y) <
+                        (bBox1.height + bBox2.height) / 2;
+
+                if (overlap)
+                    candidates.push({ sprite: s, bBox: bBox2 });
+            }
+
+            if (candidates.length === 0)
+                return options.precision === 'full' ? null : false;
+
+            if (options.precision === 'AABB')
+                return true;
+
+        } else {
+
+            const bBox2 = sprite.getBoundingBox();
+
+            const aabbOverlap =
+                Math.abs(bBox1.x - bBox2.x) <
+                    (bBox1.width + bBox2.width) / 2 &&
+                Math.abs(bBox1.y - bBox2.y) <
+                    (bBox1.height + bBox2.height) / 2;
+
+            if (!aabbOverlap)
+                return options.precision === 'full' ? null : false;
+
+            if (options.precision === 'AABB')
+                return true;
+        }
+
+        // Pixel-perfect check
+
         const b1Left = bBox1.x - bBox1.width / 2;
         const b1Top = bBox1.y + bBox1.height / 2;
         const b1Right = bBox1.x + bBox1.width / 2;
         const b1Bottom = bBox1.y - bBox1.height / 2;
 
-        const b2Left = bBox2.x - bBox2.width / 2;
-        const b2Top = bBox2.y + bBox2.height / 2;
-        const b2Right = bBox2.x + bBox2.width / 2;
-        const b2Bottom = bBox2.y - bBox2.height / 2;
+        let xMin = b1Left;
+        let yMin = b1Bottom;
+        let xMax = b1Right;
+        let yMax = b1Top;
 
-        const xMin = Math.max(b1Left, b2Left);
-        const yMin = Math.min(b1Bottom, b2Bottom);
-        const xMax = Math.min(b1Right, b2Right);
-        const yMax = Math.max(b1Top, b2Top);
+        if (isSpriteGroup) {
+            // Expand the pixel buffer only around AABB candidates.
+            for (const candidate of candidates) {
+                const bBox2 = candidate.bBox;
+
+                xMin = Math.min(xMin, bBox2.x - bBox2.width / 2);
+                yMin = Math.min(yMin, bBox2.y - bBox2.height / 2);
+                xMax = Math.max(xMax, bBox2.x + bBox2.width / 2);
+                yMax = Math.max(yMax, bBox2.y + bBox2.height / 2);
+            }
+        } else {
+            const bBox2 = sprite.getBoundingBox();
+
+            xMin = Math.max(xMin, bBox2.x - bBox2.width / 2);
+            yMin = Math.max(yMin, bBox2.y - bBox2.height / 2);
+            xMax = Math.min(xMax, bBox2.x + bBox2.width / 2);
+            yMax = Math.min(yMax, bBox2.y + bBox2.height / 2);
+        }
 
         const width = xMax - xMin;
         const height = yMax - yMin;

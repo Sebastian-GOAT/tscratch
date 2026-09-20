@@ -4,19 +4,19 @@ import ParticleEmitter, { type ParticleEmitterOptions } from '../ParticleEmitter
 
 export interface VortexParticleEmitterOptions extends ParticleEmitterOptions {
     dir: number;
-    angle: number;
+    range: number;
     rotation: number;
 }
 
 export default class VortexParticleEmitter extends ParticleEmitter {
 
     public dir: number;
-    public angle: number;
+    public range: number;
     public rotation: number;
 
     protected override emit() {
 
-        const dir = this.dir + (Math.random() - 0.5) * this.angle;
+        const dir = this.dir + (Math.random() - 0.5) * this.range;
 
         this.particles.push(new Particle({
             x: this.x,
@@ -55,7 +55,7 @@ export default class VortexParticleEmitter extends ParticleEmitter {
         this.particleLifetime = options?.particleLifetime ?? 2.2;
         
         this.dir = options?.dir ?? 0;
-        this.angle = options?.angle ?? 25;
+        this.range = options?.range ?? 25;
         this.rotation = options?.rotation ?? 180;
     }
 }

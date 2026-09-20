@@ -4,19 +4,19 @@ import ParticleEmitter, { type ParticleEmitterOptions } from '../ParticleEmitter
 
 export interface SpiralParticleEmitterOptions extends ParticleEmitterOptions {
     dir: number;
-    angle: number;
+    range: number;
     spacing: number;
 }
 
 export default class SpiralParticleEmitter extends ParticleEmitter {
 
     public dir: number;
-    public angle: number;
+    public range: number;
     public spacing: number;
 
     protected override emit() {
 
-        const dir = this.dir + (Math.random() - 0.5) * this.angle;
+        const dir = this.dir + (Math.random() - 0.5) * this.range;
 
         this.particles.push(new Particle({
             x: this.x,
@@ -63,7 +63,7 @@ export default class SpiralParticleEmitter extends ParticleEmitter {
         this.particleSpeed = options?.particleSpeed ?? 150;
 
         this.dir = options?.dir ?? 0;
-        this.angle = options?.angle ?? 135;
+        this.range = options?.range ?? 135;
         this.spacing = options?.spacing ?? 15;
     }
 }
