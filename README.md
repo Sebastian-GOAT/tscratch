@@ -1,5 +1,7 @@
 # TScratch
 
+<img width="507" height="388" alt="ball_animation" src="https://github.com/user-attachments/assets/0ba7e78c-b88c-400e-a624-c94a8c846573" />
+
 A Scratch-inspired 2D game engine for TypeScript. TScratch aims to help
 learners transition from block-based coding (Scratch) to typed code while
 keeping the runtime compact and approachable.
