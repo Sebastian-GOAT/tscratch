@@ -105,14 +105,14 @@ export default abstract class Sprite {
 
     // Sensing
 
-    public onPress(callback: () => void, options: { allowHold: boolean } = { allowHold: true }) {
+    public onPress(callback: () => void, options: { allowHold?: boolean } = { allowHold: true }) {
         const engine = Engine.init();
 
         engine.onPress(() => {
             const hovering = engine.hovering(this);
             const isCurrentlyPressed = hovering && engine.mouseDown;
 
-            if (!this.hidden && isCurrentlyPressed && (options.allowHold || !this.previousPressed))
+            if (!this.hidden && isCurrentlyPressed && ((options.allowHold ?? true) || !this.previousPressed))
                 callback();
 
             this.previousPressed = isCurrentlyPressed;

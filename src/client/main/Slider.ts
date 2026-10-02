@@ -31,7 +31,7 @@ const thumbRadius = 5;
 export default class Slider {
 
     public label: string;
-    public value: number;
+    private _value: number;
 
     public hidden: boolean;
 
@@ -45,6 +45,16 @@ export default class Slider {
     private thumbPath: Path2D;
     private onChangeFuncs: ((newValue: number) => void)[] = [];
     public static dragging: Slider | null = null;
+
+    public set value(newValue: number) {
+        this._value = newValue;
+        this.onChangeFuncs.forEach(func => func(newValue));
+        this.refresh();
+    }
+
+    public get value() {
+        return this._value;
+    }
 
     public draw() {
 
@@ -114,6 +124,7 @@ export default class Slider {
     }
 
     // Setters
+
     public setX(x: number) {
         this.x = x;
         this.refresh();
@@ -140,16 +151,6 @@ export default class Slider {
         this.refresh();
     }
 
-    public hide() {
-        this.hidden = true;
-        this.refresh();
-    }
-
-    public show() {
-        this.hidden = false;
-        this.refresh();
-    }
-
     public setStep(step: number) {
         this.step = step;
         this.refresh();
@@ -163,6 +164,23 @@ export default class Slider {
     public setMax(max: number) {
         this.max = max;
         this.refresh();
+    }
+
+    // Visibility
+
+    public hide() {
+        this.hidden = true;
+        this.refresh();
+    }
+
+    public show() {
+        this.hidden = false;
+        this.refresh();
+    }
+
+    public toggle() {
+        if (this.hidden) this.show();
+        else this.hide();
     }
 
     // Reactivity
@@ -195,7 +213,7 @@ export default class Slider {
         const engine = Engine.init();
 
         this.label = options?.label ?? '@tscratch/default_label';
-        this.value = options?.value ?? 0;
+        this._value = options?.value ?? 0;
 
         // Get tracked by the Engine class
         engine.addSlider(this);
@@ -222,7 +240,7 @@ export default class Slider {
                 const thumbX = Math.min(Math.max(engine.mouseX, this.x - sliderLength / 2), this.x + sliderLength / 2);
                 const rawValue = this.min + (this.max - this.min) * ((thumbX - this.x) / sliderLength + 0.5);
                 this.value = this.snapValue(rawValue);
-                for (const func of this.onChangeFuncs) func(this.value);
+                this.onChangeFuncs.forEach(func => func(this.value));
                 this.refresh();
             }
         });

@@ -4,7 +4,7 @@ import TSCMath from '@main/TSCMath.ts';
 
 export interface ImageSpriteOptions<K extends string> extends SpriteOptions {
     costumes: Record<K, ImageBitmap>;
-    costume?: K;
+    costume: K;
     width?: number;
     height?: number;
     lockAspectRatio?: boolean;
@@ -90,7 +90,7 @@ export default class ImageSprite<K extends string> extends Sprite {
     }
 
     public create(options?: ImageSpriteOptions<K>): this {
-        return new ImageSprite(options ?? { costumes: this.costumes }) as this;
+        return new ImageSprite(options ?? { costumes: this.costumes, costume: this.costume }) as this;
     }
 
     protected getCreateOptions() {
@@ -197,14 +197,8 @@ export default class ImageSprite<K extends string> extends Sprite {
         if (keys.length === 0)
             throw new Error('You must pass at least one costume to an ImageSprite');
 
-        if (options.costume) {
-            this.costume = options.costume;
-            this.costumeNumber = keys.indexOf(options.costume);
-        }
-        else {
-            this.costumeNumber = 0;
-            this.costume = keys[0]!;
-        }
+        this.costume = options.costume;
+        this.costumeNumber = keys.indexOf(options.costume);
 
         this.bitmap = this.costumes[this.costume];
         this.aspectRatio = this.bitmap.width / this.bitmap.height;

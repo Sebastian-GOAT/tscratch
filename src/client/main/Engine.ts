@@ -467,11 +467,11 @@ export default class Engine {
         return this.isKeyPressed(key);
     }
 
-    public onKeyPress(key: string, callback: () => void, options: { allowHold: boolean; } = { allowHold: true }) {
+    public onKeyPress(key: string, callback: () => void, options: { allowHold?: boolean; } = { allowHold: true }) {
         const normalizedKey = this.normalizeKey(key);
         const callbacks = this.keyCallbacks.get(normalizedKey) ?? [];
 
-        callbacks.push({ callback, allowHold: options.allowHold });
+        callbacks.push({ callback, allowHold: options.allowHold ?? true });
         this.keyCallbacks.set(normalizedKey, callbacks);
     }
 
