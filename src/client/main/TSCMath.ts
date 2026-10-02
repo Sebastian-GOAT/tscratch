@@ -17,6 +17,18 @@ export default class TSCMath {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+    // --- Wrappers ---
+
+    public static abs(n: number) {
+        return Math.abs(n);
+    }
+
+    public static sign(n: number) {
+        if (n > 0) return 1;
+        if (n < 0) return -1;
+        return 0;
+    }
+
     // --- Vectors ---
 
     // Vector magnitude
@@ -75,7 +87,7 @@ export default class TSCMath {
         return [
             a[1] * b[2] - a[2] * b[1],
             a[2] * b[0] - a[0] * b[2],
-            a[0] * b[1] - a[1] * b[0],
+            a[0] * b[1] - a[1] * b[0]
         ];
     }
 

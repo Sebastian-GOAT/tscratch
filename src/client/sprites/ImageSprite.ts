@@ -2,29 +2,35 @@ import { ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 
-export interface ImageSpriteOptions extends SpriteOptions {
-    costumes?: string[];
-    costumeNumber?: number;
+export interface ImageSpriteOptions<K extends string> extends SpriteOptions {
+    costumes: Record<K, ImageBitmap>;
+    costume?: K;
     width?: number;
     height?: number;
+    lockAspectRatio?: boolean;
     outlineColor?: string;
     outlineWidth?: number;
 };
 
-export default class ImageSprite extends Sprite {
-
+export default class ImageSprite<K extends string> extends Sprite {
+    
     public discriminant = 'imagesprite';
     public tags = new Set(['imagesprite']);
 
-    public costumes: string[];
-    public costumeNumber: number;
+    public costumes: Record<K, ImageBitmap>;
+    private bitmap: ImageBitmap;
+
+    public costume: K;
+    private costumeNumber: number;
+
     public width: number;
     public height: number;
+    public aspectRatio: number;
+
+    private aspectRatioLocked: boolean;
+
     public outlineColor: string;
     public outlineWidth: number;
-
-    private imgBitmap: ImageBitmap | null = null;
-    protected img: HTMLImageElement;
 
     public getBoundingBox(): BoundingBox {
 
@@ -68,10 +74,10 @@ export default class ImageSprite extends Sprite {
         c.strokeStyle = this.outlineColor;
         c.lineWidth = this.outlineWidth;
         c.drawImage(
-            this.imgBitmap ?? this.img,
+            this.bitmap,
             0, 0,
-            this.img.width,
-            this.img.height,
+            this.bitmap.width,
+            this.bitmap.height,
             -this.width / 2 * this.size,
             -this.height / 2 * this.size,
             this.width * this.size,
@@ -83,15 +89,16 @@ export default class ImageSprite extends Sprite {
         c.restore();
     }
 
-    public create(options?: ImageSpriteOptions): this {
-        return new ImageSprite(options) as this;
+    public create(options?: ImageSpriteOptions<K>): this {
+        return new ImageSprite(options ?? { costumes: this.costumes }) as this;
     }
 
     protected getCreateOptions() {
         return {
             ...super.getCreateOptions(),
             costumes: this.costumes,
-            costumeNumber: this.costumeNumber,
+            bitmap: this.bitmap,
+            costume: this.costume,
             width: this.width,
             height: this.height,
             outlineColor: this.outlineColor,
@@ -101,78 +108,134 @@ export default class ImageSprite extends Sprite {
 
     // Methods
 
-    public setCostume(costumeNumber: number) {
-        this.costumeNumber = costumeNumber < this.costumes.length && costumeNumber >= 0
-            ? costumeNumber
-            : 0;
-        this.img.src = this.costumes[this.costumeNumber]!;
-        this.loadImageBitmap();
+    public setCostume(costume: K) {
+
+        this.bitmap = this.costumes[costume];
+        this.costume = costume;
+        this.aspectRatio = this.bitmap.width / this.bitmap.height;
+
+        const keys = Object.keys(this.costumes) as K[];
+        this.costumeNumber = keys.indexOf(costume);
+
+        if (this.aspectRatioLocked)
+            this.height = this.width / this.aspectRatio;
+
+        this.invalidatePath();
+        this.refresh();
+    }
+
+    private setCostumeNumber(costumeNumber: number) {
+
+        const keys = Object.keys(this.costumes) as K[];
+        if (costumeNumber < 0 || costumeNumber >= keys.length)
+            throw new Error('costumeNumber must be between 0 and costumes.length - 1');
+
+        const targetKey = keys[costumeNumber]!;
+        const targetBitmap = this.costumes[targetKey];
+
+        this.bitmap = targetBitmap;
+        this.costume = targetKey;
+        this.costumeNumber = costumeNumber;
+        this.aspectRatio = this.bitmap.width / this.bitmap.height;
+
+        if (this.aspectRatioLocked)
+            this.height = this.width / this.aspectRatio;
+
+        this.invalidatePath();
+        this.refresh();
     }
 
     public nextCostume() {
-        this.costumeNumber = (this.costumeNumber + 1) % this.costumes.length;
-        this.img.src = this.costumes[this.costumeNumber]!;
-        this.loadImageBitmap();
+        const keys = Object.keys(this.costumes) as K[];
+        if (keys.length <= 1) return;
+
+        const nextIndex = (this.costumeNumber + 1) % keys.length;
+        this.setCostumeNumber(nextIndex);
     }
 
     public previousCostume() {
-        this.costumeNumber--;
-        if (this.costumeNumber < 0) this.costumeNumber = this.costumes.length - 1;
+        const keys = Object.keys(this.costumes) as K[];
+        if (keys.length <= 1) return;
 
-        this.img.src = this.costumes[this.costumeNumber]!;
-        this.loadImageBitmap();
+        const prevIndex = (this.costumeNumber - 1 + keys.length) % keys.length;
+        this.setCostumeNumber(prevIndex);
     }
 
     public setWidth(width: number) {
         this.width = width;
+        if (this.aspectRatioLocked)
+            this.height = width / this.aspectRatio;
+
         this.invalidatePath();
         this.refresh();
     }
 
     public setHeight(height: number) {
         this.height = height;
+        if (this.aspectRatioLocked)
+            this.width = height * this.aspectRatio;
+
         this.invalidatePath();
         this.refresh();
     }
 
-    // Bitmap loading
-    private loadImageBitmap() {
-        this.img.onload = () => {
-            this.imgBitmap = null;
-            createImageBitmap(this.img).then(bitmap => {
-                this.imgBitmap = bitmap;
-            });
-            this.refresh();
-        };
+    public lockAspectRatio() {
+        this.aspectRatioLocked = true;
+    }
+
+    public unlockAspectRatio() {
+        this.aspectRatioLocked = false;
     }
 
     // Constructor
-    constructor(options?: ImageSpriteOptions) {
+    constructor(options: ImageSpriteOptions<K>) {
         super(options);
 
-        this.costumes = options?.costumes ?? [];
-        this.costumeNumber = options?.costumeNumber && options.costumeNumber < this.costumes.length && options.costumeNumber >= 0
-            ? options.costumeNumber
-            : 0;
+        this.costumes = options.costumes;
 
-        this.img = new Image();
-        this.img.src = this.costumes[this.costumeNumber] ?? '';
+        const keys = Object.keys(this.costumes) as K[];
+        if (keys.length === 0)
+            throw new Error('You must pass at least one costume to an ImageSprite');
 
-        this.width = options?.width ?? 0;
-        this.height = options?.height ?? 0;
+        if (options.costume) {
+            this.costume = options.costume;
+            this.costumeNumber = keys.indexOf(options.costume);
+        }
+        else {
+            this.costumeNumber = 0;
+            this.costume = keys[0]!;
+        }
 
-        this.outlineColor = options?.outlineColor ?? 'black';
-        this.outlineWidth = options?.outlineWidth ?? 0;
-        if (options?.tags)
+        this.bitmap = this.costumes[this.costume];
+        this.aspectRatio = this.bitmap.width / this.bitmap.height;
+        this.aspectRatioLocked = options.lockAspectRatio ?? true;
+
+        if (this.aspectRatioLocked) {
+            if (options.width && options.height) throw new Error('You cannot pass in both width & height, because aspectRatioLocked is set to true');
+
+            if (options.width) {
+                this.width = options.width;
+                this.height = options.width / this.aspectRatio;
+            }
+            else if (options.height) {
+                this.width = options.height * this.aspectRatio;
+                this.height = options.height;
+            }
+            else {
+                this.width = this.bitmap.width;
+                this.height = this.bitmap.height;
+            }
+        }
+        else {
+            this.width = options.width ?? this.bitmap.width;
+            this.height = options.height ?? this.bitmap.height;
+        }
+        
+        this.outlineColor = options.outlineColor ?? 'black';
+        this.outlineWidth = options.outlineWidth ?? 0;
+        if (options.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        this.img.onload = () => {
-            if (!options?.width) this.width = this.img.width;
-            if (!options?.height) this.height = this.img.height;
-            createImageBitmap(this.img).then(bitmap => {
-                this.imgBitmap = bitmap;
-            });
-            if (!this.hidden) this.draw();
-        };
+        if (!this.hidden) this.draw();
     }
 }

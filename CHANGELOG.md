@@ -11,6 +11,7 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Added
 
+- `CostumeLoader` - pre-loads costumes before the start
 - `Slider` - an interactive slider inspired by Scratch variables
 - `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers
@@ -24,6 +25,7 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Changed
 
+- `ImageSprite` now accepts pre-loaded bitmaps directly
 - Canvas HTML IDs renamed to `#tscratch-main-canvas` and `#tscratch-pen-canvas`
 - `RegularPolygon` is now correctly tilted
 - Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)

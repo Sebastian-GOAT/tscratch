@@ -45,7 +45,7 @@ export default class Engine {
     private activeJoystick: Joystick | null = null;
 
     // Camera
-    public camera = new Camera();
+    public readonly camera = new Camera();
     
     // Inputs
     private keysPressed = new Set<string>();
