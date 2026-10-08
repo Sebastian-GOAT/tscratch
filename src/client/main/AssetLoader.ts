@@ -8,7 +8,7 @@ export default class AssetLoader {
         await Promise.all(
             keys.map(async key => {
                 const url = soundPaths[key];
-                result[key] = await AssetLoader.loadSingleSoundBuffer(url);
+                result[key] = await AssetLoader.loadSingleAudioBuffer(url);
             })
         );
 
@@ -39,7 +39,7 @@ export default class AssetLoader {
         return await createImageBitmap(img);
     }
 
-    private static async loadSingleSoundBuffer(url: string) {
+    private static async loadSingleAudioBuffer(url: string) {
 
         const res = await fetch(url);
         if (!res.ok)

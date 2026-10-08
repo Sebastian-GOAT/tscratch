@@ -7,11 +7,6 @@ import Slider, { baseHeight as sliderBaseHeight, baseWidth as sliderBaseWidth, m
 
 type GameLoop = (() => void) | (() => Promise<void>);
 
-export interface SoundOptions {
-    volume?: number;
-    loop?: boolean;
-}
-
 type SceneMap = Map<string, {
     sprites: Sprite[];
     loop: GameLoop | null;
@@ -477,46 +472,5 @@ export default class Engine {
 
     public onPress(callback: () => void) {
         this.pressCallbacks.add(callback);
-    }
-
-    // Sound
-
-    public playSound(src: string, options: SoundOptions = {}) {
-
-        if (
-            options.volume !== undefined &&
-            (
-                !Number.isFinite(options.volume) ||
-                options.volume < 0 ||
-                options.volume > 1
-            )
-        )
-            throw new RangeError('Volume must be a finite number between 0 and 1');
-
-        const audio = new Audio(src);
-        if (options.volume !== undefined) audio.volume = options.volume;
-        audio.loop = options.loop ?? false;
-
-        const removeSound = () => {
-            this.sounds = this.sounds.filter(sound => sound !== audio);
-        };
-
-        audio.addEventListener('ended', removeSound, { once: true });
-        audio.addEventListener('error', removeSound, { once: true });
-
-        this.sounds.push(audio);
-        void audio.play().catch(removeSound);
-
-        return audio;
-    }
-
-    public stopSound(sound: HTMLAudioElement) {
-        sound.pause();
-        this.sounds = this.sounds.filter(s => s !== sound);
-    }
-
-    public stopAllSounds() {
-        this.sounds.forEach(sound => sound.pause())
-        this.sounds = [];
     }
 }

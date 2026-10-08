@@ -12,6 +12,7 @@ The dates are in the following format: D?D.M?M.YYYY
 ### Added
 
 - `AssetLoader` - pre-loads costumes & sounds before the start
+- `Sound` - manages all sounds (play/pause/stop)
 - `Slider` - an interactive slider inspired by Scratch variables
 - `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers
@@ -40,6 +41,10 @@ The dates are in the following format: D?D.M?M.YYYY
 - Delta-time calculation finally works as expected
 - `touching()` should yield better results
 - Fixed collisions with the `Line` sprite
+
+### Removed
+
+- All sound methods on `Engine` - moved into the new `Sound` class
 
 ## [0.10.0] - 7.8.2026
 

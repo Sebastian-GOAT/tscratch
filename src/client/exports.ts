@@ -1,10 +1,11 @@
 // Main
-import Engine, { type SoundOptions } from '@main/Engine.ts';
+import Engine from '@main/Engine.ts';
 import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
 import SpriteGroup, { type SpriteGroupOptions } from '@main/SpriteGroup.ts';
 import { setScale, canvas, ctx, penCanvas, penCtx, setBackground } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
 import AssetLoader from '@main/AssetLoader.ts';
+import Sound, { type SoundOptions } from '@main/Sound.ts';
 import Slider, { type SliderOptions } from '@main/Slider.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
@@ -73,6 +74,7 @@ export {
     SpriteGroup,
     TSCMath,
     AssetLoader,
+    Sound,
     Slider,
     Perlin1D,
     Perlin2D,
