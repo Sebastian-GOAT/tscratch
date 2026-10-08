@@ -11,7 +11,7 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Added
 
-- `CostumeLoader` - pre-loads costumes before the start
+- `AssetLoader` - pre-loads costumes & sounds before the start
 - `Slider` - an interactive slider inspired by Scratch variables
 - `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers

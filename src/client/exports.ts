@@ -4,7 +4,7 @@ import Sprite, { type SpriteOptions } from '@main/Sprite.ts';
 import SpriteGroup, { type SpriteGroupOptions } from '@main/SpriteGroup.ts';
 import { setScale, canvas, ctx, penCanvas, penCtx, setBackground } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
-import CostumeLoader from '@main/CostumeLoader.ts';
+import AssetLoader from '@main/AssetLoader.ts';
 import Slider, { type SliderOptions } from '@main/Slider.ts';
 import Perlin1D from '@/tech/perlin/Perlin1.ts';
 import Perlin2D from '@/tech/perlin/Perlin2.ts';
@@ -72,7 +72,7 @@ export {
     Sprite,
     SpriteGroup,
     TSCMath,
-    CostumeLoader,
+    AssetLoader,
     Slider,
     Perlin1D,
     Perlin2D,

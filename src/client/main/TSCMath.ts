@@ -185,6 +185,12 @@ export default class TSCMath {
         return { r: 0, g: 0, b: 0 }; // Default fallback
     }
 
+    public static colorToHSL(color: string) {
+        const rgb = TSCMath.colorToRGB(color);
+        const hsl = TSCMath.RBGToHSL(rgb.r, rgb.g, rgb.b);
+        return hsl;
+    }
+
     public static RBGToHSL(r: number, g: number, b: number) {
 
         const rNorm = r / 255;
