@@ -1,3 +1,4 @@
+import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
@@ -139,6 +140,10 @@ export default class CustomPolygon extends Sprite {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (!this.hidden) this.draw();
+        if (
+            (!this.hidden && this.scene === Engine.init().currentScene) ||
+            this.scene === '*'
+        )
+            this.draw();
     }
 }

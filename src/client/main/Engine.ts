@@ -4,6 +4,7 @@ import Sprite from './Sprite.ts';
 import TSCMath from './TSCMath.ts';
 import Camera from './Camera.ts';
 import Slider, { baseHeight as sliderBaseHeight, baseWidth as sliderBaseWidth, margin as sliderMargin } from './Slider.ts';
+import type { CSSCursor } from '@ctypes/CSSCursor.ts';
 
 type GameLoop = (() => void) | (() => Promise<void>);
 
@@ -471,5 +472,10 @@ export default class Engine {
             allowHold: options.allowHold ?? true,
             previousPressed: false
         });
+    }
+
+    // Cursor
+    public setCursor(cursor: CSSCursor) {
+        canvas.style.cursor = cursor;
     }
 }

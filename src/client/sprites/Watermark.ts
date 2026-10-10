@@ -1,4 +1,5 @@
 import { canvas } from '@main/canvas.ts';
+import Engine from '@main/Engine.ts';
 import Text, { type TextOptions } from './Text.ts';
 
 export default class Watermark extends Text {
@@ -22,6 +23,10 @@ export default class Watermark extends Text {
             this.tags = new Set([...this.tags, ...options.tags]);
 
         this.invalidatePath();
-        if (!this.hidden) this.draw();
+        if (
+            (!this.hidden && this.scene === Engine.init().currentScene) ||
+            this.scene === '*'
+        )
+            this.draw();
     }
 }
