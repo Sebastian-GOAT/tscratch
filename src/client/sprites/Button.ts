@@ -26,8 +26,6 @@ export default class Button extends Sprite {
     public fontFamily: string;
     public fontSize: number;
 
-    private font: string;
-
     public width: number;
     public height: number;
     public backgroundColor: string;
@@ -39,7 +37,7 @@ export default class Button extends Sprite {
 
         ctx.save();
         
-        ctx.font = this.font;
+        ctx.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
 
         const metrics = ctx.measureText(String(this.content));
         const w = Math.max(metrics.width, this.width) / 2; // half-width
@@ -90,7 +88,7 @@ export default class Button extends Sprite {
         c.fill(path);
         if (this.outlineWidth) c.stroke(path);
 
-        c.font = this.font;
+        c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.fontColor;
         c.textAlign = 'center';
         c.textBaseline = 'middle';
@@ -139,14 +137,12 @@ export default class Button extends Sprite {
 
     public setFontSize(fontSize: number) {
         this.fontSize = fontSize;
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
         this.refresh();
     }
 
     public setFontFamily(fontFamily: string) {
         this.fontFamily = fontFamily;
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
         this.invalidatePath();
         this.refresh();
     }
@@ -160,8 +156,6 @@ export default class Button extends Sprite {
         this.fontColor = options?.fontColor ?? 'black';
         this.fontFamily = options?.fontFamily ?? 'Arial';
         this.fontSize = options?.fontSize ?? 16;
-
-        this.font = `${this.fontSize}px ${this.fontFamily}`;
 
         this.width = options?.width ?? String(this.content).length * this.fontSize + 10;
         this.height = options?.height ?? this.fontSize + 10;

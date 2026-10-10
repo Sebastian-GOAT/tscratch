@@ -1,7 +1,12 @@
-export interface SoundOptions {
+export type SoundOptions = {
     volume?: number;
+    timestampSeconds?: number;
     loop?: boolean;
-}
+} & {
+    volume?: number;
+    timestampPercentage?: number;
+    loop?: boolean;
+};
 
 export default class Sound {
     
@@ -179,7 +184,11 @@ export default class Sound {
     constructor(buffer: AudioBuffer, options?: SoundOptions) {
         this.buffer = buffer;
         this.loop = options?.loop ?? false;
+
         if (options?.volume !== undefined)
             this.setVolume(options.volume);
+
+        if (options?.timestampSeconds) this.setTimestampSeconds(options.timestampSeconds);
+        if (options?.timestampPercentage) this.setTimestampPercentage(options.timestampPercentage);
     }
 }

@@ -45,6 +45,7 @@ The dates are in the following format: D?D.M?M.YYYY
 ### Removed
 
 - All sound methods on `Engine` - moved into the new `Sound` class
+- `engine.getVariable()`, `engine.setVariable()` (using shared modules is recommended)
 
 ## [0.10.0] - 7.8.2026
 

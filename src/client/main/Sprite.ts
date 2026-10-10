@@ -45,7 +45,6 @@ export default abstract class Sprite {
 
     private cachedPath: Path2D | null = null;
     private pathDirty = true;
-    private previousPressed = false;
 
     // Reusable collision detection canvas
     private static collisionCanvas: OffscreenCanvas | null = null;
@@ -110,13 +109,10 @@ export default abstract class Sprite {
 
         engine.onPress(() => {
             const hovering = engine.hovering(this);
-            const isCurrentlyPressed = hovering && engine.mouseDown;
 
-            if (!this.hidden && isCurrentlyPressed && ((options.allowHold ?? true) || !this.previousPressed))
+            if (!this.hidden && hovering && engine.mouseDown)
                 callback();
-
-            this.previousPressed = isCurrentlyPressed;
-        });
+        }, options);
     }
 
     // AABB    - Only AABB check, return true/false

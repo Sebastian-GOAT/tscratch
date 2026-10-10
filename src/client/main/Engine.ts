@@ -29,8 +29,6 @@ export default class Engine {
     private loopGeneration = 0;
     private resetFrameTiming = false;
 
-    private sounds: HTMLAudioElement[] = [];
-
     public mouseX = 0;
     public mouseY = 0;
 
@@ -42,15 +40,14 @@ export default class Engine {
     // Camera
     public readonly camera = new Camera();
     
-    // Inputs
+    // Input
     private keysPressed = new Set<string>();
     private keyCallbacks = new Map<string, Array<{ callback: () => void; allowHold: boolean }>>();
-    private pressCallbacks = new Set<() => void>();
+    private pressCallbacks = new Set<{ callback: () => void; allowHold: boolean; previousPressed: boolean }>();
 
     public currentScene = 'main';
     public sceneMap: SceneMap = new Map();
 
-    private variableMap = new Map<string, unknown>();
     private sliders: Slider[] = [];
 
     public static init() {
@@ -100,6 +97,9 @@ export default class Engine {
                 this.primaryPointerId = null;
                 this.mouseDown = false;
                 Slider.dragging = null;
+                this.pressCallbacks.forEach(press => {
+                    press.previousPressed = false;
+                });
 
                 if (this.activeJoystick) {
                     this.activeJoystick.joyX = 0;
@@ -146,7 +146,12 @@ export default class Engine {
 
         // 2. Process active mouse/pointer presses (e.g. Sprite onPress)
         if (this.mouseDown) {
-            this.pressCallbacks.forEach(callback => callback());
+            this.pressCallbacks.forEach(press => {
+                if (press.allowHold || !press.previousPressed)
+                    press.callback();
+
+                press.previousPressed = true;
+            });
         }
     }
 
@@ -405,16 +410,6 @@ export default class Engine {
         });
     }
 
-    // Global variables
-
-    public setVariable<T = any>(key: string, value: T) {
-        this.variableMap.set(key, value);
-    }
-
-    public getVariable<T = unknown>(key: string) {
-        return this.variableMap.get(key) as T;
-    }
-
     // Events
 
     public hovering(sprite: Sprite) {
@@ -470,7 +465,11 @@ export default class Engine {
         this.keyCallbacks.set(normalizedKey, callbacks);
     }
 
-    public onPress(callback: () => void) {
-        this.pressCallbacks.add(callback);
+    public onPress(callback: () => void, options: { allowHold?: boolean; } = { allowHold: true }) {
+        this.pressCallbacks.add({
+            callback,
+            allowHold: options.allowHold ?? true,
+            previousPressed: false
+        });
     }
 }
