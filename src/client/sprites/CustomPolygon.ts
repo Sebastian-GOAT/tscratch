@@ -11,7 +11,7 @@ export interface CustomPolygonOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class CustomPolygon extends Sprite {
+export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
 
     public discriminant = 'custompolygon';
     public tags = new Set(['custompolygon']);
@@ -111,7 +111,7 @@ export default class CustomPolygon extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             vertices: this.vertices,
             color: this.color,
             outlineColor: this.outlineColor,

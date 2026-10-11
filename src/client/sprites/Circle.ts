@@ -9,7 +9,7 @@ export interface CircleOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class Circle extends Sprite {
+export default class Circle extends Sprite<CircleOptions> {
 
     public discriminant = 'circle';
     public tags = new Set(['circle']);
@@ -70,7 +70,7 @@ export default class Circle extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             radius: this.radius,
             color: this.color,
             outlineColor: this.outlineColor,

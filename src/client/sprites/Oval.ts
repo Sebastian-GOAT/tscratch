@@ -11,7 +11,7 @@ export interface OvalOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class Oval extends Sprite {
+export default class Oval extends Sprite<OvalOptions> {
 
     public discriminant = 'oval';
     public tags = new Set(['oval']);
@@ -80,7 +80,7 @@ export default class Oval extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             radX: this.radX,
             radY: this.radY,
             color: this.color,

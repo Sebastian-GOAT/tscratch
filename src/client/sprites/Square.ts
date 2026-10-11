@@ -10,7 +10,7 @@ export interface SquareOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class Square extends Sprite {
+export default class Square extends Sprite<SquareOptions> {
 
     public discriminant = 'square';
     public tags = new Set(['square']);
@@ -76,7 +76,7 @@ export default class Square extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             sideLength: this.sideLength,
             color: this.color,
             outlineColor: this.outlineColor,

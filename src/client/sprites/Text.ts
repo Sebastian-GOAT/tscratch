@@ -10,9 +10,11 @@ export interface TextOptions extends SpriteOptions {
     fontSize?: number;
     align?: CanvasTextAlign;
     baseline?: CanvasTextBaseline;
+    outlineWidth?: number;
+    outlineColor?: string;
 }
 
-export default class Text extends Sprite {
+export default class Text extends Sprite<TextOptions> {
 
     public discriminant = 'text';
     public tags = new Set(['text']);
@@ -23,6 +25,8 @@ export default class Text extends Sprite {
     public fontSize: number;
     public align: CanvasTextAlign;
     public baseline: CanvasTextBaseline;
+    public outlineColor: string;
+    public outlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
 
@@ -75,10 +79,13 @@ export default class Text extends Sprite {
 
         c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.color;
+        c.strokeStyle = this.outlineColor;
         c.textAlign = this.align;
         c.textBaseline = this.baseline;
 
         c.fillText(String(this.content), 0, 0);
+        if (this.outlineWidth)
+            c.strokeText(String(this.content), 0, 0);
 
         c.restore();
     }
@@ -89,7 +96,7 @@ export default class Text extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions,
+            ...this.baseCreateOptions,
             content: this.content,
             color: this.color,
             fontFamily: this.fontFamily,
@@ -145,6 +152,8 @@ export default class Text extends Sprite {
         this.fontSize = options?.fontSize ?? 16;
         this.align = options?.align ?? 'center';
         this.baseline = options?.baseline ?? 'middle';
+        this.outlineColor = options?.outlineColor ?? 'black';
+        this.outlineWidth = options?.outlineWidth ?? 0;
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 

@@ -13,7 +13,7 @@ export interface ImageSpriteOptions<K extends string> extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class ImageSprite<K extends string> extends Sprite {
+export default class ImageSprite<K extends string> extends Sprite<ImageSpriteOptions<K>> {
     
     public discriminant = 'imagesprite';
     public tags = new Set(['imagesprite']);
@@ -96,7 +96,7 @@ export default class ImageSprite<K extends string> extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             costumes: this.costumes,
             bitmap: this.bitmap,
             costume: this.costume,

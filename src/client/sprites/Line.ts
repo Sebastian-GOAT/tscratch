@@ -9,7 +9,7 @@ export interface LineOptions extends SpriteOptions {
     width?: number;
 }
 
-export default class Line extends Sprite {
+export default class Line extends Sprite<LineOptions> {
 
     public discriminant = 'line';
     public tags = new Set(['line']);
@@ -72,7 +72,7 @@ export default class Line extends Sprite {
 
     protected getCreateOptions(): LineOptions {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             color: this.color,
             length: this.length,
             width: this.width

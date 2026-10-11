@@ -10,7 +10,7 @@ export interface RegularPolygonOptions extends SpriteOptions {
     outlineWidth?: number;
 }
 
-export default class RegularPolygon extends Sprite {
+export default class RegularPolygon extends Sprite<RegularPolygonOptions> {
 
     public discriminant = 'regularpolygon';
     public tags = new Set(['regularpolygon']);
@@ -73,7 +73,7 @@ export default class RegularPolygon extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             sides: this.sides,
             radius: this.radius,
             color: this.color,

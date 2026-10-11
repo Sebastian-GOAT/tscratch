@@ -9,7 +9,7 @@ export interface PenOptions extends SpriteOptions {
     color?: string;
 }
 
-export default class Pen extends Sprite {
+export default class Pen extends Sprite<PenOptions> {
 
     public discriminant = 'pen';
     public tags = new Set(['pen']);
@@ -39,7 +39,7 @@ export default class Pen extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             drawing: this.drawing,
             penSize: this.penSize,
             color: this.color

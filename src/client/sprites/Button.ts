@@ -12,12 +12,14 @@ export interface ButtonOptions extends SpriteOptions {
     width?: number;
     height?: number;
     backgroundColor?: string;
+    buttonOutlineColor?: string;
+    buttonOutlineWidth?: number;
 
-    outlineColor?: string;
-    outlineWidth?: number;
+    textOutlineColor?: string;
+    textOutlineWidth?: number;
 }
 
-export default class Button extends Sprite {
+export default class Button extends Sprite<ButtonOptions> {
 
     public discriminant = 'button';
     public tags = new Set(['button']);
@@ -30,9 +32,11 @@ export default class Button extends Sprite {
     public width: number;
     public height: number;
     public backgroundColor: string;
+    public buttonOutlineColor: string;
+    public buttonOutlineWidth: number;
 
-    public outlineColor: string;
-    public outlineWidth: number;
+    public textOutlineColor: string;
+    public textOutlineWidth: number;
 
     public getBoundingBox(): BoundingBox {
 
@@ -81,20 +85,23 @@ export default class Button extends Sprite {
         this.applyDrawTransform(c);
 
         c.fillStyle = this.backgroundColor;
-        c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.strokeStyle = this.buttonOutlineColor;
+        c.lineWidth = this.buttonOutlineWidth;
 
         const path = this.getCachedPath();
         
         c.fill(path);
-        if (this.outlineWidth) c.stroke(path);
+        if (this.buttonOutlineWidth) c.stroke(path);
 
         c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.fontColor;
+        c.strokeStyle = this.textOutlineColor;
         c.textAlign = 'center';
         c.textBaseline = 'middle';
 
         c.fillText(String(this.content), 0, 0);
+        if (this.textOutlineWidth)
+            c.strokeText(String(this.content), 0, 0);
 
         c.restore();
     }
@@ -105,7 +112,7 @@ export default class Button extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             content: this.content,
             fontColor: this.fontColor,
             fontFamily: this.fontFamily,
@@ -113,8 +120,10 @@ export default class Button extends Sprite {
             width: this.width,
             height: this.height,
             backgroundColor: this.backgroundColor,
-            outlineColor: this.outlineColor,
-            outlineWidth: this.outlineWidth
+            textOutlineColor: this.textOutlineColor,
+            textOutlineWidth: this.textOutlineWidth,
+            buttonOutlineColor: this.buttonOutlineColor,
+            buttonOutlineWidth: this.buttonOutlineWidth
         };
     }
 
@@ -161,9 +170,11 @@ export default class Button extends Sprite {
         this.width = options?.width ?? String(this.content).length * this.fontSize + 10;
         this.height = options?.height ?? this.fontSize + 10;
         this.backgroundColor = options?.backgroundColor ?? 'rgb(204, 204, 204)';
+        this.buttonOutlineColor = options?.buttonOutlineColor ?? 'black';
+        this.buttonOutlineWidth = options?.buttonOutlineWidth ?? 0;
 
-        this.outlineColor = options?.outlineColor ?? 'black';
-        this.outlineWidth = options?.outlineWidth ?? 0;
+        this.textOutlineColor = options?.textOutlineColor ?? 'black';
+        this.textOutlineWidth = options?.textOutlineWidth ?? 0;
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 

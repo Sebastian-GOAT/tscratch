@@ -7,7 +7,7 @@ export interface JoystickOptions extends SpriteOptions {
     radius?: number;
 }
 
-export default class Joystick extends Sprite {
+export default class Joystick extends Sprite<JoystickOptions> {
 
     public tags = new Set(['joystick']);
     public discriminant = 'joystick';
@@ -84,7 +84,7 @@ export default class Joystick extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             radius: this.radius
         };
     }

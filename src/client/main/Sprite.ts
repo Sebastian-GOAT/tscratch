@@ -29,7 +29,7 @@ export interface SpriteOptions {
     tags?: Set<string>;
 }
 
-export default abstract class Sprite {
+export default abstract class Sprite<TOptions extends SpriteOptions = SpriteOptions> {
 
     public x: number = 0;
     public y: number = 0;
@@ -39,6 +39,19 @@ export default abstract class Sprite {
     public scene: string = 'main';
     public hidden: boolean = false;
     public layer: number = 0;
+
+    protected get baseCreateOptions() {
+        return {
+            x: this.x,
+            y: this.y,
+            dir: this.dir,
+            size: this.size,
+            pivot: this.pivot,
+            scene: this.scene,
+            hidden: this.hidden,
+            layer: this.layer
+        };
+    }
 
     public abstract discriminant: string;
     public abstract tags: Set<string>;
@@ -55,7 +68,8 @@ export default abstract class Sprite {
     public abstract getBoundingBox(): BoundingBox;
     public abstract getPath(): Path2D;
     public abstract draw(stamping?: boolean): void;
-    protected abstract create(options?: SpriteOptions): this;
+    protected abstract getCreateOptions(): TOptions;
+    protected abstract create(options?: TOptions): this;
 
     protected refresh() {
         Engine.init().refresh();
@@ -78,24 +92,12 @@ export default abstract class Sprite {
 
     // Initialization
 
-    constructor(options?: SpriteOptions) {
+    constructor(options?: TOptions) {
         Object.assign(this, options);
         Engine.init().addSprite(this);
     }
 
-    protected getCreateOptions(): SpriteOptions & Record<string, any> {
-        return {
-            x: this.x,
-            y: this.y,
-            dir: this.dir,
-            size: this.size,
-            scene: this.scene,
-            layer: this.layer,
-            hidden: this.hidden
-        };
-    }
-
-    public clone(options?: SpriteOptions): this {
+    public clone(options?: Partial<TOptions>): this {
         return this.create({
             ...this.getCreateOptions(),
             ...options

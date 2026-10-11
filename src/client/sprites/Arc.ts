@@ -10,7 +10,7 @@ export interface ArcOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class Arc extends Sprite {
+export default class Arc extends Sprite<ArcOptions> {
 
     public discriminant = 'arc';
     public tags = new Set(['arc']);
@@ -69,7 +69,7 @@ export default class Arc extends Sprite {
 
     protected getCreateOptions() {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             radius: this.radius,
             angle: this.angle,
             color: this.color,

@@ -11,7 +11,7 @@ export interface RectangleOptions extends SpriteOptions {
     outlineWidth?: number;
 };
 
-export default class Rectangle extends Sprite {
+export default class Rectangle extends Sprite<RectangleOptions> {
 
     public discriminant = 'rectangle';
     public tags = new Set(['rectangle']);
@@ -80,7 +80,7 @@ export default class Rectangle extends Sprite {
 
     protected getCreateOptions(): RectangleOptions {
         return {
-            ...super.getCreateOptions(),
+            ...this.baseCreateOptions,
             width: this.width,
             height: this.height,
             color: this.color,
