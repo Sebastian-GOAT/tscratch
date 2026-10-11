@@ -78,19 +78,25 @@ export default class Pen extends Sprite<PenOptions> {
 
     // Type-safe pen layer sprite drawing method
     public static drawSprite<
-        SpriteClass extends new (options?: SpriteOptions) => Sprite
+        TOptions extends SpriteOptions,
+        TSprite extends Sprite<TOptions>
     >(
-        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0], ctx = penCtx
+        spriteClass: new (options?: TOptions) => TSprite,
+        options?: NoInfer<TOptions>,
+        ctx = penCtx
     ) {
-        const sprite = new spriteClass(options ?? {});
-        sprite.draw(ctx === penCtx ? true : undefined);
+        const sprite = new spriteClass(options);
+        sprite.draw(ctx === penCtx ? true : false);
         Engine.init().removeSprite(sprite);
     }
 
     public drawSprite<
-        SpriteClass extends new (options?: SpriteOptions) => Sprite
+        TOptions extends SpriteOptions,
+        TSprite extends Sprite<TOptions>
     >(
-        spriteClass: SpriteClass, options?: ConstructorParameters<SpriteClass>[0], ctx = penCtx
+        spriteClass: new (options?: TOptions) => TSprite,
+        options?: NoInfer<TOptions>,
+        ctx = penCtx
     ) {
         Pen.drawSprite(spriteClass, options, ctx);
     }

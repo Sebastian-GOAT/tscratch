@@ -64,7 +64,8 @@ export default class Slider {
             x: this.x,
             y: this.y,
             width: baseWidth,
-            height: baseHeight
+            height: baseHeight,
+            borderRadius: 5
         }, ctx);
 
         // Display
@@ -73,7 +74,8 @@ export default class Slider {
             x: this.x + (baseWidth - displayWidth) / 2 - margin,
             y: this.y + (baseHeight - displayHeight) / 2 - margin,
             width: displayWidth,
-            height: displayHeight
+            height: displayHeight,
+            borderRadius: 3
         }, ctx);
 
         // Label

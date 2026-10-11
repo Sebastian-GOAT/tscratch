@@ -9,6 +9,7 @@ export interface RectangleOptions extends SpriteOptions {
     color?: string;
     outlineColor?: string;
     outlineWidth?: number;
+    borderRadius?: number;
 };
 
 export default class Rectangle extends Sprite<RectangleOptions> {
@@ -21,6 +22,7 @@ export default class Rectangle extends Sprite<RectangleOptions> {
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+    public borderRadius: number;
 
     public getBoundingBox(): BoundingBox {
 
@@ -45,12 +47,22 @@ export default class Rectangle extends Sprite<RectangleOptions> {
     public getPath(): Path2D {
         const path = new Path2D;
 
-        path.rect(
-            -this.width / 2 * this.size,
-            -this.height / 2 * this.size,
-            this.width * this.size,
-            this.height * this.size
-        );
+        if (this.borderRadius > 1) {
+            path.roundRect(
+                -this.width / 2 * this.size,
+                -this.height / 2 * this.size,
+                this.width * this.size,
+                this.height * this.size,
+                this.borderRadius * this.size
+            );
+        } else {
+            path.rect(
+                -this.width / 2 * this.size,
+                -this.height / 2 * this.size,
+                this.width * this.size,
+                this.height * this.size
+            );
+        }
 
         return path;
     }
@@ -85,7 +97,8 @@ export default class Rectangle extends Sprite<RectangleOptions> {
             height: this.height,
             color: this.color,
             outlineColor: this.outlineColor,
-            outlineWidth: this.outlineWidth
+            outlineWidth: this.outlineWidth,
+            borderRadius: this.borderRadius
         };
     }
 
@@ -114,6 +127,7 @@ export default class Rectangle extends Sprite<RectangleOptions> {
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        this.borderRadius = options?.borderRadius ?? 0;
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
