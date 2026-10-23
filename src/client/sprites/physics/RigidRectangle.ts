@@ -282,10 +282,6 @@ export default class RigidRectangle extends Rectangle implements RigidBodyOption
             this.tags = new Set([...this.tags, ...options.tags]);
 
         this.invalidatePath();
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

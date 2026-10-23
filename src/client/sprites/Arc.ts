@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 
@@ -55,7 +54,7 @@ export default class Arc extends Sprite<ArcOptions> {
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.lineWidth = this.outlineWidth * this.size;
         c.fill(path)
         if (this.outlineWidth)
             c.stroke(path);
@@ -106,10 +105,6 @@ export default class Arc extends Sprite<ArcOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

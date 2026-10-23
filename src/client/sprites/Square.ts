@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 import TSCMath from '@main/TSCMath.ts';
@@ -8,6 +7,7 @@ export interface SquareOptions extends SpriteOptions {
     color?: string;
     outlineColor?: string;
     outlineWidth?: number;
+    borderRadius?: number;
 };
 
 export default class Square extends Sprite<SquareOptions> {
@@ -19,6 +19,7 @@ export default class Square extends Sprite<SquareOptions> {
     public color: string;
     public outlineColor: string;
     public outlineWidth: number;
+    public borderRadius: number;
 
     public getBoundingBox(): BoundingBox {
 
@@ -41,12 +42,22 @@ export default class Square extends Sprite<SquareOptions> {
     public getPath(): Path2D {
         const path = new Path2D();
 
-        path.rect(
-            -this.sideLength / 2 * this.size,
-            -this.sideLength / 2 * this.size,
-            this.sideLength * this.size,
-            this.sideLength * this.size
-        );
+        if (this.borderRadius > 1) {
+            path.roundRect(
+                -this.sideLength / 2 * this.size,
+                -this.sideLength / 2 * this.size,
+                this.sideLength * this.size,
+                this.sideLength * this.size,
+                this.borderRadius * this.size
+            );
+        } else {
+            path.rect(
+                -this.sideLength / 2 * this.size,
+                -this.sideLength / 2 * this.size,
+                this.sideLength * this.size,
+                this.sideLength * this.size
+            );
+        }
 
         return path;
     }
@@ -62,7 +73,7 @@ export default class Square extends Sprite<SquareOptions> {
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.lineWidth = this.outlineWidth * this.size;
         c.fill(path)
         if (this.outlineWidth)
             c.stroke(path);
@@ -102,13 +113,10 @@ export default class Square extends Sprite<SquareOptions> {
         this.color = options?.color ?? 'black';
         this.outlineColor = options?.outlineColor ?? 'black';
         this.outlineWidth = options?.outlineWidth ?? 0;
+        this.borderRadius = options?.borderRadius ?? 0;
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

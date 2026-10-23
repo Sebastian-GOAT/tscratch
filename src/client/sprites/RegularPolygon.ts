@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 
@@ -59,7 +58,7 @@ export default class RegularPolygon extends Sprite<RegularPolygonOptions> {
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.lineWidth = this.outlineWidth * this.size;
         c.fill(path)
         if (this.outlineWidth)
             c.stroke(path);
@@ -110,11 +109,7 @@ export default class RegularPolygon extends Sprite<RegularPolygonOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 
 }

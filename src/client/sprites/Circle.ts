@@ -1,5 +1,4 @@
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
-import Engine from '@main/Engine.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 
 export interface CircleOptions extends SpriteOptions {
@@ -56,7 +55,7 @@ export default class Circle extends Sprite<CircleOptions> {
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.lineWidth = this.outlineWidth * this.size;
         c.fill(path);
         if (this.outlineWidth)
             c.stroke(path);
@@ -99,10 +98,6 @@ export default class Circle extends Sprite<CircleOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

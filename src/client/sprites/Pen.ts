@@ -86,7 +86,7 @@ export default class Pen extends Sprite<PenOptions> {
         ctx = penCtx
     ) {
         const sprite = new spriteClass(options);
-        sprite.draw(ctx === penCtx ? true : false);
+        sprite.draw(ctx === penCtx);
         Engine.init().removeSprite(sprite);
     }
 

@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
@@ -80,6 +79,7 @@ export default class Text extends Sprite<TextOptions> {
         c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
+        c.lineWidth = this.outlineWidth * this.size;
         c.textAlign = this.align;
         c.textBaseline = this.baseline;
 
@@ -157,10 +157,6 @@ export default class Text extends Sprite<TextOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

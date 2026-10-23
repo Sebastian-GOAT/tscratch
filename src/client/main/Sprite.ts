@@ -1,7 +1,7 @@
 import Engine from './Engine.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
 import TSCMath from './TSCMath.ts';
-import { canvas } from './canvas.ts';
+import { canvas, ctx } from './canvas.ts';
 import SpriteGroup from './SpriteGroup.ts';
 
 export interface CollisionData {
@@ -75,6 +75,43 @@ export default abstract class Sprite<TOptions extends SpriteOptions = SpriteOpti
         Engine.init().refresh();
     }
 
+    protected initDraw() {
+
+        const engine = Engine.init();
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const sprites = [
+            ...engine.sceneMap.get(engine.currentScene)!.sprites,
+            ...engine.sceneMap.get('*')!.sprites
+        ];
+
+        // Lock the camera
+        sprites.forEach(sprite => {
+
+            const { camera } = engine;
+            const { lockings } = camera;
+
+            if (lockings.x === sprite) camera.x = lockings.x.x;
+            if (lockings.y === sprite) camera.y = lockings.y.y;
+            if (lockings.dir === sprite) camera.dir = lockings.dir.dir;
+            if (lockings.zoom === sprite) camera.zoom = 1 / lockings.zoom.size;
+        });
+
+        // Draw sprites
+        sprites.forEach(sprite => {
+            if (!sprite.hidden)
+                sprite.draw();
+        });
+
+        // Draw sliders
+        engine.sliders.forEach(slider => {
+            if (!slider.hidden)
+                slider.draw();
+        });
+    }
+
     // Geometry caching
 
     protected invalidatePath() {
@@ -112,7 +149,7 @@ export default abstract class Sprite<TOptions extends SpriteOptions = SpriteOpti
         engine.onPress(() => {
             const hovering = engine.hovering(this);
 
-            if (!this.hidden && hovering && engine.mouseDown)
+            if (!this.hidden && hovering && engine.mouseDown && (this.scene === engine.currentScene || this.scene === '*'))
                 callback();
         }, options);
     }
@@ -427,12 +464,12 @@ export default abstract class Sprite<TOptions extends SpriteOptions = SpriteOpti
     }
 
     public turn(deg: number) {
-        this.dir += deg;
+        this.dir = (this.dir + deg) % 360;
         this.refresh();
     }
 
     public point(dir: number) {
-        this.dir = dir;
+        this.dir = dir % 360;
         this.refresh();
     }
 

@@ -11,7 +11,7 @@ The dates are in the following format: D?D.M?M.YYYY
 
 ### Added
 
-- `AssetLoader` - pre-loads costumes & sounds before the start
+- `AssetLoader` - pre-loads assets before the start (costumes, sounds, fonts)
 - `Sound` - manages all sounds (play/pause/stop)
 - `Slider` - an interactive slider inspired by Scratch variables
 - `Rope` - simple rope physics (attachments, swinging)
@@ -23,6 +23,8 @@ The dates are in the following format: D?D.M?M.YYYY
 - `engine.camera` - camera offset, rotation and zoom
 - `volume` and `loop` options on sounds
 - You can now pass `tags` directly as an option on Sprite
+- Cursor settings using `engine.setCursor(cursor)`
+- `borderRadius` property on `Square`, `Rectangle` and `Button`
 
 ### Changed
 
@@ -32,15 +34,19 @@ The dates are in the following format: D?D.M?M.YYYY
 - Changed `engine.deltaTime` to `engine.getDeltaTime()` (still in seconds)
 - Switched units in `await engine.wait(ms)` from milliseconds to seconds
 - Canvas is now 480 x 360 pixels, scaled by 1.5 by default
+- Sprite outline width now scales with the `size` property
 - `InverseKinematics` switched from Jacobian to FABRIK calculation - faster and more predictable results
 - Default width of a rectange is now 75 (used to be 50)
 - Default x radius of an oval is now 50 (used to be 25)
+- `joystick.setRGB(r, g, b)` -> `joystick.setColor(color)` | switched from RGB to string colors
 
 ### Fixed
 
 - Delta-time calculation finally works as expected
 - `touching()` should yield better results
 - Fixed collisions with the `Line` sprite
+- `sprite.onPress(callback)` callback no longer executes if the sprite isn't in the current or global scene
+- `CustomPolygon` AABB calculation -> fixed scaling problem
 
 ### Removed
 

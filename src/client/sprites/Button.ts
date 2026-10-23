@@ -1,5 +1,4 @@
 import { ctx, penCtx } from '@main/canvas.ts';
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import TSCMath from '@main/TSCMath.ts';
 
@@ -100,7 +99,7 @@ export default class Button extends Sprite<ButtonOptions> {
 
         c.fillStyle = this.backgroundColor;
         c.strokeStyle = this.buttonOutlineColor;
-        c.lineWidth = this.buttonOutlineWidth;
+        c.lineWidth = this.buttonOutlineWidth * this.size;
 
         const path = this.getCachedPath();
         
@@ -110,6 +109,7 @@ export default class Button extends Sprite<ButtonOptions> {
         c.font = `${this.fontSize * this.size}px ${this.fontFamily}`;
         c.fillStyle = this.fontColor;
         c.strokeStyle = this.textOutlineColor;
+        c.lineWidth = this.textOutlineWidth * this.size;
         c.textAlign = 'center';
         c.textBaseline = 'middle';
 
@@ -195,10 +195,6 @@ export default class Button extends Sprite<ButtonOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

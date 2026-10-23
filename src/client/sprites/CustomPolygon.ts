@@ -1,4 +1,3 @@
-import Engine from '@main/Engine.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
 import { ctx, penCtx } from '@main/canvas.ts';
 import type { Vec2 } from '@ctypes/Vectors.ts';
@@ -23,6 +22,15 @@ export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
 
     public getBoundingBox(): BoundingBox {
 
+        if (this.vertices.length === 0) {
+            return {
+                x: this.x,
+                y: this.y,
+                width: 1,
+                height: 1
+            };
+        }
+
         const cos = TSCMath.cos(this.dir);
         const sin = TSCMath.sin(this.dir);
 
@@ -31,16 +39,9 @@ export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
         let minY = Infinity;
         let maxY = -Infinity;
 
-        if (this.vertices.length === 0) {
-            return {
-                x: this.x,
-                y: this.y,
-                width: 0,
-                height: 0
-            };
-        }
+        const vertices: Vec2[] = this.vertices.map(v => [v[0] * this.size, v[1] * this.size]);
 
-        for (const v of this.vertices) {
+        for (const v of vertices) {
 
             // Rotate
             const rx = v[0] * cos - v[1] * sin;
@@ -63,10 +64,10 @@ export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
 
         const off = this.getDrawOffset();
         return {
-            x: x * this.size + off[0],
-            y: y * this.size + off[1],
-            width: width * this.size,
-            height: height * this.size
+            x: x + off[0],
+            y: y + off[1],
+            width: width,
+            height: height
         };
     }
 
@@ -97,7 +98,7 @@ export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
 
         c.fillStyle = this.color;
         c.strokeStyle = this.outlineColor;
-        c.lineWidth = this.outlineWidth;
+        c.lineWidth = this.outlineWidth * this.size;
         c.fill(path)
         if (this.outlineWidth)
             c.stroke(path);
@@ -140,10 +141,6 @@ export default class CustomPolygon extends Sprite<CustomPolygonOptions> {
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }

@@ -49,7 +49,7 @@ export default class Engine {
     public currentScene = 'main';
     public sceneMap: SceneMap = new Map();
 
-    private sliders: Slider[] = [];
+    public sliders: Slider[] = [];
 
     public static init() {
         if (!this.instance)

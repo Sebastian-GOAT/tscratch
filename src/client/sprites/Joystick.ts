@@ -1,10 +1,11 @@
 import type { Vec3 } from '@ctypes/Vectors.ts';
-import Engine from '@main/Engine.ts';
 import { canvas, ctx, penCtx } from '@main/canvas.ts';
 import Sprite, { type BoundingBox, type SpriteOptions } from '@main/Sprite.ts';
+import TSCMath from '@main/TSCMath.ts';
 
 export interface JoystickOptions extends SpriteOptions {
     radius?: number;
+    color?: string;
 }
 
 export default class Joystick extends Sprite<JoystickOptions> {
@@ -15,7 +16,7 @@ export default class Joystick extends Sprite<JoystickOptions> {
     public radius: number;
     private thumbRadius: number;
     private sizeRatio = 0.4;
-    public rgb: Vec3 = [0, 0, 0];
+    public color: string;
 
     public joyX = 0;
     public joyY = 0;
@@ -54,7 +55,9 @@ export default class Joystick extends Sprite<JoystickOptions> {
         // Base
         const path = this.getCachedPath();
 
-        c.fillStyle = `rgba(${this.rgb[0]}, ${this.rgb[1]}, ${this.rgb[2]}, 0.4)`;
+        const { r, g, b } = TSCMath.colorToRGB(this.color);
+
+        c.fillStyle = `rgba(${r}, ${g}, ${b}, 0.4)`;
         c.fill(path);
 
         // Thumb
@@ -96,10 +99,8 @@ export default class Joystick extends Sprite<JoystickOptions> {
         this.refresh();
     }
 
-    public setRGB(r: number, g: number, b: number) {
-        this.rgb[0] = r;
-        this.rgb[1] = g;
-        this.rgb[2] = b;
+    public setColor(color: string) {
+        this.color = color;
     }
 
     constructor(options?: JoystickOptions) {
@@ -109,13 +110,10 @@ export default class Joystick extends Sprite<JoystickOptions> {
         this.thumbRadius = this.radius * this.sizeRatio;
         this.x = -canvas.width / 2 + this.radius + 15;
         this.y = -canvas.height / 2 + this.radius + 15;
+        this.color = options?.color ?? 'black';
         if (options?.tags)
             this.tags = new Set([...this.tags, ...options.tags]);
 
-        if (
-            (!this.hidden && this.scene === Engine.init().currentScene) ||
-            this.scene === '*'
-        )
-            this.draw();
+        this.initDraw();
     }
 }
