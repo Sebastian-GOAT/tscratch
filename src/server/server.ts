@@ -10,6 +10,11 @@ type ClientEventHandler = (client: Client) => void;
 
 export default class Server {
 
+    private lastTick = performance.now();
+    private loopFunc: ((dt: number) => void) | null = null;
+    private interval: NodeJS.Timeout;
+    public maxFPS: number = 60;
+
     public readonly port: number;
     public readonly corsOrigin: string;
     public readonly clients: Set<Client> = new Set();
@@ -25,6 +30,35 @@ export default class Server {
             this.clients.add(client);
             client.on('disconnect', () => this.clients.delete(client));
         });
+
+        this.interval = setInterval(() => {
+            const now = performance.now();
+            const dt = (now - this.lastTick) / 1000;
+            this.lastTick = now;
+
+            if (this.loopFunc) this.loopFunc(dt);
+        }, 1000 / this.maxFPS);
+    }
+
+    // Loop
+
+    public setLoop(callback: (dt: number) => void) {
+        this.loopFunc = callback;
+    }
+
+    public setMaxFPS(fps: number) {
+        this.maxFPS = fps;
+
+        if (this.interval) clearInterval(this.interval);
+        
+        this.interval = setInterval(() => {
+            const now = performance.now();
+            const dt = (now - this.lastTick) / 1000;
+            this.lastTick = now;
+
+            if (this.loopFunc) this.loopFunc(dt);
+            
+        }, 1000 / this.maxFPS);
     }
 
     // Methods

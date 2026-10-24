@@ -34,22 +34,29 @@ export default class RoomManager<PlayerState> {
     private allowedPlayerState: (keyof PlayerState)[];
     private blacklist: Map<string, string | null> = new Map;
     private canJoin: Map<string, boolean> = new Map;
-    private onLeaveFunc: ((client: Socket) => void) | null = null;
-    private onJoinFunc: ((client: Socket) => void) | null = null;
+    private onLeaveFunc: ((client: Socket, room: Room<PlayerState>) => void) | null = null;
+    private onJoinFunc: ((client: Socket, room: Room<PlayerState>) => void) | null = null;
     private onPlayerStateUpdateFunc: ((client: Socket, playerState: PlayerState) => void) | null = null;
     public rooms: Map<string, Room<PlayerState>> = new Map;
 
     // Custom functions
-    public onJoin(callback: (client: Socket) => void) {
+    public onJoin(callback: (client: Socket, room: Room<PlayerState>) => void) {
         this.onJoinFunc = callback;
     }
 
-    public onLeave(callback: (client: Socket) => void) {
+    public onLeave(callback: (client: Socket, room: Room<PlayerState>) => void) {
         this.onLeaveFunc = callback;
     }
 
     public onPlayerStateUpdate(callback: (client: Socket, playerState: PlayerState) => void) {
         this.onPlayerStateUpdateFunc = callback;
+    }
+
+    // Room finding helper
+    public getRoomByClient(client: Socket) {
+        return Array
+            .from(this.rooms.entries())
+            .find(entry => entry[1].clients.has(client.id))!;
     }
 
     // Get all the clients inside the room except one
@@ -113,7 +120,7 @@ export default class RoomManager<PlayerState> {
         this.server.broadcast<{ id: string }>(events.room_disconnect_notification, { id: client.id }, otherRoomClients);
 
         // Run the custom onLeave function
-        if (this.onLeaveFunc) this.onLeaveFunc(client);
+        if (this.onLeaveFunc) this.onLeaveFunc(client, room);
     }
 
     // Update player state
@@ -209,7 +216,7 @@ export default class RoomManager<PlayerState> {
             );
 
             // Run the custom onJoin function
-            if (this.onJoinFunc) this.onJoinFunc(client);
+            if (this.onJoinFunc) this.onJoinFunc(client, newRoom);
         });
 
         // Handle join requests
@@ -270,7 +277,7 @@ export default class RoomManager<PlayerState> {
             }, otherRoomClients);
 
             // Run the custom onJoin function
-            if (this.onJoinFunc) this.onJoinFunc(client);
+            if (this.onJoinFunc) this.onJoinFunc(client, room);
         });
 
         // Handle disconnects

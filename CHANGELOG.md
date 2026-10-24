@@ -14,6 +14,7 @@ The dates are in the following format: D?D.M?M.YYYY
 - `AssetLoader` - pre-loads assets before the start (costumes, sounds, fonts)
 - `Sound` - manages all sounds (play/pause/stop)
 - `Slider` - an interactive slider inspired by Scratch variables
+- Server-side loops for multiplayer games `server.setLoop(dt => {})`
 - `Rope` - simple rope physics (attachments, swinging)
 - Particle emitters + modifiers
 - `SpriteGroup` class, which lets you manipulate multiple sprites at the same time + check collisions
