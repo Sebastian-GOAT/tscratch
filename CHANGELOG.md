@@ -26,6 +26,7 @@ The dates are in the following format: D?D.M?M.YYYY
 - You can now pass `tags` directly as an option on Sprite
 - Cursor settings using `engine.setCursor(cursor)`
 - `borderRadius` property on `Square`, `Rectangle` and `Button`
+- `host` option on `Server`
 
 ### Changed
 

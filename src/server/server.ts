@@ -1,7 +1,9 @@
 import { Socket as Client, Server as SocketIOServer } from 'socket.io';
+import { createServer } from 'node:http';
 
 interface ServerOptions {
     port: number;
+    host?: string;
     corsOrigin?: string;
 }
 
@@ -16,15 +18,19 @@ export default class Server {
     public maxFPS: number = 60;
 
     public readonly port: number;
+    public readonly host: string;
     public readonly corsOrigin: string;
     public readonly clients: Set<Client> = new Set();
     private io: SocketIOServer;
 
     constructor(options: ServerOptions) {
         this.port = options.port;
+        this.host = options.host ?? '127.0.0.1';
         this.corsOrigin = options.corsOrigin ?? '*';
 
-        this.io = new SocketIOServer(this.port, { cors: { origin: this.corsOrigin } });
+        const httpServer = createServer();
+        this.io = new SocketIOServer(httpServer, { cors: { origin: this.corsOrigin } });
+        httpServer.listen(this.port, this.host);
 
         this.io.on('connection', (client: Client) => {
             this.clients.add(client);
